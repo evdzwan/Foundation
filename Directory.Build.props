@@ -2,6 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
+    <RootNamespace>Foundation</RootNamespace>
     <Version>0.1.0</Version>
   </PropertyGroup>
 
