@@ -20,14 +20,14 @@ sealed class FoundationConfiguration(IServiceCollection services) : IFoundationC
     {
         foreach (var type in types)
         {
-            ScanTypeEffects(type);
-            ScanTypeReducers(type);
+            ScanEffects(type);
+            ScanReducers(type);
         }
 
         return this;
     }
 
-    void ScanTypeEffects(Type type)
+    void ScanEffects(Type type)
     {
         var registeredInstanceEffect = false;
         foreach (var method in type.GetMethods())
@@ -49,7 +49,7 @@ sealed class FoundationConfiguration(IServiceCollection services) : IFoundationC
         }
     }
 
-    void ScanTypeReducers(Type type)
+    void ScanReducers(Type type)
     {
         var registeredInstanceReducer = false;
         foreach (var method in type.GetMethods())
