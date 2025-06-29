@@ -2,5 +2,5 @@
 
 public interface IEffect<TAction>
 {
-    Task Apply(TAction action, IDispatcher dispatcher); //TODO add cancellationtoken
+    Task Apply(TAction action, IDispatcher dispatcher);
 }

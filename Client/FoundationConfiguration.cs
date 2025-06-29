@@ -32,9 +32,9 @@ sealed class FoundationConfiguration(IServiceCollection services) : IFoundationC
         var registeredInstanceEffect = false;
         foreach (var method in type.GetMethods())
         {
-            if (method.GetCustomAttribute<EffectAttribute>() is not null)
+            if (method.GetCustomAttribute<EffectAttribute>() is not null && method.GetParameters() is { Length: 2 } parameters)
             {
-                var actionType = method.GetParameters()[0].ParameterType;
+                var actionType = parameters[0].ParameterType;
                 var interfaceType = typeof(IEffect<>).MakeGenericType([actionType]);
                 var instanceType = typeof(ReflectionEffect<>).MakeGenericType([actionType]);
 
@@ -54,10 +54,10 @@ sealed class FoundationConfiguration(IServiceCollection services) : IFoundationC
         var registeredInstanceReducer = false;
         foreach (var method in type.GetMethods())
         {
-            if (method.GetCustomAttribute<ReducerAttribute>() is not null)
+            if (method.GetCustomAttribute<ReducerAttribute>() is not null && method.GetParameters() is { Length: 2 } parameters)
             {
-                var stateType = method.GetParameters()[0].ParameterType;
-                var actionType = method.GetParameters()[1].ParameterType;
+                var stateType = parameters[0].ParameterType;
+                var actionType = parameters[1].ParameterType;
                 var interfaceType = typeof(IReducer<,>).MakeGenericType([stateType, actionType]);
                 var instanceType = typeof(ReflectionReducer<,>).MakeGenericType([stateType, actionType]);
 
