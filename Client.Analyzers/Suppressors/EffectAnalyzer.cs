@@ -32,12 +32,12 @@ sealed class EffectAnalyzer : DiagnosticAnalyzer
                 var diagnostic = Diagnostic.Create(ParameterCountRule, method.Locations[0]);
                 context.ReportDiagnostic(diagnostic);
             }
-            else if (method.ReturnType is not { MetadataName: "Void" or "Task" })
+            else if (method.ReturnType is not { MetadataName: "Task" })
             {
                 var diagnostic = Diagnostic.Create(ReturnTypeRule, method.Locations[0]);
                 context.ReportDiagnostic(diagnostic);
             }
-            else if (method.Parameters[1].Type is not { MetadataName: "IDispatcher" })
+            else if (method.Parameters[1].Type is not { Name: "IDispatcher" })
             {
                 var diagnostic = Diagnostic.Create(DispatcherParameterRule, method.Parameters[1].Locations[0]);
                 context.ReportDiagnostic(diagnostic);

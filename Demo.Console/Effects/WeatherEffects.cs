@@ -7,7 +7,7 @@ namespace Foundation.Effects;
 sealed class WeatherEffects(IWeatherForecastService service)
 {
     [EffectMethod(typeof(WeatherActions.FetchData))]
-    public async Task FetchData(IDispatcher dispatcher)
+    public async Task FetchData(Fluxor.IDispatcher dispatcher)
     {
         var forecasts = await service.GetForecasts(DateTime.Today);
         dispatcher.Dispatch(new WeatherActions.FetchDataResult(forecasts));
@@ -27,10 +27,6 @@ sealed class WeatherEffects(IWeatherForecastService service)
 
     [Effect]
     public Task InvalidWithNonDispatcherParameter(WeatherActions.FetchData action, string dispatcher)
-        => throw new NotImplementedException();
-
-    [Effect]
-    public void ValidWithVoid(WeatherActions.FetchData action, IDispatcher dispatcher)
         => throw new NotImplementedException();
 
     [Effect]

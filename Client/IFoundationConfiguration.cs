@@ -8,7 +8,7 @@ public interface IFoundationConfiguration
     IFoundationConfiguration AddMiddleware<TMiddleware>() where TMiddleware : IMiddleware
         => AddMiddleware(typeof(TMiddleware));
 
-    IFoundationConfiguration ScanTypes(IEnumerable<Type> types);
-    IFoundationConfiguration ScanAssemblies(IEnumerable<Assembly> assemblies)
-        => ScanTypes(assemblies.SelectMany(asm => asm.GetTypes()));
+    IFoundationConfiguration Scan(IEnumerable<Type> types);
+    IFoundationConfiguration Scan(IEnumerable<Assembly> assemblies)
+        => Scan(assemblies.SelectMany(asm => asm.GetTypes()));
 }

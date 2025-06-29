@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Foundation;
 
@@ -15,30 +16,59 @@ sealed class FoundationConfiguration(IServiceCollection services) : IFoundationC
         throw new ArgumentException($"Type must be a concrete class that implements {nameof(IMiddleware)}", nameof(middlewareType));
     }
 
-    public IFoundationConfiguration ScanTypes(IEnumerable<Type> types)
+    public IFoundationConfiguration Scan(IEnumerable<Type> types)
     {
         foreach (var type in types)
         {
-            if (GetEffectDataOrDefault(type) is { Length: > 0 } effectDataCollection)
-            {
-                foreach (var effectData in effectDataCollection)
-                {
-                    var interfaceType = typeof(IEffect<>).MakeGenericType([effectData.ActionType]);
-                    services.AddScoped(interfaceType, sp => Activator.CreateInstance(typeof(ReflectionEffect<>).MakeGenericType([[effectData.ActionType]]), [type, effectData.Method]));
-                    if (!type.IsAbstract)
-                    {
-                        services.AddScoped(type);
-                    }
-                }
-            }
-            else if (GetFeatureDataOrDefault(type) is { Length: > 0 } featureDataCollection)
-            {
-            }
-            else if (GetReducerDataOrDefault(type) is { Length: > 0 } reducerDataCollection)
-            {
-            }
+            ScanTypeEffects(type);
+            ScanTypeReducers(type);
         }
 
         return this;
+    }
+
+    void ScanTypeEffects(Type type)
+    {
+        var registeredInstanceEffect = false;
+        foreach (var method in type.GetMethods())
+        {
+            if (method.GetCustomAttribute<EffectAttribute>() is not null)
+            {
+                var actionType = method.GetParameters()[0].ParameterType;
+                var interfaceType = typeof(IEffect<>).MakeGenericType([actionType]);
+                var instanceType = typeof(ReflectionEffect<>).MakeGenericType([actionType]);
+
+                services.AddScoped(interfaceType, sp => ActivatorUtilities.CreateInstance(sp, instanceType, [method, sp]));
+                registeredInstanceEffect |= !method.IsStatic;
+            }
+        }
+
+        if (registeredInstanceEffect)
+        {
+            services.AddTransient(type);
+        }
+    }
+
+    void ScanTypeReducers(Type type)
+    {
+        var registeredInstanceReducer = false;
+        foreach (var method in type.GetMethods())
+        {
+            if (method.GetCustomAttribute<ReducerAttribute>() is not null)
+            {
+                var stateType = method.GetParameters()[0].ParameterType;
+                var actionType = method.GetParameters()[1].ParameterType;
+                var interfaceType = typeof(IReducer<,>).MakeGenericType([stateType, actionType]);
+                var instanceType = typeof(ReflectionReducer<,>).MakeGenericType([stateType, actionType]);
+
+                services.AddScoped(interfaceType, sp => ActivatorUtilities.CreateInstance(sp, instanceType, [method, sp]));
+                registeredInstanceReducer |= !method.IsStatic;
+            }
+        }
+
+        if (registeredInstanceReducer)
+        {
+            services.AddTransient(type);
+        }
     }
 }
