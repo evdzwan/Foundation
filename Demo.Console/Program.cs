@@ -1,6 +1,5 @@
 ﻿using Foundation;
 using Microsoft.Extensions.DependencyInjection;
-using static Foundation.WeatherCommands;
 
 var services = new ServiceCollection();
 services.AddFoundation(config => config.Scan([typeof(Program).Assembly]))
@@ -24,7 +23,7 @@ class WeatherApp(IState<Weather> state, ICommandDispatcher dispatcher) : IDispos
     }
 
     void Initialize() => Subscriptions.AddDebounced(state, OnWeatherChanged, TimeSpan.FromMilliseconds(300), emitImmediately: true);
-    void LoadForecasts() => dispatcher.Dispatch(new LoadWeatherForecasts(DateTime.Today));
+    void LoadForecasts() => dispatcher.Dispatch(new WeatherCommands.LoadWeatherForecasts(DateTime.Today));
     void Stop() => CompletionSource.TrySetResult();
     void IDisposable.Dispose() => Subscriptions.Dispose();
 
