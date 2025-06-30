@@ -12,13 +12,15 @@ var view = serviceProvider.GetRequiredService<WeatherView>();
 
 view.Initialize();
 view.LoadForecasts();
-await App.Task;
+
+await App.Run();
 
 static class App
 {
     static readonly TaskCompletionSource CompletionSource = new();
 
-    public static Task Task => CompletionSource.Task;
+    public static Task Run()
+        => CompletionSource.Task;
 
     public static void Stop()
         => CompletionSource.TrySetResult();
