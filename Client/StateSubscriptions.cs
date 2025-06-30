@@ -4,7 +4,7 @@ public sealed class StateSubscriptions : IDisposable
 {
     readonly List<IDisposable> Subscriptions = [];
 
-    public IDisposable Add<TModel>(IState<TModel> state, Action<TModel> modelChanged, bool emitImmediately = true)
+    public IDisposable Add<TModel>(IState<TModel> state, Action<TModel> modelChanged, bool emitImmediately = true) where TModel : notnull
     {
         var subscription = state.Subscribe(modelChanged);
         Subscriptions.Add(subscription);
@@ -16,7 +16,7 @@ public sealed class StateSubscriptions : IDisposable
         return subscription;
     }
 
-    public IDisposable AddThrottled<TModel>(IState<TModel> state, Action<TModel> modelChanged, TimeSpan throttleDelay, bool emitImmediately = true)
+    public IDisposable AddThrottled<TModel>(IState<TModel> state, Action<TModel> modelChanged, TimeSpan throttleDelay, bool emitImmediately = true) where TModel : notnull
     {
         var gate = new Lock();
         var latest = (TModel?)default;
@@ -68,7 +68,7 @@ public sealed class StateSubscriptions : IDisposable
         }
     }
 
-    public IDisposable AddDebounced<TModel>(IState<TModel> state, Action<TModel> modelChanged, TimeSpan debounceDelay, bool emitImmediately = true)
+    public IDisposable AddDebounced<TModel>(IState<TModel> state, Action<TModel> modelChanged, TimeSpan debounceDelay, bool emitImmediately = true) where TModel : notnull
     {
         var gate = new Lock();
         var cts = new CancellationTokenSource();
@@ -98,7 +98,7 @@ public sealed class StateSubscriptions : IDisposable
         }
     }
 
-    public IDisposable AddSampled<TModel>(IState<TModel> state, Action<TModel> modelChanged, TimeSpan sampleInterval, bool emitImmediately = true)
+    public IDisposable AddSampled<TModel>(IState<TModel> state, Action<TModel> modelChanged, TimeSpan sampleInterval, bool emitImmediately = true) where TModel : notnull
     {
         var gate = new Lock();
         var nextAllowedTime = DateTime.MinValue;

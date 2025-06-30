@@ -2,5 +2,8 @@
 
 public interface IState
 {
-    internal object Model { get; set; }
+    object Model { get; }
+    Type ModelType { get; }
+
+    internal void SetModel(object model);
 }

@@ -24,7 +24,7 @@ sealed class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDispa
             mutators.ForEach(mutator =>
             {
                 var state = (IState)serviceProvider.GetRequiredService(typeof(IState<>).MakeGenericType(mutator.ModelType));
-                state.Model = mutator.On(state.Model, command);
+                state.SetModel(mutator.On(state.Model, command));
             });
 
             Task.WhenAll(handlers.Select(handler => handler.On(command, dispatcher, cts.Token)));

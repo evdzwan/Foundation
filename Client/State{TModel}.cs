@@ -1,18 +1,11 @@
 ﻿namespace Foundation;
 
-sealed class State<TModel> : IState<TModel>, IState, IDisposable where TModel : notnull
+sealed class State<TModel> : IState<TModel>, IDisposable where TModel : notnull
 {
     readonly List<ModelChangedSubscription> ModelChangedSubscriptions = [];
 
     public TModel Model { get; private set; } = CreateDefaultModel();
-    object IState.Model
-    {
-        get => Model;
-        set => SetModel((TModel)value);
-    }
-
-    public void Dispose()
-        => ModelChangedSubscriptions.ForEach(subscription => subscription.Dispose());
+    object IState.Model => Model;
 
     public IDisposable Subscribe(Action<TModel> modelChanged)
     {
@@ -29,6 +22,12 @@ sealed class State<TModel> : IState<TModel>, IState, IDisposable where TModel : 
             ModelChangedSubscriptions.ForEach(subscription => subscription.Invoke(model));
         }
     }
+
+    void IState.SetModel(object model)
+        => SetModel((TModel)model);
+
+    void IDisposable.Dispose()
+       => ModelChangedSubscriptions.ForEach(subscription => subscription.Dispose());
 
     static TModel CreateDefaultModel() => typeof(TModel) switch
     {

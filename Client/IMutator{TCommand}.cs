@@ -1,8 +1,8 @@
 ﻿namespace Foundation;
 
-public interface IMutator<TCommand>
+public interface IMutator<in TCommand>
 {
-    internal Type ModelType { get; }
+    Type ModelType { get; }
 
     internal object On(object model, TCommand command);
 }
