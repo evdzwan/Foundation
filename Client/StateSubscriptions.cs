@@ -152,7 +152,7 @@ public sealed class StateSubscriptions : IDisposable
 
     public void Dispose()
     {
-        Subscriptions.ForEach(subscription => subscription.Dispose());
+        Subscriptions.ToArray().ForEach(subscription => subscription.Dispose());
         Subscriptions.Clear();
     }
 

@@ -26,7 +26,10 @@ sealed class State<TModel> : IState<TModel>, IDisposable where TModel : notnull
         => SetModel((TModel)model);
 
     void IDisposable.Dispose()
-       => Subscriptions.ForEach(subscription => subscription.Dispose());
+    {
+        Subscriptions.ToArray().ForEach(subscription => subscription.Dispose());
+        Subscriptions.Clear();
+    }
 
     static TModel CreateDefaultModel() => typeof(TModel) switch
     {
