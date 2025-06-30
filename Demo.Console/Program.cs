@@ -5,39 +5,28 @@ using static Foundation.WeatherCommands;
 var services = new ServiceCollection();
 services.AddFoundation(config => config.Scan([typeof(Program).Assembly]))
         .AddScoped<WeatherForecastService>()
-        .AddTransient<WeatherView>();
+        .AddTransient<WeatherApp>();
 
 using var serviceProvider = services.BuildServiceProvider();
-var view = serviceProvider.GetRequiredService<WeatherView>();
+var app = serviceProvider.GetRequiredService<WeatherApp>();
+await app.Run();
 
-view.Initialize();
-view.LoadForecasts();
-
-await App.Run();
-
-static class App
+class WeatherApp(IState<Weather> state, ICommandDispatcher dispatcher) : IDisposable
 {
-    static readonly TaskCompletionSource CompletionSource = new();
-
-    public static Task Run()
-        => CompletionSource.Task;
-
-    public static void Stop()
-        => CompletionSource.TrySetResult();
-}
-
-class WeatherView(IState<Weather> state, ICommandDispatcher dispatcher) : IDisposable
-{
+    readonly TaskCompletionSource CompletionSource = new();
     readonly StateSubscriptions Subscriptions = new();
 
-    public void Dispose()
-        => Subscriptions.Dispose();
+    public async Task Run()
+    {
+        Initialize();
+        LoadForecasts();
+        await CompletionSource.Task;
+    }
 
-    public void Initialize()
-        => Subscriptions.AddDebounced(state, OnWeatherChanged, TimeSpan.FromMilliseconds(300), emitImmediately: true);
-
-    public void LoadForecasts()
-        => dispatcher.Dispatch(new LoadWeatherForecasts(DateTime.Today));
+    void Initialize() => Subscriptions.AddDebounced(state, OnWeatherChanged, TimeSpan.FromMilliseconds(300), emitImmediately: true);
+    void LoadForecasts() => dispatcher.Dispatch(new LoadWeatherForecasts(DateTime.Today));
+    void Stop() => CompletionSource.TrySetResult();
+    void IDisposable.Dispose() => Subscriptions.Dispose();
 
     void OnWeatherChanged(Weather weather)
     {
@@ -50,7 +39,7 @@ class WeatherView(IState<Weather> state, ICommandDispatcher dispatcher) : IDispo
 
         if (weather is { Loading: false, Forecasts.Length: > 0 })
         {
-            App.Stop();
+            Stop();
         }
     }
 }
