@@ -1,61 +1,39 @@
-﻿using Fluxor;
-using Foundation.Actions;
-using Foundation.Services;
-using Foundation.States;
+﻿using Foundation;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using static Foundation.WeatherCommands;
 
-var builder = new HostApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>()
-                .AddScoped<WeatherRetriever>()
-                .AddScoped<IWeatherForecastService, WeatherForecastService>()
-                .AddFluxor(options => options.ScanAssemblies(typeof(Program).Assembly));
+var services = new ServiceCollection();
+services.AddFoundation(config => config.Scan([typeof(Program).Assembly]))
+        .AddScoped<WeatherForecastService>()
+        .AddTransient<WeatherView>();
 
-var host = builder.Build();
-host.Run();
+using var serviceProvider = services.BuildServiceProvider();
+var view = serviceProvider.GetRequiredService<WeatherView>();
 
-class Worker(IServiceScopeFactory scopeFactory) : BackgroundService
+view.Initialize();
+view.LoadForecasts();
+await Task.Delay(5000);
+
+class WeatherView(IState<Weather> state, ICommandDispatcher dispatcher) : IDisposable
 {
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    readonly StateSubscriptions Subscriptions = new();
+
+    public void Dispose()
+        => Subscriptions.Dispose();
+
+    public void Initialize()
+        => Subscriptions.AddDebounced(state, OnWeatherChanged, TimeSpan.FromMilliseconds(300), emitImmediately: true);
+
+    public void LoadForecasts()
+        => dispatcher.Dispatch(new LoadWeatherForecasts(DateTime.Today));
+
+    void OnWeatherChanged(Weather weather)
     {
-        await using var scope = scopeFactory.CreateAsyncScope();
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Worker>>();
-
-        var store = scope.ServiceProvider.GetRequiredService<IStore>();
-        await store.InitializeAsync();
-
-        var retriever = scope.ServiceProvider.GetRequiredService<WeatherRetriever>();
-        await retriever.Retrieve(stoppingToken);
-    }
-}
-
-class WeatherRetriever(IState<WeatherState> state, IDispatcher dispatcher, ILogger<WeatherRetriever> logger)
-{
-    public async Task Retrieve(CancellationToken cancellationToken)
-    {
-        state.StateChanged += OnStateChanged;
-
-        try
+        Console.WriteLine("Weather changed:");
+        Console.WriteLine($"  Loading: {weather.Loading}");
+        foreach (var forecast in weather.Forecasts)
         {
-            dispatcher.Dispatch(new WeatherActions.FetchData());
-
-            var completionSource = new TaskCompletionSource();
-            cancellationToken.Register(completionSource.SetResult);
-            await completionSource.Task;
-        }
-        finally
-        {
-            state.StateChanged -= OnStateChanged;
-        }
-    }
-
-    void OnStateChanged(object? sender, EventArgs e)
-    {
-        logger.LogInformation("Weather is {Loading}", [state.Value.Loading ? "Loading" : "Loaded"]);
-        foreach (var forecast in state.Value.Forecasts)
-        {
-            logger.LogInformation("  {Forecast}", [forecast]);
+            Console.WriteLine($"  {forecast.Date:d}: {forecast.Temperature} °C");
         }
     }
 }

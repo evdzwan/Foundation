@@ -2,7 +2,7 @@
 
 public interface IState<TModel>
 {
-    TModel Model { get; }
+    TModel Model { get;  }
 
     IDisposable Subscribe(Action<TModel> modelChanged);
 }
