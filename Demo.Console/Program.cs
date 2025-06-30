@@ -12,7 +12,17 @@ var view = serviceProvider.GetRequiredService<WeatherView>();
 
 view.Initialize();
 view.LoadForecasts();
-await Task.Delay(1000);
+await App.Task;
+
+static class App
+{
+    static readonly TaskCompletionSource CompletionSource = new();
+
+    public static Task Task => CompletionSource.Task;
+
+    public static void Stop()
+        => CompletionSource.TrySetResult();
+}
 
 class WeatherView(IState<Weather> state, ICommandDispatcher dispatcher) : IDisposable
 {
@@ -34,6 +44,11 @@ class WeatherView(IState<Weather> state, ICommandDispatcher dispatcher) : IDispo
         foreach (var forecast in weather.Forecasts)
         {
             Console.WriteLine($"  {forecast.Date:d}: {forecast.Temperature} °C");
+        }
+
+        if (weather is { Loading: false, Forecasts.Length: > 0 })
+        {
+            App.Stop();
         }
     }
 }
