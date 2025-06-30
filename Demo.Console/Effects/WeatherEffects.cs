@@ -13,23 +13,23 @@ sealed class WeatherEffects(IWeatherForecastService service)
         dispatcher.Dispatch(new WeatherActions.FetchDataResult(forecasts));
     }
 
-    [Effect]
-    public Task InvalidWithoutAction(IDispatcher dispatcher)
-        => throw new NotImplementedException();
+    //[Effect]
+    //public Task InvalidWithoutAction(IDispatcher dispatcher)
+    //    => throw new NotImplementedException();
 
-    [Effect]
-    public Task InvalidWithoutDispatcher(WeatherActions.FetchData action)
-        => throw new NotImplementedException();
+    //[Effect]
+    //public Task InvalidWithoutDispatcher(WeatherActions.FetchData action)
+    //    => throw new NotImplementedException();
 
-    [Effect]
-    public Task InvalidWithAdditionalParameter(WeatherActions.FetchData action, IDispatcher dispatcher, int value)
-        => throw new NotImplementedException();
+    //[Effect]
+    //public Task InvalidWithAdditionalParameter(WeatherActions.FetchData action, IDispatcher dispatcher, int value)
+    //    => throw new NotImplementedException();
 
-    [Effect]
-    public Task InvalidWithNonDispatcherParameter(WeatherActions.FetchData action, string dispatcher)
-        => throw new NotImplementedException();
+    //[Effect]
+    //public Task InvalidWithNonDispatcherParameter(WeatherActions.FetchData action, string dispatcher)
+    //    => throw new NotImplementedException();
 
-    [Effect]
-    public Task ValidWithTask(WeatherActions.FetchData action, IDispatcher dispatcher)
-        => throw new NotImplementedException();
+    //[Effect]
+    //public Task ValidWithTask(WeatherActions.FetchData action, IDispatcher dispatcher)
+    //    => throw new NotImplementedException();
 }
