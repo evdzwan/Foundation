@@ -18,7 +18,6 @@ sealed class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDispa
             var dispatcher = serviceProvider.GetRequiredService<ICommandDispatcher>();
             var handlers = serviceProvider.GetServices<ICommandHandler<TCommand>>();
             var mutators = serviceProvider.GetServices<IMutator<TCommand>>();
-            var cts = new CancellationTokenSource();
 
             observers.ForEach(observer => observer.BeforeInvokeCommand(command));
             mutators.ForEach(mutator =>
@@ -27,7 +26,7 @@ sealed class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDispa
                 state.SetModel(mutator.On(state.Model, command));
             });
 
-            Task.WhenAll(handlers.Select(handler => handler.On(command, dispatcher, cts.Token)));
+            Task.WhenAll(handlers.Select(handler => handler.On(command, dispatcher, CancellationToken.None)));
             observers.ForEach(observer => observer.AfterInvokeCommand(command));
         }
     }
