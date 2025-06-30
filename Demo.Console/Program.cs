@@ -12,7 +12,7 @@ var view = serviceProvider.GetRequiredService<WeatherView>();
 
 view.Initialize();
 view.LoadForecasts();
-await Task.Delay(5000);
+await Task.Delay(1000);
 
 class WeatherView(IState<Weather> state, ICommandDispatcher dispatcher) : IDisposable
 {
