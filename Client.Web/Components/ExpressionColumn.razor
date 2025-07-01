@@ -1,0 +1,13 @@
+﻿@typeparam TItem
+@typeparam TProperty
+@implements IColumn<TItem>
+@implements IDisposable
+
+@code {
+    [CascadingParameter] Table<TItem>? Table { get; set; }
+    
+    [Parameter, EditorRequired] public required Expression<Func<TItem, TProperty>> Expression { get; set; }
+
+    protected override void OnInitialized() => Table?.AddColumn(this);
+    void IDisposable.Dispose() => Table?.RemoveColumn(this);
+}

@@ -1,10 +1,8 @@
-using Foundation;
 using Foundation.Components;
-using Foundation.Services;
+using Foundation.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddFoundation(config => config.Scan([typeof(Program).Assembly]))
-                .AddScoped<ProductService>()
+builder.Services.AddScoped<IBookRepository, BookRepository>()
                 .AddRazorComponents()
                 .AddInteractiveServerComponents();
 

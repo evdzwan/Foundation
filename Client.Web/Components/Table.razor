@@ -1,0 +1,43 @@
+﻿@attribute [CascadingTypeParameter(nameof(TItem))]
+@typeparam TItem
+
+<div class="table">
+    <CascadingValue Value="this" IsFixed>
+        @ChildContent
+    </CascadingValue>
+
+    <Defer>
+        @foreach (var column in Columns)
+        {
+            <div class="column">
+                Column: @column
+            </div>
+        }
+
+        @foreach (var item in Items)
+        {
+            <div class="row">
+                Row: @item
+            </div>
+        }
+    </Defer>
+</div>
+
+@code {
+    readonly List<IColumn<TItem>> Columns = [];
+    readonly List<TItem> Items = [];
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public CollectionProviderDelegate<TItem>? Provider { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Provider is { } provider)
+        {
+            Items.AddRange(await provider(new()));
+        }
+    }
+
+    internal void AddColumn(IColumn<TItem> column) => Columns.Add(column);
+    internal void RemoveColumn(IColumn<TItem> column) => Columns.Remove(column);
+}

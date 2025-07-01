@@ -1,0 +1,24 @@
+﻿@typeparam TContext
+@typeparam TValue
+@implements IField<TContext>
+@implements IDisposable
+
+<div class="field">
+    <label>@Title</label>
+    <input @bind="DisplayValue" />
+</div>
+
+@code {
+    string? DisplayValue;
+
+    [CascadingParameter] Form<TContext>? Form { get; set; }
+
+    [Parameter, EditorRequired] public required Expression<Func<TContext, TValue>> Expression { get; set; }
+    [Parameter] public string? Title { get; set; }
+
+    protected override void OnParametersSet()
+        => Title ??= Expression.GetPropertyOrDefault()?.Name.Humanize(LetterCasing.Title);
+
+    protected override void OnInitialized() => Form?.AddField(this);
+    void IDisposable.Dispose() => Form?.RemoveField(this);
+}

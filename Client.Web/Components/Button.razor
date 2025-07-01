@@ -1,0 +1,30 @@
+﻿@typeparam TContext
+
+<button type="button" @onclick="InvokePressed">
+    @ChildContent
+</button>
+
+@code {
+    [CascadingParameter] Form<TContext>? Form { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool Commit { get; set; }
+    [Parameter] public bool Discard { get; set; }
+    [Parameter] public EventCallback Pressed { get; set; }
+
+    async Task InvokePressed()
+    {
+        await Pressed.InvokeAsync();
+        if (Form is { } form)
+        {
+            if (Commit)
+            {
+                await form.InvokeCommit();
+            }
+            else if (Discard)
+            {
+                await form.InvokeDiscard();
+            }
+        }
+    }
+}

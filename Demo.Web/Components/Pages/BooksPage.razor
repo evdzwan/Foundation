@@ -1,0 +1,14 @@
+﻿@page "/books"
+@attribute [StreamRendering]
+@inject IBookRepository BookRepository
+
+<Table Provider="Books.AsCollectionProvider()">
+    <ExpressionColumn Expression="book => book.Name" />
+    <ExpressionColumn Expression="book => book.Author" />
+</Table>
+
+@code {
+    readonly IAsyncCollection<BookItem> Books;
+    public BooksPage() => Books = AsyncCollection.Create((transform, ct)
+        => BookRepository.GetBooks(transform, ct));
+}

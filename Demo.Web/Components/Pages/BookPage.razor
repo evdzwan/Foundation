@@ -1,0 +1,23 @@
+﻿@page "/books/new"
+@page "/books/{id:int}"
+@attribute [StreamRendering]
+@inject IBookRepository BookRepository
+
+<Form Provider="Book.AsValueProvider()" OnCommit="CommitChanges">
+    <TextField Expression="book => book.Name" />
+    <ChoiceField Expression="book => book.Author" />
+    <Button Commit>Save changes</Button>
+    <Button Discard>Cancel</Button>
+</Form>
+
+@code {
+    readonly IAsyncValue<BookDetail> Book;
+    public BookPage() => Book = AsyncValue.Create(async ct
+        => Id is { } id ? await BookRepository.GetBook(id, ct) : BookDetail.CreateNew());
+
+    [Parameter] public int? Id { get; set; }
+
+    Task CommitChanges(BookDetail book) => Id is { } id
+        ? BookRepository.UpdateBook(id, book)
+        : BookRepository.CreateBook(book);
+}
