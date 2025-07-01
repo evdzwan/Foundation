@@ -1,12 +1,8 @@
-﻿@typeparam TContext where TContext : class
-
-<button type="@ButtonType" @onclick="Pressed">
+﻿<button type="@ButtonType" @onclick="Pressed">
     @ChildContent
 </button>
 
 @code {
-    [CascadingParameter] Form<TContext>? Form { get; set; }
-
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool Commit { get; set; }
     [Parameter] public bool Discard { get; set; }
