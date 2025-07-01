@@ -13,10 +13,12 @@ public abstract class Field<TContext> : ComponentBase, IDisposable where TContex
     [Parameter] public string? Title { get; set; }
     [Parameter] public bool Visible { get; set; } = true;
 
+    protected virtual void OnDisposed() { }
     protected override void OnInitialized() => Form?.AddField(this);
     void IDisposable.Dispose()
     {
         GC.SuppressFinalize(this);
         Form?.RemoveField(this);
+        OnDisposed();
     }
 }

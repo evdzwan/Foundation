@@ -66,6 +66,9 @@
         }
     }
 
+    protected override void OnDisposed()
+        => ComponentReference.Dispose();
+
     async Task HidePopover()
     {
         if (PopoverOpen)
