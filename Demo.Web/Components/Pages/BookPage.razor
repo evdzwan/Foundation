@@ -4,8 +4,10 @@
 @inject IBookRepository BookRepository
 
 <Form Provider="Book.AsValueProvider()" OnCommit="CommitChanges">
+    <TextField Expression="book => book.Id" Visible="Id is not null" readonly />
     <TextField Expression="book => book.Name" AutoFocus />
     <ChoiceField Expression="book => book.Author" />
+
     <Button Commit>Save changes</Button>
     <Button Discard>Cancel</Button>
 </Form>
