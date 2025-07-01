@@ -6,16 +6,26 @@
 <Form Provider="Book.AsValueProvider()" OnCommit="CommitChanges">
     <TextField Expression="book => book.Id" Visible="Id is not null" readonly />
     <TextField Expression="book => book.Name" AutoFocus />
-    <ChoiceField Expression="book => book.Author" />
+    <ChoiceField Expression="book => book.Author" Provider="Authors.AsCollectionProvider()">
+        <ExpressionColumn Expression="author => author.Name" />
+    </ChoiceField>
 
     <Button Commit>Save changes</Button>
     <Button Discard>Cancel</Button>
 </Form>
 
 @code {
+    readonly IAsyncCollection<AuthorReference> Authors;
     readonly IAsyncValue<BookDetail> Book;
-    public BookPage() => Book = AsyncValue.Create(async ct
-        => Id is { } id ? await BookRepository.GetBook(id, ct) : BookDetail.CreateNew());
+
+    public BookPage()
+    {
+        Book = AsyncValue.Create(async ct
+            => Id is { } id ? await BookRepository.GetBook(id, ct) : BookDetail.CreateNew());
+
+        Authors = AsyncCollection.Create(async (transform, ct)
+            => await BookRepository.GetAuthorLookup(await Book.GetValue(), transform, ct));
+    }
 
     [Parameter] public int? Id { get; set; }
 

@@ -1,0 +1,8 @@
+﻿.field ::deep [popover] {
+    inset: unset;
+    left: calc(anchor(start));
+    overflow: hidden;
+    position: absolute;
+    top: calc(anchor(bottom));
+    width: calc(anchor-size(width));
+}
