@@ -1,14 +1,16 @@
 ﻿@attribute [CascadingTypeParameter(nameof(TContext))]
 @typeparam TContext where TContext : class
 
-<EditForm class="form" Model="Context ?? new object()" OnValidSubmit="SubmitForm">
-    <DataAnnotationsValidator />
-    <CascadingValue Value="this" IsFixed>
-        <CascadingValue Value="Context">
-            @ChildContent
+<div class="form">
+    <EditForm Model="Context ?? new object()" OnValidSubmit="SubmitForm">
+        <DataAnnotationsValidator />
+        <CascadingValue Value="this" IsFixed>
+            <CascadingValue Value="Context">
+                @ChildContent
+            </CascadingValue>
         </CascadingValue>
-    </CascadingValue>
-</EditForm>
+    </EditForm>
+</div>
 
 @code {
     readonly List<Field<TContext>> Fields = [];

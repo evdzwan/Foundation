@@ -1,9 +1,15 @@
-﻿::deep .form {
+﻿.form {
+    align-items: start;
     display: flex;
     flex-direction: column;
 }
 
-    ::deep .form > ::deep .field {
+    .form > ::deep form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form ::deep .field {
         display: flex;
         flex-direction: column;
     }

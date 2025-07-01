@@ -7,7 +7,7 @@
     <div class="field">
         <label>@Title</label>
         <Focus Enabled="AutoFocus">
-            <input @attributes="Attributes" @bind="DisplayValue" />
+            <button @attributes="Attributes">@DisplayValue</button>
         </Focus>
         @if (ValidationExpression is { } validationExpression)
         {
@@ -22,10 +22,6 @@
 
     [Parameter, EditorRequired] public required Expression<Func<TContext, TValue>> Expression { get; set; }
 
-    void OnDisplayValueChanged()
-    {
-    }
-
     protected override void OnParametersSet()
     {
         if (Expression.GetPropertyOrDefault() is { CanRead: true } property)
@@ -33,6 +29,7 @@
             Title ??= Expression.GetPropertyOrDefault()?.Name.Humanize(LetterCasing.Title);
             if (Context is { } context)
             {
+                DisplayValue = property.GetValue(context)?.ToString();
                 ValidationExpression = Expression.WithoutContextParameter(context);
             }
         }
