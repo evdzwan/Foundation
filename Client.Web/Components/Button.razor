@@ -1,6 +1,6 @@
-﻿@typeparam TContext
+﻿@typeparam TContext where TContext : class
 
-<button type="button" @onclick="InvokePressed">
+<button type="@ButtonType" @onclick="Pressed">
     @ChildContent
 </button>
 
@@ -10,21 +10,11 @@
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool Commit { get; set; }
     [Parameter] public bool Discard { get; set; }
-    [Parameter] public EventCallback Pressed { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> Pressed { get; set; }
 
-    async Task InvokePressed()
+    string ButtonType => (Commit, Discard) switch
     {
-        await Pressed.InvokeAsync();
-        if (Form is { } form)
-        {
-            if (Commit)
-            {
-                await form.InvokeCommit();
-            }
-            else if (Discard)
-            {
-                await form.InvokeDiscard();
-            }
-        }
-    }
+        (true, false) => "submit",
+        _ => "button"
+    };
 }

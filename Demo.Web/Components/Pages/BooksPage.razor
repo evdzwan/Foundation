@@ -5,6 +5,9 @@
 <Table Provider="Books.AsCollectionProvider()">
     <ExpressionColumn Expression="book => book.Name" />
     <ExpressionColumn Expression="book => book.Author" />
+    <TemplateColumn Title="Options">
+        <a href="/books/@context.Id">Detail</a>
+    </TemplateColumn>
 </Table>
 
 @code {

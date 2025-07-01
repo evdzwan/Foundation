@@ -27,4 +27,18 @@ public static class ExpressionExtensions
         UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression => unaryExpression.Operand.GetPropertyOrDefault(),
         _ => null
     };
+
+    public static Expression<Func<TValue>> WithoutContextParameter<TContext, TValue>(this Expression<Func<TContext, TValue>> @this, TContext context) where TContext : class
+    {
+        var replacer = new ParameterReplacer(@this.Parameters[0], Expression.Constant(context));
+        var convertedBody = replacer.Visit(@this.Body);
+
+        return Expression.Lambda<Func<TValue>>(convertedBody);
+    }
+
+    sealed class ParameterReplacer(ParameterExpression parameter, Expression replacement) : ExpressionVisitor
+    {
+        protected override Expression VisitParameter(ParameterExpression node)
+            => node == parameter ? replacement : base.VisitParameter(node);
+    }
 }

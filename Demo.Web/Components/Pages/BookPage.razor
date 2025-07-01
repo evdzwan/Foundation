@@ -1,6 +1,6 @@
 ﻿@page "/books/new"
 @page "/books/{id:int}"
-@attribute [StreamRendering]
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject IBookRepository BookRepository
 
 <Form Provider="Book.AsValueProvider()" OnCommit="CommitChanges">

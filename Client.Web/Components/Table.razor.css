@@ -1,0 +1,29 @@
+﻿.table {
+    display: table;
+    width: 100%;
+}
+
+.table-column {
+    display: table-column;
+}
+
+.table-header {
+    display: table-header-group;
+}
+
+    .table-header > .table-cell:last-child {
+        width: 100%;
+    }
+
+.table-body {
+    display: table-row-group;
+}
+
+.table-row {
+    display: table-row;
+}
+
+.table-cell {
+    display: table-cell;
+    white-space: nowrap;
+}

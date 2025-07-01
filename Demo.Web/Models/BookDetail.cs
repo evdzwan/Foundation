@@ -1,9 +1,11 @@
-﻿namespace Foundation.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Foundation.Models;
 
 public sealed record BookDetail(int Id) : ICreateNew<BookDetail>
 {
-    public required string Name { get; set; }
-    public required AuthorReference Author { get; set; }
+    [Required, MinLength(3)] public required string Name { get; set; }
+    [Required] public required AuthorReference Author { get; set; }
 
     public static BookDetail CreateNew() => new(Id: 0)
     {

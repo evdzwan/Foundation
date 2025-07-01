@@ -1,12 +1,14 @@
 ﻿@attribute [CascadingTypeParameter(nameof(TContext))]
-@typeparam TContext
+@typeparam TContext where TContext : class
 
-<div class="form">
+<EditForm class="form" Model="Context ?? new object()" OnValidSubmit="SubmitForm">
+    <DataAnnotationsValidator />
     <CascadingValue Value="this" IsFixed>
-        Context: @Context
-        @ChildContent
+        <CascadingValue Value="Context">
+            @ChildContent
+        </CascadingValue>
     </CascadingValue>
-</div>
+</EditForm>
 
 @code {
     readonly List<IField<TContext>> Fields = [];
@@ -14,25 +16,15 @@
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public Func<TContext, Task>? OnCommit { get; set; }
-    [Parameter] public Func<TContext, Task>? OnDiscard { get; set; }
     [Parameter] public ValueProviderDelegate<TContext>? Provider { get; set; }
 
     protected override async Task OnInitializedAsync()
-    {
-        if (Provider is { } provider)
-        {
-            Context = await provider();
-        }
-    }
+        => Context = Provider is { } provider ? await provider() : default;
 
     internal void AddField(IField<TContext> field) => Fields.Add(field);
     internal void RemoveField(IField<TContext> field) => Fields.Remove(field);
 
-    internal Task InvokeCommit() => OnCommit is { } onCommit && Context is { } context
+    Task SubmitForm() => OnCommit is { } onCommit && Context is { } context
         ? onCommit(context)
-        : Task.CompletedTask;
-
-    internal Task InvokeDiscard() => OnDiscard is { } onDiscard && Context is { } context
-        ? onDiscard(context)
         : Task.CompletedTask;
 }

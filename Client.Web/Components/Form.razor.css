@@ -1,0 +1,9 @@
+﻿::deep .form {
+    display: flex;
+    flex-direction: column;
+}
+
+    ::deep .form > ::deep .field {
+        display: flex;
+        flex-direction: column;
+    }

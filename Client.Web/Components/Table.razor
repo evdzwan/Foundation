@@ -9,17 +9,31 @@
     <Defer>
         @foreach (var column in Columns)
         {
-            <div class="column">
-                Column: @column
-            </div>
+            <div class="table-column" @key="column" />
         }
 
-        @foreach (var item in Items)
-        {
-            <div class="row">
-                Row: @item
-            </div>
-        }
+        <div class="table-header">
+            @foreach (var column in Columns)
+            {
+                <div class="table-cell" @key="column">
+                    @column.RenderTitle()
+                </div>
+            }
+        </div>
+
+        <div class="table-body">
+            @foreach (var item in Items)
+            {
+                <div class="table-row" @key="item">
+                    @foreach (var column in Columns)
+                    {
+                        <div class="table-cell" @key="column">
+                            @column.RenderCell(item)
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     </Defer>
 </div>
 
@@ -31,12 +45,7 @@
     [Parameter] public CollectionProviderDelegate<TItem>? Provider { get; set; }
 
     protected override async Task OnInitializedAsync()
-    {
-        if (Provider is { } provider)
-        {
-            Items.AddRange(await provider(new()));
-        }
-    }
+        => Items.AddRange(Provider is { } provider ? await provider(new()) : []);
 
     internal void AddColumn(IColumn<TItem> column) => Columns.Add(column);
     internal void RemoveColumn(IColumn<TItem> column) => Columns.Remove(column);

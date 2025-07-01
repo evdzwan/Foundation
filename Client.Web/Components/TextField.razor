@@ -1,23 +1,47 @@
-﻿@typeparam TContext
+﻿@typeparam TContext where TContext : class
 @typeparam TValue
 @implements IField<TContext>
 @implements IDisposable
 
 <div class="field">
     <label>@Title</label>
-    <input @bind="DisplayValue" />
+    <input @bind="DisplayValue" @bind:after="OnDisplayValueChanged" />
+    @if (ValidationExpression is { } validationExpression)
+    {
+        <ValidationMessage For="validationExpression" />
+    }
 </div>
 
 @code {
     string? DisplayValue;
+    Expression<Func<TValue>>? ValidationExpression;
 
+    [CascadingParameter] TContext? Context { get; set; }
     [CascadingParameter] Form<TContext>? Form { get; set; }
 
     [Parameter, EditorRequired] public required Expression<Func<TContext, TValue>> Expression { get; set; }
     [Parameter] public string? Title { get; set; }
 
+    void OnDisplayValueChanged()
+    {
+        if (Expression.GetPropertyOrDefault() is { CanWrite: true } property && Context is { } context)
+        {
+            property.SetValue(context, Convert.ChangeType(DisplayValue, property.PropertyType));
+        }
+    }
+
     protected override void OnParametersSet()
-        => Title ??= Expression.GetPropertyOrDefault()?.Name.Humanize(LetterCasing.Title);
+    {
+        if (Expression.GetPropertyOrDefault() is { CanRead: true } property)
+        {
+            Title ??= property.Name.Humanize(LetterCasing.Title);
+            if (Context is { } context)
+            {
+                DisplayValue = Convert.ChangeType(property.GetValue(context), typeof(string)) as string;
+                ValidationExpression = Expression.WithoutContextParameter(context);
+            }
+        }
+    }
 
     protected override void OnInitialized() => Form?.AddField(this);
     void IDisposable.Dispose() => Form?.RemoveField(this);
