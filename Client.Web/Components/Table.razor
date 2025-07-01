@@ -16,7 +16,7 @@
             @foreach (var column in Columns)
             {
                 <div class="table-cell" @key="column">
-                    @column.RenderTitle()
+                    @column.Title
                 </div>
             }
         </div>
@@ -38,7 +38,7 @@
 </div>
 
 @code {
-    readonly List<IColumn<TItem>> Columns = [];
+    readonly List<Column<TItem>> Columns = [];
     readonly List<TItem> Items = [];
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
@@ -47,6 +47,6 @@
     protected override async Task OnInitializedAsync()
         => Items.AddRange(Provider is { } provider ? await provider(new()) : []);
 
-    internal void AddColumn(IColumn<TItem> column) => Columns.Add(column);
-    internal void RemoveColumn(IColumn<TItem> column) => Columns.Remove(column);
+    internal void AddColumn(Column<TItem> column) => Columns.Add(column);
+    internal void RemoveColumn(Column<TItem> column) => Columns.Remove(column);
 }

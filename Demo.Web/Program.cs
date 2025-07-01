@@ -1,8 +1,10 @@
+using Foundation;
 using Foundation.Components;
 using Foundation.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped<IBookRepository, BookRepository>()
+builder.Services.AddFoundation()
+                .AddScoped<IBookRepository, BookRepository>()
                 .AddRazorComponents()
                 .AddInteractiveServerComponents();
 

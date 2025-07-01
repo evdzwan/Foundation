@@ -1,26 +1,26 @@
-﻿@typeparam TContext where TContext : class
+﻿@inherits Field<TContext>
+@typeparam TContext where TContext : class
 @typeparam TValue
-@implements IField<TContext>
-@implements IDisposable
 
-<div class="field">
-    <label>@Title</label>
-    <input @bind="DisplayValue" @bind:after="OnDisplayValueChanged" />
-    @if (ValidationExpression is { } validationExpression)
-    {
-        <ValidationMessage For="validationExpression" />
-    }
-</div>
+@if (Visible)
+{
+    <div class="field">
+        <label>@Title</label>
+        <Focus Enabled="AutoFocus">
+            <InputText AdditionalAttributes="Attributes" @bind-Value="DisplayValue" @bind-Value:after="OnDisplayValueChanged" />
+        </Focus>
+        @if (ValidationExpression is { } validationExpression)
+        {
+            <ValidationMessage For="validationExpression" />
+        }
+    </div>
+}
 
 @code {
     string? DisplayValue;
     Expression<Func<TValue>>? ValidationExpression;
 
-    [CascadingParameter] TContext? Context { get; set; }
-    [CascadingParameter] Form<TContext>? Form { get; set; }
-
     [Parameter, EditorRequired] public required Expression<Func<TContext, TValue>> Expression { get; set; }
-    [Parameter] public string? Title { get; set; }
 
     void OnDisplayValueChanged()
     {
@@ -42,7 +42,4 @@
             }
         }
     }
-
-    protected override void OnInitialized() => Form?.AddField(this);
-    void IDisposable.Dispose() => Form?.RemoveField(this);
 }

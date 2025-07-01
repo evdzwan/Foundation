@@ -1,19 +1,8 @@
 ﻿@typeparam TItem
-@implements IColumn<TItem>
-@implements IDisposable
+@inherits Column<TItem>
 
 @code {
-    [CascadingParameter] Table<TItem>? Table { get; set; }
-
     [Parameter, EditorRequired] public required RenderFragment<TItem> ChildContent { get; set; }
-    [Parameter] public string? Title { get; set; }
 
-    RenderFragment IColumn<TItem>.RenderCell(TItem item) => ChildContent(item);
-    RenderFragment IColumn<TItem>.RenderTitle() => __builder =>
-    {
-        @Title
-    };
-
-    protected override void OnInitialized() => Table?.AddColumn(this);
-    void IDisposable.Dispose() => Table?.RemoveColumn(this);
+    public override RenderFragment RenderCell(TItem item) => ChildContent(item);
 }

@@ -1,0 +1,21 @@
+﻿@inject FocusScript Script
+
+<div class="focus" @ref="FocusReference">
+    @ChildContent
+</div>
+
+@code {
+    ElementReference FocusReference;
+
+    [Parameter, EditorRequired] public required RenderFragment ChildContent { get; set; }
+    [Parameter] public bool Enabled { get; set; } = true;
+    [Parameter] public string Selector { get; set; } = ":first-child";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && Enabled)
+        {
+            await Script.Focus(FocusReference, Selector);
+        }
+    }
+}

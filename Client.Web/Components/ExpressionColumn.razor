@@ -1,27 +1,15 @@
 ﻿@typeparam TItem
 @typeparam TProperty
-@implements IColumn<TItem>
-@implements IDisposable
+@inherits Column<TItem>
 
 @code {
-    [CascadingParameter] Table<TItem>? Table { get; set; }
-
     [Parameter, EditorRequired] public required Expression<Func<TItem, TProperty>> Expression { get; set; }
-    [Parameter] public string? Title { get; set; }
 
-    RenderFragment IColumn<TItem>.RenderCell(TItem item) => __builder =>
+    public override RenderFragment RenderCell(TItem item) => __builder =>
     {
         @Expression.Compile()(item)
     };
 
-    RenderFragment IColumn<TItem>.RenderTitle() => __builder =>
-    {
-        @Title
-    };
-
     protected override void OnParametersSet()
         => Title ??= Expression.GetPropertyOrDefault()?.Name.Humanize(LetterCasing.Title);
-
-    protected override void OnInitialized() => Table?.AddColumn(this);
-    void IDisposable.Dispose() => Table?.RemoveColumn(this);
 }

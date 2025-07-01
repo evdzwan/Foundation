@@ -11,7 +11,7 @@
 </EditForm>
 
 @code {
-    readonly List<IField<TContext>> Fields = [];
+    readonly List<Field<TContext>> Fields = [];
     TContext? Context;
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
@@ -21,8 +21,8 @@
     protected override async Task OnInitializedAsync()
         => Context = Provider is { } provider ? await provider() : default;
 
-    internal void AddField(IField<TContext> field) => Fields.Add(field);
-    internal void RemoveField(IField<TContext> field) => Fields.Remove(field);
+    internal void AddField(Field<TContext> field) => Fields.Add(field);
+    internal void RemoveField(Field<TContext> field) => Fields.Remove(field);
 
     Task SubmitForm() => OnCommit is { } onCommit && Context is { } context
         ? onCommit(context)
