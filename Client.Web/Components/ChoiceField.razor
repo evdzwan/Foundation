@@ -39,6 +39,7 @@
         => ComponentReference = DotNetObjectReference.Create(this);
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public Func<TItem, string?> DisplayItem { get; set; } = GetDefaultDisplayItem();
     [Parameter, EditorRequired] public required Expression<Func<TContext, TItem>> Expression { get; set; }
     [Parameter] public CollectionProviderDelegate<TItem>? Provider { get; set; }
 
@@ -61,10 +62,10 @@
     {
         if (Expression.GetPropertyOrDefault() is { CanRead: true } property)
         {
-            Title ??= Expression.GetPropertyOrDefault()?.Name.Humanize(LetterCasing.Title);
+            Title ??= property.Name.Humanize(LetterCasing.Title);
             if (Context is { } context)
             {
-                DisplayValue = property.GetValue(context)?.ToString();
+                DisplayValue = property.GetValue(context) is TItem item ? DisplayItem(item) : null;
                 ValidationExpression = Expression.WithoutContextParameter(context);
             }
         }
@@ -92,4 +93,15 @@
 
     ValueTask IAsyncDisposable.DisposeAsync()
         => Script.Detach(PopoverReference);
+
+    static Func<TItem, string?> GetDefaultDisplayItem()
+    {
+        if (typeof(TItem).GetCustomAttribute<DisplayColumnAttribute>() is { DisplayColumn: { Length: > 0 } displayColumn })
+        {
+            var property = typeof(TItem).GetProperty(displayColumn);
+            return item => property?.GetValue(item) as string;
+        }
+
+        return item => item?.ToString();
+    }
 }
