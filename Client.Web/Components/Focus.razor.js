@@ -1,6 +1,8 @@
 ﻿export function focus(elem, selector) {
-    const child = elem.querySelector(selector);
-    if (child !== null) {
-        child.focus();
+    if (elem !== null && selector !== null) {
+        const child = elem.querySelector(selector);
+        if (child !== null) {
+            child.focus();
+        }
     }
 }

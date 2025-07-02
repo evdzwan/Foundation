@@ -13,7 +13,10 @@
             <button @attributes="Attributes" @onclick="ShowPopover" @ref="TriggerReference">@DisplayValue</button>
         </Focus>
         <div popover="hint" @ref="PopoverReference">
-            <Table ChildContent="ChildContent" Provider="Provider" />
+            @if (TableVisible)
+            {
+                <Table ChildContent="ChildContent" Provider="Provider" />
+            }
         </div>
         @if (ValidationExpression is { } validationExpression)
         {
@@ -26,6 +29,7 @@
     readonly DotNetObjectReference<ChoiceField<TContext, TItem>> ComponentReference;
 
     bool PopoverOpen;
+    bool TableVisible;
     string? DisplayValue;
     ElementReference PopoverReference;
     ElementReference TriggerReference;
@@ -81,6 +85,7 @@
     {
         if (!PopoverOpen)
         {
+            TableVisible = true;
             await Script.ShowPopover(PopoverReference, TriggerReference);
         }
     }

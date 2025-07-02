@@ -1,22 +1,32 @@
 ﻿export function attach(elem, invoker) {
-    elem.toggle = evt => toggle(invoker, evt);
-    elem.addEventListener("toggle", elem.toggle);
-    toggle(elem, invoker);
+    if (elem !== null) {
+        elem.toggle = evt => toggle(invoker, evt);
+        elem.addEventListener("toggle", elem.toggle);
+        toggle(elem, invoker);
+    }
 }
 
 export function detach(elem) {
-    elem.removeEventListener("toggle", elem.toggle);
-    elem.toggle = undefined;
+    if (elem !== null) {
+        elem.removeEventListener("toggle", elem.toggle);
+        elem.toggle = undefined;
+    }
 }
 
 async function toggle(invoker, args) {
-    await invoker.invokeMethodAsync("OnPopoverToggled", args.newState == "open");
+    if (invoker !== null) {
+        await invoker.invokeMethodAsync("OnPopoverToggled", args.newState == "open");
+    }
 }
 
 export function showPopover(elem, trigger) {
-    elem.showPopover({ source: trigger });
+    if (elem !== null) {
+        elem.showPopover({ source: trigger });
+    }
 }
 
 export function hidePopover(elem) {
-    elem.hidePopover();
+    if (elem !== null) {
+        elem.hidePopover();
+    }
 }

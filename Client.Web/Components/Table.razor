@@ -44,8 +44,14 @@
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public CollectionProviderDelegate<TItem>? Provider { get; set; }
 
-    protected override async Task OnInitializedAsync()
-        => Items.AddRange(Provider is { } provider ? await provider(new()) : []);
+    protected override Task OnAfterRenderAsync(bool firstRender)
+        => firstRender ? LoadItems() : Task.CompletedTask;
+
+    async Task LoadItems()
+    {
+        Items.AddRange(Provider is { } provider ? await provider(new(Page: new(Skip: 0, Take: 20))) : []);
+        StateHasChanged();
+    }
 
     internal void AddColumn(Column<TItem> column) => Columns.Add(column);
     internal void RemoveColumn(Column<TItem> column) => Columns.Remove(column);

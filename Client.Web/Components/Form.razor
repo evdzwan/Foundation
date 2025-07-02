@@ -20,13 +20,19 @@
     [Parameter] public Func<TContext, Task>? OnCommit { get; set; }
     [Parameter] public ValueProviderDelegate<TContext>? Provider { get; set; }
 
-    protected override async Task OnInitializedAsync()
-        => Context = Provider is { } provider ? await provider() : default;
+    protected override Task OnAfterRenderAsync(bool firstRender)
+        => firstRender ? LoadContext() : Task.CompletedTask;
 
-    internal void AddField(Field<TContext> field) => Fields.Add(field);
-    internal void RemoveField(Field<TContext> field) => Fields.Remove(field);
+    async Task LoadContext()
+    {
+        Context = Provider is { } provider ? await provider() : default;
+        StateHasChanged();
+    }
 
     Task SubmitForm() => OnCommit is { } onCommit && Context is { } context
         ? onCommit(context)
         : Task.CompletedTask;
+
+    internal void AddField(Field<TContext> field) => Fields.Add(field);
+    internal void RemoveField(Field<TContext> field) => Fields.Remove(field);
 }

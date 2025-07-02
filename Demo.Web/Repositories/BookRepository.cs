@@ -5,6 +5,7 @@ namespace Foundation.Repositories;
 interface IBookRepository
 {
     Task CreateBook(BookDetail book, CancellationToken cancellationToken = default);
+    //TODO denk dat dit toch IAuthorRepository moet zijn? en dan zonder Ref?!
     Task<AuthorReference[]> GetAuthorLookup(BookDetail book, Transform transform, CancellationToken cancellationToken = default);
     Task<BookItem[]> GetBooks(Transform transform, CancellationToken cancellationToken = default);
     Task<BookDetail> GetBook(int id, CancellationToken cancellationToken = default);
@@ -25,7 +26,7 @@ sealed class BookRepository : IBookRepository
     public async Task<AuthorReference[]> GetAuthorLookup(BookDetail book, Transform transform, CancellationToken cancellationToken = default)
     {
         await Task.Delay(200, cancellationToken);
-        return [.. Authors.Take(10)];
+        return [.. transform.Apply(Authors)];
     }
 
     public async Task<BookDetail> GetBook(int id, CancellationToken cancellationToken = default)
@@ -37,7 +38,7 @@ sealed class BookRepository : IBookRepository
     public async Task<BookItem[]> GetBooks(Transform transform, CancellationToken cancellationToken = default)
     {
         await Task.Delay(500, cancellationToken);
-        return [.. Books.Skip(10).Take(20).Select(book => new BookItem(book.Id, book.Name, book.Author.Name))];
+        return [.. transform.Apply(Books).Select(book => new BookItem(book.Id, book.Name, book.Author.Name))];
     }
 
     public async Task UpdateBook(int id, BookDetail book, CancellationToken cancellationToken = default)

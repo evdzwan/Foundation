@@ -1,5 +1,5 @@
 ﻿@page "/books"
-@attribute [StreamRendering]
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject IBookRepository BookRepository
 
 <Table Provider="Books.AsCollectionProvider()">
