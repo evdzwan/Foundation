@@ -1,7 +1,7 @@
 ﻿namespace Foundation;
 
-public record Page(int Skip, int Take)
+public record Filter()
 {
     public IEnumerable<TItem> Apply<TItem>(IEnumerable<TItem> collection)
-        => collection.Skip(Skip).Take(Take);
+        => collection;
 }

@@ -63,7 +63,7 @@
     async Task LoadItems()
     {
         Items = [];
-        Items = Provider is { } provider ? await provider(new(Page)) : [];
+        Items = Provider is { } provider ? await provider(new(Filter: null, Sort: null, Page)) : [];
         StateHasChanged();
     }
 
