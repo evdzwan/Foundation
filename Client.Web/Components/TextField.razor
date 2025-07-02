@@ -9,6 +9,7 @@
         <Focus Enabled="AutoFocus">
             <InputText AdditionalAttributes="Attributes" @bind-Value="DisplayValue" @bind-Value:after="OnDisplayValueChanged" />
         </Focus>
+
         @if (ValidationExpression is { } validationExpression)
         {
             <ValidationMessage For="validationExpression" />

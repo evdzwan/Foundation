@@ -39,18 +39,35 @@
 
 @code {
     readonly List<Column<TItem>> Columns = [];
-    readonly List<TItem> Items = [];
+    TItem[] Items = [];
+    bool Rendered;
+
+    [CascadingParameter] Page? ActivePage { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public CollectionProviderDelegate<TItem>? Provider { get; set; }
 
     protected override Task OnAfterRenderAsync(bool firstRender)
-        => firstRender ? LoadItems() : Task.CompletedTask;
+    {
+        Rendered = true;
+        return firstRender ? LoadItems() : Task.CompletedTask;
+    }
 
     async Task LoadItems()
     {
-        Items.AddRange(Provider is { } provider ? await provider(new(Page: new(Skip: 0, Take: 20))) : []);
+        Items = [];
+        Items = Provider is { } provider ? await provider(new(ActivePage)) : [];
         StateHasChanged();
+    }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        var activePage = ActivePage;
+        await base.SetParametersAsync(parameters);
+        if (Rendered && ActivePage?.Equals(activePage) is not true)
+        {
+            await LoadItems();
+        }
     }
 
     internal void AddColumn(Column<TItem> column) => Columns.Add(column);
