@@ -7,5 +7,5 @@
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter, EditorRequired] public required ISelection<TItem> Selection { get; set; }
+    [Parameter] public ISelection<TItem>? Selection { get; set; }
 }

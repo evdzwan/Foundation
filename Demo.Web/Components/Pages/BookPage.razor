@@ -2,14 +2,17 @@
 @page "/books/{id:int}"
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject IAuthorRepository AuthorRepository
+@inject IGenreRepository GenreRepository
 @inject IBookRepository BookRepository
 
 <Form Provider="Book.AsValueProvider()" OnCommit="CommitChanges">
     <TextField Expression="book => book.Id" Visible="Id is not null" readonly />
     <TextField Expression="book => book.Name" AutoFocus />
     <ChoiceField Expression="book => book.Author" Provider="Authors.AsCollectionProvider()">
+        <ExpressionColumn Expression="author => author.Id" />
         <ExpressionColumn Expression="author => author.Name" />
     </ChoiceField>
+    <ChoiceField Expression="book => book.Genres" Provider="Genres.AsCollectionProvider()" />
 
     <Button Commit>Save changes</Button>
     <Button Discard>Cancel</Button>
@@ -17,12 +20,16 @@
 
 @code {
     readonly IAsyncCollection<AuthorItem> Authors;
+    readonly IAsyncCollection<Genre> Genres;
     readonly IAsyncValue<BookDetail> Book;
 
     public BookPage()
     {
         Authors = AsyncCollection.Create(async (transform, ct)
             => await AuthorRepository.GetAuthors(transform, ct));
+
+        Genres = AsyncCollection.Create(async (transform, ct)
+            => await GenreRepository.GetGenres(transform, ct));
 
         Book = AsyncValue.Create(async ct
             => Id is { } id ? await BookRepository.GetBook(id, ct) : BookDetail.CreateNew());

@@ -3,4 +3,4 @@
 namespace Foundation.Models;
 
 [DisplayColumn(nameof(Name))]
-public sealed record BookItem(int Id, [property: Display] string Name, [property: Display] string Author);
+public sealed record Genre(int Id, string Name);

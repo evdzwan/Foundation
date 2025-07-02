@@ -48,7 +48,7 @@
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public CollectionProviderDelegate<TItem>? Provider { get; set; }
 
-    string? GetBodyClass() => Selection is not null ? "select" : null;
+    string? GetBodyClass() => Selection is { } selection ? $"select {(selection.Multiple ? "multiple" : "single")}" : null;
     string? GetRowClass(TItem item) => Selection?.IsActive(item) is true ? "active" : null;
 
     protected override Task OnAfterRenderAsync(bool firstRender)
@@ -56,6 +56,9 @@
         Rendered = true;
         return firstRender ? LoadItems() : Task.CompletedTask;
     }
+
+    protected override void OnParametersSet()
+        => ChildContent ??= CreateDefaultChildContent();
 
     async Task LoadItems()
     {
@@ -65,7 +68,16 @@
     }
 
     void SelectRow(TItem item)
-        => Selection?.Activate(item);
+    {
+        if (Selection is { Multiple: true } multipleSelection)
+        {
+            multipleSelection.Toggle(item);
+        }
+        else if (Selection is { Multiple: false } singleSelection)
+        {
+            singleSelection.Activate(item);
+        }
+    }
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
@@ -79,4 +91,32 @@
 
     internal void AddColumn(Column<TItem> column) => Columns.Add(column);
     internal void RemoveColumn(Column<TItem> column) => Columns.Remove(column);
+
+    static Expression<Func<TItem, TValue>> CreateColumnExpression<TValue>(string propertyName)
+    {
+        var parameter = Expression.Parameter(typeof(TItem), "item");
+        return Expression.Lambda<Func<TItem, TValue>>(Expression.Property(parameter, propertyName), parameter);
+    }
+
+    static RenderFragment CreateDefaultChildContent() => builder =>
+    {
+        var sequence = 0;
+
+        var properties = typeof(TItem).GetProperties();
+        foreach (var property in properties)
+        {
+            builder.OpenComponent(sequence++, typeof(ExpressionColumn<,>).MakeGenericType(typeof(TItem), property.PropertyType));
+            var createColumnExpressionGenericMethod = typeof(Table<TItem>).GetMethod(nameof(CreateColumnExpression),
+                                                                                     genericParameterCount: 1,
+                                                                                     BindingFlags.Static | BindingFlags.NonPublic,
+                                                                                     [typeof(string)])!;
+
+            var createColumnExpressionMethod = createColumnExpressionGenericMethod.MakeGenericMethod(property.PropertyType);
+            builder.AddComponentParameter(sequence++,
+                                          nameof(ExpressionColumn<TItem, object?>.Expression),
+                                          createColumnExpressionMethod.Invoke(obj: null, [property.Name]));
+
+            builder.CloseComponent();
+        }
+    };
 }

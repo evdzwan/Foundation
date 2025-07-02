@@ -42,6 +42,7 @@ sealed class BookRepository : IBookRepository
     static BookDetail GenerateBook(int id) => new(id)
     {
         Name = $"Book {id}",
-        Author = AuthorRepository.ConvertToItem(AuthorRepository.Authors[(id - 1) / 5 % 20])
+        Author = AuthorRepository.ConvertToItem(AuthorRepository.Authors[(id - 1) / 5 % 20]),
+        Genres = [GenreRepository.Genres[0], GenreRepository.Genres[3]]
     };
 }

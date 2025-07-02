@@ -1,6 +1,8 @@
-﻿namespace Foundation.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Foundation.Models;
 
 public sealed record AuthorDetail(int Id)
 {
-    public required string Name { get; set; }
+    [Required] public required string Name { get; set; }
 }

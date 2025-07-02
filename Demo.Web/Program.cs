@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddFoundation()
                 .AddScoped<IAuthorRepository, AuthorRepository>()
                 .AddScoped<IBookRepository, BookRepository>()
+                .AddScoped<IGenreRepository, GenreRepository>()
                 .AddRazorComponents()
                 .AddInteractiveServerComponents();
 
