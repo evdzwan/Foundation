@@ -21,10 +21,10 @@
             }
         </div>
 
-        <div class="table-body">
+        <div class="table-body @GetBodyClass()">
             @foreach (var item in Items)
             {
-                <div class="table-row" @key="item">
+                <div class="table-row @GetRowClass(item)" @onclick="() => SelectRow(item)" @key="item">
                     @foreach (var column in Columns)
                     {
                         <div class="table-cell" @key="column">
@@ -42,10 +42,14 @@
     TItem[] Items = [];
     bool Rendered;
 
-    [CascadingParameter] Page? ActivePage { get; set; }
+    [CascadingParameter] Page? Page { get; set; }
+    [CascadingParameter] ISelection<TItem>? Selection { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public CollectionProviderDelegate<TItem>? Provider { get; set; }
+
+    string? GetBodyClass() => Selection is not null ? "select" : null;
+    string? GetRowClass(TItem item) => Selection?.IsActive(item) is true ? "active" : null;
 
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -56,15 +60,18 @@
     async Task LoadItems()
     {
         Items = [];
-        Items = Provider is { } provider ? await provider(new(ActivePage)) : [];
+        Items = Provider is { } provider ? await provider(new(Page)) : [];
         StateHasChanged();
     }
 
+    void SelectRow(TItem item)
+        => Selection?.Activate(item);
+
     public override async Task SetParametersAsync(ParameterView parameters)
     {
-        var activePage = ActivePage;
+        var page = Page;
         await base.SetParametersAsync(parameters);
-        if (Rendered && ActivePage?.Equals(activePage) is not true)
+        if (Rendered && Page?.Equals(page) is not true)
         {
             await LoadItems();
         }

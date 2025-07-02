@@ -1,6 +1,8 @@
-﻿namespace Foundation;
+﻿using System.Collections.Specialized;
 
-public interface ISelection<TItem> : ICollection<TItem>
+namespace Foundation;
+
+public interface ISelection<TItem> : ICollection<TItem>, INotifyCollectionChanged
 {
     TItem? Cursor { get; }
 

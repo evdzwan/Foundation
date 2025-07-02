@@ -1,6 +1,8 @@
-﻿namespace Foundation;
+﻿using System.Collections.ObjectModel;
 
-sealed class MultipleSelection<TItem> : List<TItem>, ISelection<TItem>
+namespace Foundation;
+
+public sealed class MultipleSelection<TItem> : ObservableCollection<TItem>, ISelection<TItem>
 {
     public TItem? Cursor => this.LastOrDefault();
 

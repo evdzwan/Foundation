@@ -19,6 +19,15 @@
     display: table-row-group;
 }
 
+    .table-body.select > .table-row {
+        cursor: pointer;
+    }
+
+        .table-body.select > .table-row.active {
+            background-color: #ddd;
+            cursor: unset;
+        }
+
 .table-row {
     display: table-row;
 }

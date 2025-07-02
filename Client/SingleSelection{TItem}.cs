@@ -1,6 +1,8 @@
-﻿namespace Foundation;
+﻿using System.Collections.ObjectModel;
 
-sealed class SingleSelection<TItem> : List<TItem>, ISelection<TItem>
+namespace Foundation;
+
+public sealed class SingleSelection<TItem> : ObservableCollection<TItem>, ISelection<TItem>
 {
     public TItem? Cursor => this.LastOrDefault();
 

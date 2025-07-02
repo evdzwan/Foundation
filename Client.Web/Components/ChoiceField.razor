@@ -15,7 +15,9 @@
         <div popover="hint" @ref="PopoverReference">
             @if (TableVisible)
             {
-                <Table ChildContent="ChildContent" Provider="Provider" />
+                <Selector Selection="Selection">
+                    <Table ChildContent="ChildContent" Provider="Provider" />
+                </Selector>
             }
         </div>
 
@@ -28,6 +30,7 @@
 
 @code {
     readonly DotNetObjectReference<ChoiceField<TContext, TItem>> ComponentReference;
+    readonly ISelection<TItem> Selection = new SingleSelection<TItem>();
 
     bool PopoverOpen;
     bool TableVisible;
@@ -37,7 +40,10 @@
     Expression<Func<TItem>>? ValidationExpression;
 
     public ChoiceField()
-        => ComponentReference = DotNetObjectReference.Create(this);
+    {
+        ComponentReference = DotNetObjectReference.Create(this);
+        Selection.CollectionChanged += OnSelectionChanged;
+    }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public Func<TItem, string?> DisplayItem { get; set; } = GetDefaultDisplayItem();
@@ -66,14 +72,33 @@
             Title ??= property.Name.Humanize(LetterCasing.Title);
             if (Context is { } context)
             {
-                DisplayValue = property.GetValue(context) is TItem item ? DisplayItem(item) : null;
+                var value = property.GetValue(context);
+                if (value is TItem item)
+                {
+                    DisplayValue = DisplayItem(item);
+                    Selection.Activate(item);
+                }
+                else
+                {
+                    DisplayValue = null;
+                }
+
                 ValidationExpression = Expression.WithoutContextParameter(context);
             }
         }
     }
 
+    async void OnSelectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => await (Selection switch
+    {
+        { Cursor: { } cursor, Multiple: false } => UpdatePropertyValue(cursor),
+        _ => Task.CompletedTask
+    });
+
     protected override void OnDisposed()
-        => ComponentReference.Dispose();
+    {
+        Selection.CollectionChanged -= OnSelectionChanged;
+        ComponentReference.Dispose();
+    }
 
     async Task HidePopover()
     {
@@ -89,6 +114,28 @@
         {
             TableVisible = true;
             await Script.ShowPopover(PopoverReference, TriggerReference);
+        }
+    }
+
+    async Task UpdatePropertyValue(TItem item)
+    {
+        if (Expression.GetPropertyOrDefault() is { CanRead: true, CanWrite: true } property
+            && Context is { } context
+            && item?.Equals(property.GetValue(context)) is not true)
+        {
+            property.SetValue(context, item);
+            DisplayValue = DisplayItem(item);
+
+            try
+            {
+                await HidePopover();
+            }
+            catch (Exception ex)
+            {
+                await DispatchExceptionAsync(ex);
+            }
+
+            StateHasChanged();
         }
     }
 
