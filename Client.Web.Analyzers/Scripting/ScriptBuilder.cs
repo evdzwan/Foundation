@@ -16,7 +16,7 @@ sealed class ScriptBuilder(INamedTypeSymbol scriptType, string scriptPath) : Bui
         /// <remarks>
         /// Generated from <c>{{scriptPath}}</c>
         /// </remarks>
-        {{GetAccessibilityName(scriptType)}} partial class {{scriptType.Name}}(IJSRuntime jsRuntime, ILogger<{{scriptType.Name}}>? logger = null) : Script(@"{{scriptPath}}", jsRuntime, logger)
+        {{GetAccessibilityName(scriptType)}} partial class {{scriptType.Name}}(IJSRuntime jsRuntime, ILogger<{{scriptType.Name}}> logger) : Script(@"{{scriptPath}}", jsRuntime, logger)
         {
         {{string.Join("\r\n\r\n", GetMethods(scriptType))}}
         }

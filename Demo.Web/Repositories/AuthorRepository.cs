@@ -8,19 +8,23 @@ interface IAuthorRepository
     Task<AuthorDetail> GetAuthor(int id, CancellationToken cancellationToken = default);
 }
 
-sealed class AuthorRepository : IAuthorRepository
+sealed class AuthorRepository(ILogger<AuthorRepository> logger) : IAuthorRepository
 {
     internal static readonly List<AuthorDetail> Authors = [.. Enumerable.Range(1, 20).Select(GenerateAuthor)];
     internal static AuthorItem ConvertToItem(AuthorDetail author) => new(author.Id, author.Name);
 
     public async Task<AuthorDetail> GetAuthor(int id, CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("GetAuthor(id = {Id})", id);
+
         await Task.Delay(100, cancellationToken);
         return Authors[id - 1];
     }
 
     public async Task<AuthorItem[]> GetAuthors(Query query, CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("GetAuthors(query = {Query})", query);
+
         await Task.Delay(500, cancellationToken);
         return [.. query.Transform(Authors.AsQueryable()).Select(ConvertToItem)];
     }

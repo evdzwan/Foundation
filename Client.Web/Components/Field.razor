@@ -6,7 +6,7 @@
 
     [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object?>? Attributes { get; set; }
     [Parameter, EditorRequired] public required Expression<Func<TContext, object?>> Expression { get; set; }
-    
+
     [Parameter] public bool AutoFocus { get; set; }
     [Parameter] public bool Visible { get; set; } = true;
 
@@ -34,21 +34,19 @@
     protected override void OnParametersSet()
         => ValueProperty = Expression.GetPropertyOrDefault();
 
-    protected RenderFragment Render(string? additionalClass = null) => __builder =>
+    protected RenderFragment Render() => __builder =>
     {
         @if (Visible)
         {
-            <div class="field @additionalClass">
-                @RenderHeader()
-                <Focus Enabled="AutoFocus">
-                    @RenderEditor()
-                </Focus>
+            @RenderHeader()
+            <Focus Enabled="AutoFocus">
+                @RenderEditor()
+            </Focus>
 
-                @if (Form is { DisplayContext: { } context })
-                {
-                    @RenderValidationMessage(context)
-                }
-            </div>
+            @if (Form is { DisplayContext: { } context })
+            {
+                @RenderValidationMessage(context)
+            }
         }
     };
 

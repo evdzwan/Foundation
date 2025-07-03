@@ -1,7 +1,9 @@
 ﻿@typeparam TContext where TContext : notnull
 @inherits Field<TContext>
 
-@Render(additionalClass: "text")
+<div class="field text">
+    @Render()
+</div>
 
 @code {
     string? EditorValue

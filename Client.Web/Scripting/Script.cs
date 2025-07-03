@@ -3,7 +3,7 @@ using Microsoft.JSInterop;
 
 namespace Foundation.Scripting;
 
-public abstract class Script(string path, IJSRuntime jsRuntime, ILogger? logger) : IAsyncDisposable
+public abstract class Script(string path, IJSRuntime jsRuntime, ILogger logger) : IAsyncDisposable
 {
     IJSObjectReference? Module;
 
