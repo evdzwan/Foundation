@@ -18,8 +18,13 @@
     [Parameter] public bool JustifyStart { get; set; }
     [Parameter] public bool JustifyStretch { get; set; }
 
+    [Parameter] public bool SpaceAround { get; set; }
+    [Parameter] public bool SpaceBetween { get; set; }
+    [Parameter] public bool SpaceEvenly { get; set; }
+
     [Parameter] public bool Horizontal { get; set; }
     [Parameter] public bool Vertical { get; set; }
+    [Parameter] public bool Reverse { get; set; }
 
     ClassList FlexClass => ClassList.Create(Attributes);
 
@@ -31,9 +36,14 @@
                                           .Add("--align", "stretch", AlignStretch)
                                           .Add("--justify", "center", JustifyCenter)
                                           .Add("--justify", "end", JustifyEnd)
+                                          .Add("--justify", "space-around", SpaceAround)
+                                          .Add("--justify", "space-between", SpaceBetween)
+                                          .Add("--justify", "space-evenly", SpaceEvenly)
                                           .Add("--justify", "start", JustifyStart)
                                           .Add("--justify", "stretch", JustifyStretch)
-                                          .Add("--direction", "row", Horizontal)
-                                          .Add("--direction", "column", Vertical)
+                                          .Add("--direction", "row", Horizontal && !Reverse)
+                                          .Add("--direction", "column", Vertical && !Reverse)
+                                          .Add("--direction", "row-reverse", Horizontal && Reverse)
+                                          .Add("--direction", "column-reverse", Vertical && Reverse)
                                           .ToString();
 }

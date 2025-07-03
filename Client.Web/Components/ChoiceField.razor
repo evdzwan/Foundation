@@ -4,9 +4,12 @@
 @inject ChoiceFieldScript Script
 @inherits Field<TContext>
 
-<div class="field choice">
-    @Render()
-</div>
+@if (Visible)
+{
+    <div class="field choice">
+        @Render()
+    </div>
+}
 
 @code {
     readonly DotNetObjectReference<ChoiceField<TContext, TItem>> ComponentReference;

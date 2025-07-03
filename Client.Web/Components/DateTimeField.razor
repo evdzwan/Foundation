@@ -1,9 +1,12 @@
 ﻿@typeparam TContext where TContext : notnull
 @inherits Field<TContext>
 
-<div class="field datetime">
-    @Render()
-</div>
+@if (Visible)
+{
+    <div class="field datetime">
+        @Render()
+    </div>
+}
 
 @code {
     [Parameter] public bool Date { get; set; }

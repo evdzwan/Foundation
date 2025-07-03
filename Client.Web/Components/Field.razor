@@ -36,8 +36,7 @@
 
     protected RenderFragment Render() => __builder =>
     {
-        @if (Visible)
-        {
+        <Flex Vertical AlignStretch>
             @RenderHeader()
             <Focus Enabled="AutoFocus">
                 @RenderEditor()
@@ -47,7 +46,7 @@
             {
                 @RenderValidationMessage(context)
             }
-        }
+        </Flex>
     };
 
     protected abstract RenderFragment RenderEditor();

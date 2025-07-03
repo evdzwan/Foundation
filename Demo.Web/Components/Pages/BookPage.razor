@@ -6,7 +6,7 @@
 @page "/books/new"
 
 <Form Context="Book" OnCommit="CommitChanges">
-    <Flex Vertical>
+    <Flex Vertical AlignStretch>
         <TextField Expression="book => book.Id" Visible="Id is not null" readonly />
         <TextField Expression="book => book.Name" AutoFocus />
         <DateTimeField Expression="book => book.PublishDate" Date />
@@ -16,7 +16,7 @@
         </ChoiceField>
         <ChoiceField Expression="book => book.Genres" Items="Genres" />
 
-        <Flex Horizontal>
+        <Flex Horizontal SpaceEvenly>
             <button type="submit">Save changes</button>
             <button type="button">Cancel</button>
         </Flex>
