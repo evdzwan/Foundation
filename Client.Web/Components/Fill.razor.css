@@ -1,0 +1,4 @@
+﻿.fill {
+    --factor: 1;
+    flex-grow: var(--factor);
+}

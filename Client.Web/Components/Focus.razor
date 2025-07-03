@@ -1,15 +1,19 @@
 ﻿@inject FocusScript Script
 
-<div class="focus" @ref="FocusReference">
+<div @attributes="Attributes" class="focus @FocusClass" @ref="FocusReference">
     @ChildContent
 </div>
 
 @code {
     ElementReference FocusReference;
 
-    [Parameter, EditorRequired] public required RenderFragment ChildContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object?>? Attributes { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool Enabled { get; set; } = true;
     [Parameter] public string Selector { get; set; } = ":first-child";
+
+    ClassList FocusClass => ClassList.Create(Attributes);
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

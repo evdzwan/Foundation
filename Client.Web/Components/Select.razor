@@ -1,0 +1,11 @@
+﻿@typeparam TItem where TItem : notnull
+@inherits Component
+
+<CascadingValue Value="Selection">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter] public required RenderFragment? ChildContent { get; set; }
+    [Parameter] public ISelection<TItem>? Selection { get; set; }
+}

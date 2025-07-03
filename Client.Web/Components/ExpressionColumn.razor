@@ -1,15 +1,32 @@
-﻿@typeparam TItem
-@typeparam TProperty
+﻿@typeparam TItem where TItem : notnull
+@typeparam TValue
 @inherits Column<TItem>
 
 @code {
-    [Parameter, EditorRequired] public required Expression<Func<TItem, TProperty>> Expression { get; set; }
+    [Parameter, EditorRequired] public required Expression<Func<TItem, TValue>> Expression { get; set; }
+    [Parameter] public RenderFragment<TValue>? ChildContent { get; set; }
 
-    public override RenderFragment RenderCell(TItem item) => __builder =>
+    public override RenderFragment RenderCell(TItem item)
     {
-        @Expression.Compile()(item)
-    };
+        if (ChildContent is { } childContent && Expression.GetPropertyOrDefault() is { CanRead: true } property)
+        {
+            return childContent((TValue)property.GetValue(item)!);
+        }
+
+        return __builder =>
+        {
+            @item
+        };
+    }
 
     protected override void OnParametersSet()
-        => Title ??= Expression.GetPropertyOrDefault()?.Name.Humanize(LetterCasing.Title);
+    {
+        ChildContent ??= CreateDefaultChildContent();
+        Title ??= Expression.GetPropertyOrDefault()?.Name.Humanize(LetterCasing.Title);
+    }
+
+    static RenderFragment<TValue> CreateDefaultChildContent() => value => __builder =>
+    {
+        @value
+    };
 }

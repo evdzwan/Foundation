@@ -1,0 +1,69 @@
+﻿@typeparam TContext where TContext : notnull
+@inherits Component
+
+@code {
+    [CascadingParameter] protected Form<TContext>? Form { get; private set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object?>? Attributes { get; set; }
+    [Parameter, EditorRequired] public required Expression<Func<TContext, object?>> Expression { get; set; }
+    
+    [Parameter] public bool AutoFocus { get; set; }
+    [Parameter] public bool Visible { get; set; } = true;
+
+    protected PropertyInfo? ValueProperty { get; private set; }
+    protected object? Value
+    {
+        get
+        {
+            if (Form is { DisplayContext: { } context } && Expression.GetPropertyOrDefault() is { CanRead: true } property)
+            {
+                return property.GetValue(context);
+            }
+
+            return default;
+        }
+        set
+        {
+            if (Form is { DisplayContext: { } context } && Expression.GetPropertyOrDefault() is { CanWrite: true } property)
+            {
+                property.SetValue(context, value);
+            }
+        }
+    }
+
+    protected override void OnParametersSet()
+        => ValueProperty = Expression.GetPropertyOrDefault();
+
+    protected RenderFragment Render(string? additionalClass = null) => __builder =>
+    {
+        @if (Visible)
+        {
+            <div class="field @additionalClass">
+                @RenderHeader()
+                <Focus Enabled="AutoFocus">
+                    @RenderEditor()
+                </Focus>
+
+                @if (Form is { DisplayContext: { } context })
+                {
+                    @RenderValidationMessage(context)
+                }
+            </div>
+        }
+    };
+
+    protected abstract RenderFragment RenderEditor();
+
+    protected virtual RenderFragment RenderHeader() => __builder =>
+    {
+        <label>@Expression.GetPropertyOrDefault()?.Name.Humanize(LetterCasing.Title)</label>
+    };
+
+    protected virtual RenderFragment RenderValidationMessage(TContext context) => __builder =>
+    {
+        <ValidationMessage For="Expression.ReplaceParameter(context)" />
+    };
+
+    protected override void OnInitialized() => Form?.AddField(this);
+    protected override void OnDisposed() => Form?.RemoveField(this);
+}

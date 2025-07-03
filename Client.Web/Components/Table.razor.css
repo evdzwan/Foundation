@@ -1,6 +1,5 @@
 ﻿.table {
     display: table;
-    width: 100%;
 }
 
 .table-column {
@@ -10,10 +9,6 @@
 .table-header {
     display: table-header-group;
 }
-
-    .table-header > .table-cell:last-child {
-        width: 100%;
-    }
 
 .table-body {
     display: table-row-group;
@@ -26,10 +21,6 @@
         .table-body.select > .table-row.active {
             background-color: #ddd;
         }
-
-    .table-body.select.single > .table-row.active {
-        cursor: unset;
-    }
 
 .table-row {
     display: table-row;

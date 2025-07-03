@@ -1,58 +1,37 @@
-﻿@inherits Field<TContext>
-@implements IAsyncDisposable
+﻿@attribute [CascadingTypeParameter(nameof(TItem))]
+@typeparam TContext where TContext : notnull
+@typeparam TItem where TItem : notnull
 @inject ChoiceFieldScript Script
-@attribute [CascadingTypeParameter(nameof(TItem))]
-@typeparam TContext where TContext : class
-@typeparam TItem
+@inherits Field<TContext>
 
-@if (Visible)
-{
-    <div class="field">
-        <label>@Title</label>
-        <Focus Enabled="AutoFocus">
-            <button @attributes="Attributes" @onclick="ShowPopover" @ref="TriggerReference">@DisplayValue</button>
-            <div popover="hint" @ref="PopoverReference">
-                @if (TableVisible)
-                {
-                    <Selector Selection="Selection">
-                        <Table ChildContent="ChildContent" Provider="Provider" />
-                    </Selector>
-                }
-            </div>
-        </Focus>
-
-        @if (ValidationExpression is { } validationExpression)
-        {
-            <ValidationMessage For="validationExpression" />
-        }
-    </div>
-}
+@Render(additionalClass: "choice")
 
 @code {
     readonly DotNetObjectReference<ChoiceField<TContext, TItem>> ComponentReference;
-
-    bool PopoverOpen;
-    bool TableVisible;
-    string? DisplayValue;
-    ISelection<TItem>? Selection;
+    ISelection<TItem>? ActiveSelection;
     ElementReference PopoverReference;
     ElementReference TriggerReference;
-    Expression<Func<object?>>? ValidationExpression;
+    bool TableVisible;
+    bool PopoverOpen;
 
     public ChoiceField()
         => ComponentReference = DotNetObjectReference.Create(this);
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public Func<TItem, string?> DisplayItem { get; set; } = GetDefaultDisplayItem();
-    [Parameter, EditorRequired] public required Expression<Func<TContext, object?>> Expression { get; set; }
-    [Parameter] public CollectionProviderDelegate<TItem>? Provider { get; set; }
+    [Parameter] public IAsyncCollection<TItem>? Items { get; set; }
 
-    [JSInvokable]
-    public Task OnPopoverToggled(bool open)
+    protected override RenderFragment RenderEditor() => __builder =>
     {
-        PopoverOpen = open;
-        return InvokeAsync(StateHasChanged);
-    }
+        <button type="button" @attributes="Attributes" @onclick="ShowPopover" @ref="TriggerReference">Trigger</button>
+        <div popover="hint" @ref="PopoverReference">
+            @if (TableVisible)
+            {
+                <Select Selection="ActiveSelection">
+                    <Table ChildContent="ChildContent" Items="Items" />
+                </Select>
+            }
+        </div>
+    };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -64,65 +43,39 @@
 
     protected override void OnParametersSet()
     {
-        if (Expression.GetPropertyOrDefault() is { CanRead: true } property)
+        base.OnParametersSet();
+
+        if (ActiveSelection is { } prevSelection)
         {
-            if (Selection is { } prevSelection)
-            {
-                prevSelection.CollectionChanged -= OnSelectionChanged;
-            }
+            prevSelection.CollectionChanged -= OnActiveSelectionChanged;
+        }
 
-            var selection = Selection = property.PropertyType.IsAssignableTo(typeof(IEnumerable<>).MakeGenericType([typeof(TItem)]))
-                ? new MultipleSelection<TItem>()
-                : new SingleSelection<TItem>();
-            selection.CollectionChanged += OnSelectionChanged;
-            Selection = selection;
-
-            Title ??= property.Name.Humanize(LetterCasing.Title);
-            if (Context is { } context)
-            {
-                var value = property.GetValue(context);
-                if (value is TItem item)
-                {
-                    DisplayValue = DisplayItem(item);
-                    selection.Activate(item);
-                }
-                else if (value is IEnumerable<TItem> items)
-                {
-                    DisplayValue = string.Join(", ", items.Select(DisplayItem));
-                    items.ToArray().ForEach(selection.Activate);
-                }
-                else
-                {
-                    DisplayValue = null;
-                }
-
-                ValidationExpression = Expression.WithoutContextParameter(context);
-            }
+        var selection = ActiveSelection = CreateSelection(ValueProperty?.PropertyType, Value);
+        if (selection is not null)
+        {
+            selection.CollectionChanged += OnActiveSelectionChanged;
         }
     }
 
-    async void OnSelectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => await (Selection switch
+    async void OnActiveSelectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        { Cursor: { } cursor, Multiple: false } => UpdatePropertyValue(cursor),
-        { Multiple: true } selection => UpdatePropertyValue(selection),
-        _ => Task.CompletedTask
-    });
-
-    protected override void OnDisposed()
-    {
-        ComponentReference.Dispose();
-        if (Selection is { } selection)
+        Value = DetermineValue(sender as ISelection<TItem>, Value);
+        await InvokeAsync(async () =>
         {
-            selection.CollectionChanged -= OnSelectionChanged;
-        }
+            if (ActiveSelection is { Multiple: false })
+            {
+                await HidePopover();
+            }
+
+            StateHasChanged();
+        });
     }
 
-    async Task HidePopover()
+    [JSInvokable]
+    public Task OnPopoverToggled(bool open)
     {
-        if (PopoverOpen)
-        {
-            await Script.HidePopover(PopoverReference);
-        }
+        PopoverOpen = open;
+        return InvokeAsync(StateHasChanged);
     }
 
     async Task ShowPopover()
@@ -134,73 +87,55 @@
         }
     }
 
-    async Task UpdatePropertyValue(TItem item)
+    async Task HidePopover()
     {
-        if (Expression.GetPropertyOrDefault() is { CanRead: true, CanWrite: true } property
-            && Context is { } context
-            && item?.Equals(property.GetValue(context)) is not true)
+        if (PopoverOpen)
         {
-            property.SetValue(context, item);
-            DisplayValue = DisplayItem(item);
-
-            try
-            {
-                await HidePopover();
-            }
-            catch (Exception ex)
-            {
-                await DispatchExceptionAsync(ex);
-            }
-
-            StateHasChanged();
+            await Script.HidePopover(PopoverReference);
         }
     }
 
-    Task UpdatePropertyValue(IEnumerable<TItem> items)
+    protected override async ValueTask OnDisposedAsync()
     {
-        if (Expression.GetPropertyOrDefault() is { } property && Context is { } context)
+        if (ActiveSelection is { } selection)
         {
-            if (property.CanRead && property.PropertyType.IsAssignableTo(typeof(ICollection<>).MakeGenericType([typeof(TItem)])))
-            {
-                UpdateCollection((ICollection<TItem>)property.GetValue(context)!, items);
-            }
-            else if (property.CanWrite)
-            {
-                property.SetValue(context, items.ToArray());
-            }
-
-            DisplayValue = string.Join(", ", items.Select(DisplayItem));
-            StateHasChanged();
+            selection.CollectionChanged -= OnActiveSelectionChanged;
         }
 
-        return Task.CompletedTask;
+        await Script.Detach(PopoverReference);
+        ComponentReference.Dispose();
     }
 
-    ValueTask IAsyncDisposable.DisposeAsync()
-        => Script.Detach(PopoverReference);
-
-    static void UpdateCollection(ICollection<TItem> target, IEnumerable<TItem> source)
+    static ISelection<TItem>? CreateSelection(Type? valueType, object? value) => (valueType, value) switch
     {
-        var originalTarget = target.ToArray();
-        foreach (var item in originalTarget.Except(source))
-        {
-            target.Remove(item);
-        }
+        (_, IEnumerable<TItem> items) => Selection.Multiple(items),
+        (_, TItem item) => Selection.Single([item]),
+        ({ } type, _) when type.IsAssignableTo(typeof(IEnumerable<>).MakeGenericType([typeof(TItem)])) => Selection.Multiple<TItem>(),
+        ({ } type, _) when type.IsAssignableTo(typeof(TItem)) => Selection.Single<TItem>(),
+        _ => null
+    };
 
-        foreach (var item in source.Except(originalTarget))
-        {
-            target.Add(item);
-        }
-    }
-
-    static Func<TItem, string?> GetDefaultDisplayItem()
+    static object? DetermineValue(ISelection<TItem>? selection, object? value) => (selection, value) switch
     {
-        if (typeof(TItem).GetCustomAttribute<DisplayColumnAttribute>() is { DisplayColumn: { Length: > 0 } displayColumn })
+        ({ Multiple: true }, ICollection<TItem> collection) => UpdateCollection(collection, selection),
+        ({ Multiple: true }, _) => selection.ToArray(),
+        ({ Multiple: false }, _) => selection.Cursor,
+        _ => value
+    };
+
+    static ICollection<TItem> UpdateCollection(ICollection<TItem> collection, ISelection<TItem> selection)
+    {
+        var originalCollection = collection.ToArray();
+        foreach (var item in originalCollection.Except(selection))
         {
-            var property = typeof(TItem).GetProperty(displayColumn);
-            return item => property?.GetValue(item) as string;
+            collection.Remove(item);
         }
 
-        return item => item?.ToString();
+        foreach (var item in selection.Except(originalCollection))
+        {
+            collection.Add(item);
+        }
+
+        return collection;
     }
 }

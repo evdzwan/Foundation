@@ -1,5 +1,6 @@
 ﻿@attribute [CascadingTypeParameter(nameof(TItem))]
-@typeparam TItem
+@typeparam TItem where TItem : notnull
+@inherits Component
 
 <div class="table">
     <CascadingValue Value="this" IsFixed>
@@ -7,87 +8,61 @@
     </CascadingValue>
 
     <Defer>
-        @foreach (var column in Columns)
-        {
+        <ForEach Items="Columns" Context="column">
             <div class="table-column" @key="column" />
-        }
+        </ForEach>
 
         <div class="table-header">
-            @foreach (var column in Columns)
-            {
+            <ForEach Items="Columns" Context="column">
                 <div class="table-cell" @key="column">
-                    @column.Title
+                    @column.RenderHeader()
                 </div>
-            }
+            </ForEach>
         </div>
 
-        <div class="table-body @GetBodyClass()">
-            @foreach (var item in Items)
-            {
+        <div class="table-body @BodyClass">
+            <ForEach Items="DisplayItems" Context="item">
                 <div class="table-row @GetRowClass(item)" @onclick="() => SelectRow(item)" @key="item">
-                    @foreach (var column in Columns)
-                    {
+                    <ForEach Items="Columns" Context="column">
                         <div class="table-cell" @key="column">
                             @column.RenderCell(item)
                         </div>
-                    }
+                    </ForEach>
                 </div>
-            }
+            </ForEach>
         </div>
     </Defer>
 </div>
 
 @code {
     readonly List<Column<TItem>> Columns = [];
-    TItem[] Items = [];
-    bool Rendered;
+    TItem[] DisplayItems = [];
 
-    [CascadingParameter] Page? Page { get; set; }
     [CascadingParameter] ISelection<TItem>? Selection { get; set; }
+    [CascadingParameter] Query? Query { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public CollectionProviderDelegate<TItem>? Provider { get; set; }
+    [Parameter] public IAsyncCollection<TItem>? Items { get; set; }
 
-    string? GetBodyClass() => Selection is { } selection ? $"select {(selection.Multiple ? "multiple" : "single")}" : null;
-    string? GetRowClass(TItem item) => Selection?.IsActive(item) is true ? "active" : null;
+    ClassList BodyClass => ClassList.Create("select", Selection is not null);
 
     protected override Task OnAfterRenderAsync(bool firstRender)
-    {
-        Rendered = true;
-        return firstRender ? LoadItems() : Task.CompletedTask;
-    }
+        => firstRender ? LoadDisplayItems() : Task.CompletedTask;
 
     protected override void OnParametersSet()
         => ChildContent ??= CreateDefaultChildContent();
 
-    async Task LoadItems()
+    async Task LoadDisplayItems()
     {
-        Items = [];
-        Items = Provider is { } provider ? await provider(new(Filter: null, Sort: null, Page)) : [];
+        DisplayItems = Items is { } items ? await items.GetView(Query ?? new()) : [];
         StateHasChanged();
     }
 
-    void SelectRow(TItem item)
-    {
-        if (Selection is { Multiple: true } multipleSelection)
-        {
-            multipleSelection.Toggle(item);
-        }
-        else if (Selection is { Multiple: false } singleSelection)
-        {
-            singleSelection.Activate(item);
-        }
-    }
+    ClassList GetRowClass(TItem item)
+        => ClassList.Create("active", Selection?.IsActive(item) is true);
 
-    public override async Task SetParametersAsync(ParameterView parameters)
-    {
-        var page = Page;
-        await base.SetParametersAsync(parameters);
-        if (Rendered && Page?.Equals(page) is not true)
-        {
-            await LoadItems();
-        }
-    }
+    void SelectRow(TItem item)
+        => Selection?.Toggle(item);
 
     internal void AddColumn(Column<TItem> column) => Columns.Add(column);
     internal void RemoveColumn(Column<TItem> column) => Columns.Remove(column);
@@ -101,20 +76,18 @@
     static RenderFragment CreateDefaultChildContent() => builder =>
     {
         var sequence = 0;
-
-        var properties = typeof(TItem).GetProperties();
-        foreach (var property in properties)
+        foreach (var property in typeof(TItem).GetProperties())
         {
             builder.OpenComponent(sequence++, typeof(ExpressionColumn<,>).MakeGenericType(typeof(TItem), property.PropertyType));
-            var createColumnExpressionGenericMethod = typeof(Table<TItem>).GetMethod(nameof(CreateColumnExpression),
-                                                                                     genericParameterCount: 1,
-                                                                                     BindingFlags.Static | BindingFlags.NonPublic,
-                                                                                     [typeof(string)])!;
+            var method = typeof(Table<TItem>).GetMethod(nameof(CreateColumnExpression),
+                                                        genericParameterCount: 1,
+                                                        BindingFlags.Static | BindingFlags.NonPublic,
+                                                        [typeof(string)])!;
 
-            var createColumnExpressionMethod = createColumnExpressionGenericMethod.MakeGenericMethod(property.PropertyType);
+            var genericMethod = method.MakeGenericMethod(property.PropertyType);
             builder.AddComponentParameter(sequence++,
                                           nameof(ExpressionColumn<TItem, object?>.Expression),
-                                          createColumnExpressionMethod.Invoke(obj: null, [property.Name]));
+                                          genericMethod.Invoke(obj: null, [property.Name]));
 
             builder.CloseComponent();
         }

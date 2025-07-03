@@ -1,8 +1,9 @@
-﻿@typeparam TItem
+﻿@typeparam TItem where TItem : notnull
 @inherits Column<TItem>
 
 @code {
     [Parameter, EditorRequired] public required RenderFragment<TItem> ChildContent { get; set; }
 
-    public override RenderFragment RenderCell(TItem item) => ChildContent(item);
+    public override RenderFragment RenderCell(TItem item)
+        => ChildContent(item);
 }

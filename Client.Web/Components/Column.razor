@@ -1,0 +1,16 @@
+﻿@typeparam TItem where TItem : notnull
+@inherits Component
+
+@code {
+    [CascadingParameter] protected Table<TItem>? Table { get; private set; }
+    [Parameter] public string? Title { get; set; }
+
+    public abstract RenderFragment RenderCell(TItem item);
+    public virtual RenderFragment RenderHeader() => __builder =>
+    {
+        @Title
+    };
+
+    protected override void OnInitialized() => Table?.AddColumn(this);
+    protected override void OnDisposed() => Table?.RemoveColumn(this);
+}

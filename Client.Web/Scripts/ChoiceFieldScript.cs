@@ -1,20 +1,14 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
+﻿using Foundation.Scripting;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace Foundation.Scripts;
 
-sealed class ChoiceFieldScript(IJSRuntime jsRuntime, ILogger<ChoiceFieldScript>? logger = null) : Script(jsRuntime, "./_content/Client.Web/Components/ChoiceField.razor.js", logger)
+[Script(@"./_content/Client.Web/Components/ChoiceField.razor.js")]
+sealed partial class ChoiceFieldScript
 {
-    public ValueTask Attach<TValue>(ElementReference elem, DotNetObjectReference<TValue> invoker, CancellationToken cancellationToken = default) where TValue : class
-        => Invoke("attach", [elem, invoker], cancellationToken);
-
-    public ValueTask Detach(ElementReference elem, CancellationToken cancellationToken = default)
-        => Invoke("detach", [elem], cancellationToken);
-
-    public ValueTask ShowPopover(ElementReference elem, ElementReference trigger, CancellationToken cancellationToken = default)
-        => Invoke("showPopover", [elem, trigger], cancellationToken);
-
-    public ValueTask HidePopover(ElementReference elem, CancellationToken cancellationToken = default)
-        => Invoke("hidePopover", [elem], cancellationToken);
+    public partial ValueTask Attach<TValue>(ElementReference elem, DotNetObjectReference<TValue> invoker, CancellationToken cancellationToken = default) where TValue : class;
+    public partial ValueTask Detach(ElementReference elem, CancellationToken cancellationToken = default);
+    public partial ValueTask ShowPopover(ElementReference elem, ElementReference trigger, CancellationToken cancellationToken = default);
+    public partial ValueTask HidePopover(ElementReference elem, CancellationToken cancellationToken = default);
 }

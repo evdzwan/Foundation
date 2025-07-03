@@ -1,0 +1,19 @@
+﻿@inherits Component
+
+<div @attributes="Attributes" class="fill @FillClass">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object?> Attributes { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public int Factor { get; set; } = 1;
+
+    ClassList FillClass => ClassList.Create(Attributes);
+
+    protected override void OnParametersSet()
+        => Attributes["style"] = StyleList.Create(Attributes)
+                                          .Add("--factor", Factor)
+                                          .ToString();
+}

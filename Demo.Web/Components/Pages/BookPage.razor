@@ -1,21 +1,26 @@
-﻿@page "/books/new"
-@page "/books/{id:int}"
-@rendermode @(new InteractiveServerRenderMode(prerender: false))
+﻿@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject IAuthorRepository AuthorRepository
 @inject IGenreRepository GenreRepository
 @inject IBookRepository BookRepository
+@page "/books/{id:int}"
+@page "/books/new"
 
-<Form Provider="Book.AsValueProvider()" OnCommit="CommitChanges">
-    <TextField Expression="book => book.Id" Visible="Id is not null" readonly />
-    <TextField Expression="book => book.Name" AutoFocus />
-    <ChoiceField Expression="book => book.Author" Provider="Authors.AsCollectionProvider()">
-        <ExpressionColumn Expression="author => author.Id" />
-        <ExpressionColumn Expression="author => author.Name" />
-    </ChoiceField>
-    <ChoiceField Expression="book => book.Genres" Provider="Genres.AsCollectionProvider()" />
+<Form Context="Book" OnCommit="CommitChanges">
+    <Flex Vertical>
+        <TextField Expression="book => book.Id" Visible="Id is not null" readonly />
+        <TextField Expression="book => book.Name" AutoFocus />
+        <DateTimeField Expression="book => book.PublishDate" Date />
+        <ChoiceField Expression="book => book.Author" Items="Authors">
+            <ExpressionColumn Expression="author => author.Id" />
+            <ExpressionColumn Expression="author => author.Name" />
+        </ChoiceField>
+        <ChoiceField Expression="book => book.Genres" Items="Genres" />
 
-    <Button Commit>Save changes</Button>
-    <Button Discard>Cancel</Button>
+        <Flex Horizontal>
+            <button type="submit">Save changes</button>
+            <button type="button">Cancel</button>
+        </Flex>
+    </Flex>
 </Form>
 
 @code {
@@ -25,14 +30,9 @@
 
     public BookPage()
     {
-        Authors = AsyncCollection.Create(async (transform, ct)
-            => await AuthorRepository.GetAuthors(transform, ct));
-
-        Genres = AsyncCollection.Create(async (transform, ct)
-            => await GenreRepository.GetGenres(transform, ct));
-
-        Book = AsyncValue.Create(async ct
-            => Id is { } id ? await BookRepository.GetBook(id, ct) : BookDetail.CreateNew());
+        Authors = AsyncCollection.Create((transform, ct) => AuthorRepository.GetAuthors(transform, ct));
+        Genres = AsyncCollection.Create((transform, ct) => GenreRepository.GetGenres(transform, ct));
+        Book = AsyncValue.Create(async ct => Id is { } id ? await BookRepository.GetBook(id, ct) : BookDetail.CreateNew());
     }
 
     [Parameter] public int? Id { get; set; }

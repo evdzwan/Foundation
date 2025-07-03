@@ -1,37 +1,36 @@
 ﻿@attribute [CascadingTypeParameter(nameof(TContext))]
-@typeparam TContext where TContext : class
+@typeparam TContext where TContext : notnull
+@inherits Component
 
 <div class="form">
-    <EditForm Model="Context ?? new object()" OnValidSubmit="SubmitForm">
+    <EditForm Model="DisplayContext ?? new object()" OnValidSubmit="OnFormValidSubmit">
         <DataAnnotationsValidator />
         <CascadingValue Value="this" IsFixed>
-            <CascadingValue Value="Context">
-                @ChildContent
-            </CascadingValue>
+            @ChildContent
         </CascadingValue>
     </EditForm>
 </div>
 
 @code {
     readonly List<Field<TContext>> Fields = [];
-    TContext? Context;
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public IAsyncValue<TContext>? Context { get; set; }
     [Parameter] public Func<TContext, Task>? OnCommit { get; set; }
-    [Parameter] public ValueProviderDelegate<TContext>? Provider { get; set; }
+
+    internal TContext? DisplayContext { get; private set; }
 
     protected override Task OnAfterRenderAsync(bool firstRender)
-        => firstRender ? LoadContext() : Task.CompletedTask;
+        => firstRender ? LoadDisplayContext() : Task.CompletedTask;
 
-    async Task LoadContext()
+    async Task LoadDisplayContext()
     {
-        Context = Provider is { } provider ? await provider() : default;
+        DisplayContext = Context is { } context ? await context.GetValue() : default;
         StateHasChanged();
     }
 
-    Task SubmitForm() => OnCommit is { } onCommit && Context is { } context
-        ? onCommit(context)
-        : Task.CompletedTask;
+    Task OnFormValidSubmit(EditContext editContext)
+        => OnCommit?.Invoke((TContext)editContext.Model) ?? Task.CompletedTask;
 
     internal void AddField(Field<TContext> field) => Fields.Add(field);
     internal void RemoveField(Field<TContext> field) => Fields.Remove(field);

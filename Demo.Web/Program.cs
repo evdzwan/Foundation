@@ -1,9 +1,10 @@
 using Foundation;
 using Foundation.Components;
 using Foundation.Repositories;
+using Foundation.Scripting;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddFoundation()
+builder.Services.AddFoundation(config => config.AddScripts([typeof(Program).Assembly]))
                 .AddScoped<IAuthorRepository, AuthorRepository>()
                 .AddScoped<IBookRepository, BookRepository>()
                 .AddScoped<IGenreRepository, GenreRepository>()

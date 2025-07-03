@@ -1,19 +1,21 @@
-﻿@page "/books"
-@rendermode @(new InteractiveServerRenderMode(prerender: false))
+﻿@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject IBookRepository BookRepository
+@page "/books"
 
-<Pager>
-    <Table Provider="Books.AsCollectionProvider()">
+<Transform Query="new(Page: new(Skip: 0, Take: 20))">
+    <Table Items="Books">
         <ExpressionColumn Expression="book => book.Name" />
         <ExpressionColumn Expression="book => book.Author" />
         <TemplateColumn>
             <a href="/books/@context.Id">Detail</a>
         </TemplateColumn>
     </Table>
-</Pager>
+</Transform>
+
+<NavLink href="/books/new">New</NavLink>
 
 @code {
     readonly IAsyncCollection<BookItem> Books;
-    public BooksPage() => Books = AsyncCollection.Create((transform, ct)
-        => BookRepository.GetBooks(transform, ct));
+    public BooksPage()
+        => Books = AsyncCollection.Create((transform, ct) => BookRepository.GetBooks(transform, ct));
 }

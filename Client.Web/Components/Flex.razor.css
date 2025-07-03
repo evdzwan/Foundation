@@ -1,0 +1,9 @@
+﻿.flex {
+    --align: start;
+    --direction: row;
+    --justify: start;
+    align-items: var(--align);
+    display: flex;
+    flex-direction: var(--direction);
+    justify-content: var(--justify);
+}

@@ -1,10 +1,5 @@
-﻿.form {
-    align-items: start;
+﻿.form,
+.form ::deep form {
+    display: grid;
+    grid-template-columns: 1fr;
 }
-
-    .form,
-    .form ::deep form,
-    .form ::deep .field {
-        display: flex;
-        flex-direction: column;
-    }

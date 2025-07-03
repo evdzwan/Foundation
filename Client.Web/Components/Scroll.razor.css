@@ -1,0 +1,13 @@
+﻿.scroll {
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow: auto;
+}
+
+    .scroll.horizontal:not(.vertical) {
+        overflow-y: hidden;
+    }
+
+    .scroll.vertical:not(.horizontal) {
+        overflow-x: hidden;
+    }

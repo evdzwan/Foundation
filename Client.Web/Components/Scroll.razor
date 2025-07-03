@@ -1,0 +1,15 @@
+﻿<div @attributes="Attributes" class="scroll @ScrollClass">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object?>? Attributes { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool Horizontal { get; set; }
+    [Parameter] public bool Vertical { get; set; }
+
+    ClassList ScrollClass => ClassList.Create(Attributes)
+                                      .Add("horizontal", Horizontal)
+                                      .Add("vertical", Vertical);
+}

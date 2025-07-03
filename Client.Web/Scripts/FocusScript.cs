@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
+﻿using Foundation.Scripting;
+using Microsoft.AspNetCore.Components;
 
 namespace Foundation.Scripts;
 
-sealed class FocusScript(IJSRuntime jsRuntime, ILogger<FocusScript>? logger = null) : Script(jsRuntime, "./_content/Client.Web/Components/Focus.razor.js", logger)
+[Script(@"./_content/Client.Web/Components/Focus.razor.js")]
+sealed partial class FocusScript
 {
-    public ValueTask Focus(ElementReference elem, string selector, CancellationToken cancellationToken = default)
-        => Invoke("focus", [elem, selector], cancellationToken);
+    public partial ValueTask Focus(ElementReference elem, string selector, CancellationToken cancellationToken = default);
 }

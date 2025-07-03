@@ -1,0 +1,39 @@
+﻿@inherits Component
+
+<div @attributes="Attributes" class="flex @FlexClass">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object?> Attributes { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public bool AlignCenter { get; set; }
+    [Parameter] public bool AlignEnd { get; set; }
+    [Parameter] public bool AlignStart { get; set; }
+    [Parameter] public bool AlignStretch { get; set; }
+
+    [Parameter] public bool JustifyCenter { get; set; }
+    [Parameter] public bool JustifyEnd { get; set; }
+    [Parameter] public bool JustifyStart { get; set; }
+    [Parameter] public bool JustifyStretch { get; set; }
+
+    [Parameter] public bool Horizontal { get; set; }
+    [Parameter] public bool Vertical { get; set; }
+
+    ClassList FlexClass => ClassList.Create(Attributes);
+
+    protected override void OnParametersSet()
+        => Attributes["style"] = StyleList.Create(Attributes)
+                                          .Add("--align", "center", AlignCenter)
+                                          .Add("--align", "end", AlignEnd)
+                                          .Add("--align", "start", AlignStart)
+                                          .Add("--align", "stretch", AlignStretch)
+                                          .Add("--justify", "center", JustifyCenter)
+                                          .Add("--justify", "end", JustifyEnd)
+                                          .Add("--justify", "start", JustifyStart)
+                                          .Add("--justify", "stretch", JustifyStretch)
+                                          .Add("--direction", "row", Horizontal)
+                                          .Add("--direction", "column", Vertical)
+                                          .ToString();
+}

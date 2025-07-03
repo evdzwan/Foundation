@@ -1,4 +1,4 @@
-﻿using Foundation.Models;
+﻿using Foundation.Protocol;
 
 namespace Foundation.Repositories;
 
@@ -6,7 +6,7 @@ interface IBookRepository
 {
     Task CreateBook(BookDetail book, CancellationToken cancellationToken = default);
     Task<BookDetail> GetBook(int id, CancellationToken cancellationToken = default);
-    Task<BookItem[]> GetBooks(Transform transform, CancellationToken cancellationToken = default);
+    Task<BookItem[]> GetBooks(Query query, CancellationToken cancellationToken = default);
     Task UpdateBook(int id, BookDetail book, CancellationToken cancellationToken = default);
 }
 
@@ -27,10 +27,10 @@ sealed class BookRepository : IBookRepository
         return Books[id - 1];
     }
 
-    public async Task<BookItem[]> GetBooks(Transform transform, CancellationToken cancellationToken = default)
+    public async Task<BookItem[]> GetBooks(Query query, CancellationToken cancellationToken = default)
     {
         await Task.Delay(500, cancellationToken);
-        return [.. transform.Apply(Books).Select(ConvertToItem)];
+        return [.. query.Transform(Books.AsQueryable()).Select(ConvertToItem)];
     }
 
     public async Task UpdateBook(int id, BookDetail book, CancellationToken cancellationToken = default)
@@ -43,6 +43,7 @@ sealed class BookRepository : IBookRepository
     {
         Name = $"Book {id}",
         Author = AuthorRepository.ConvertToItem(AuthorRepository.Authors[(id - 1) / 5 % 20]),
+        PublishDate = DateTime.Today.AddDays(-id),
         Genres = [GenreRepository.Genres[0], GenreRepository.Genres[3]]
     };
 }

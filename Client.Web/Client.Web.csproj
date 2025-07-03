@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Client\Client.csproj" />
+    <ProjectReference Include="..\Client.Web.Analyzers\Client.Web.Analyzers.csproj" OutputItemType="Analyzer" />
   </ItemGroup>
 
 </Project>

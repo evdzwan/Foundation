@@ -1,46 +1,17 @@
-﻿@inherits Field<TContext>
-@typeparam TContext where TContext : class
-@typeparam TValue
+﻿@typeparam TContext where TContext : notnull
+@inherits Field<TContext>
 
-@if (Visible)
-{
-    <div class="field">
-        <label>@Title</label>
-        <Focus Enabled="AutoFocus">
-            <InputText AdditionalAttributes="Attributes" @bind-Value="DisplayValue" @bind-Value:after="OnDisplayValueChanged" />
-        </Focus>
-
-        @if (ValidationExpression is { } validationExpression)
-        {
-            <ValidationMessage For="validationExpression" />
-        }
-    </div>
-}
+@Render(additionalClass: "text")
 
 @code {
-    string? DisplayValue;
-    Expression<Func<TValue>>? ValidationExpression;
-
-    [Parameter, EditorRequired] public required Expression<Func<TContext, TValue>> Expression { get; set; }
-
-    void OnDisplayValueChanged()
+    string? EditorValue
     {
-        if (Expression.GetPropertyOrDefault() is { CanWrite: true } property && Context is { } context)
-        {
-            property.SetValue(context, Convert.ChangeType(DisplayValue, property.PropertyType));
-        }
+        get => Convert.ChangeType(Value, typeof(string)) as string;
+        set => Value = ValueProperty is { PropertyType: { } propertyType } ? Convert.ChangeType(value, propertyType) : value;
     }
 
-    protected override void OnParametersSet()
+    protected override RenderFragment RenderEditor() => __builder =>
     {
-        if (Expression.GetPropertyOrDefault() is { CanRead: true } property)
-        {
-            Title ??= property.Name.Humanize(LetterCasing.Title);
-            if (Context is { } context)
-            {
-                DisplayValue = Convert.ChangeType(property.GetValue(context), typeof(string)) as string;
-                ValidationExpression = Expression.WithoutContextParameter(context);
-            }
-        }
-    }
+        <InputText AdditionalAttributes="Attributes" @bind-Value="EditorValue" />
+    };
 }

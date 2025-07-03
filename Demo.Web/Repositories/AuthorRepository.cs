@@ -1,10 +1,10 @@
-﻿using Foundation.Models;
+﻿using Foundation.Protocol;
 
 namespace Foundation.Repositories;
 
 interface IAuthorRepository
 {
-    Task<AuthorItem[]> GetAuthors(Transform transform, CancellationToken cancellationToken = default);
+    Task<AuthorItem[]> GetAuthors(Query query, CancellationToken cancellationToken = default);
     Task<AuthorDetail> GetAuthor(int id, CancellationToken cancellationToken = default);
 }
 
@@ -19,10 +19,10 @@ sealed class AuthorRepository : IAuthorRepository
         return Authors[id - 1];
     }
 
-    public async Task<AuthorItem[]> GetAuthors(Transform transform, CancellationToken cancellationToken = default)
+    public async Task<AuthorItem[]> GetAuthors(Query query, CancellationToken cancellationToken = default)
     {
         await Task.Delay(500, cancellationToken);
-        return [.. transform.Apply(Authors).Select(ConvertToItem)];
+        return [.. query.Transform(Authors.AsQueryable()).Select(ConvertToItem)];
     }
 
     static AuthorDetail GenerateAuthor(int id) => new(id)

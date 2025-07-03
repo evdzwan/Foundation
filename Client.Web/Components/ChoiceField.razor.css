@@ -1,4 +1,4 @@
-﻿.field ::deep [popover] {
+﻿.field.choice ::deep [popover] {
     inset: unset;
     left: calc(anchor(start));
     overflow: hidden;

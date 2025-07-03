@@ -1,6 +1,8 @@
-﻿namespace Foundation;
+﻿using Foundation.Protocol;
 
-public interface IAsyncCollection<TItem> : IAsyncEnumerable<TItem>
+namespace Foundation;
+
+public interface IAsyncCollection<TItem> : IAsyncEnumerable<TItem> where TItem : notnull
 {
-    Task<TItem[]> GetView(Transform transform, CancellationToken cancellationToken = default);
+    Task<TItem[]> GetView(Query query, CancellationToken cancellationToken = default);
 }

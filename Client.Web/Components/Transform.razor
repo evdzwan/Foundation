@@ -1,0 +1,10 @@
+﻿@inherits Component
+
+<CascadingValue Value="Query">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public Query? Query { get; set; }
+}
