@@ -1,4 +1,4 @@
-﻿namespace Foundation.Protocol;
+﻿namespace Foundation;
 
 public interface ICreateNew<TValue>
 {
