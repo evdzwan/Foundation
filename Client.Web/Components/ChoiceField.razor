@@ -20,11 +20,23 @@
         => ComponentReference = DotNetObjectReference.Create(this);
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public Func<TItem, string?>? DisplayItem { get; set; }
     [Parameter] public IAsyncCollection<TItem>? Items { get; set; }
+
+    string EditorValue => string.Join(", ", ActiveSelection?.Select(DisplayItem ?? (item => item.ToString())) ?? []);
 
     protected override RenderFragment RenderEditor() => __builder =>
     {
-        <button type="button" @attributes="Attributes" @onclick="ShowPopover" @ref="TriggerReference">Trigger</button>
+        <button type="button" @attributes="Attributes" @onclick="ShowPopover" @ref="TriggerReference">
+            @if (EditorValue is { Length: > 0 } value)
+            {
+                @value
+            }
+            else
+            {
+                <i>Nothing selected</i>
+            }
+        </button>
         <div popover="hint" @ref="PopoverReference">
             @if (TableVisible)
             {
@@ -46,7 +58,6 @@
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-
         if (ActiveSelection is { } prevSelection)
         {
             prevSelection.CollectionChanged -= OnActiveSelectionChanged;
@@ -57,6 +68,8 @@
         {
             selection.CollectionChanged += OnActiveSelectionChanged;
         }
+
+        DisplayItem ??= CreateDefaultDisplayItem();
     }
 
     async void OnActiveSelectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -106,6 +119,17 @@
 
         await Script.Detach(PopoverReference);
         ComponentReference.Dispose();
+    }
+
+    static Func<TItem, string?> CreateDefaultDisplayItem()
+    {
+        if (typeof(TItem).GetCustomAttribute<DisplayColumnAttribute>() is { DisplayColumn: { Length: > 0 } displayColumn })
+        {
+            var property = typeof(TItem).GetProperty(displayColumn);
+            return item => property?.GetValue(item) as string;
+        }
+
+        return item => item?.ToString();
     }
 
     static ISelection<TItem>? CreateSelection(Type? valueType, object? value) => (valueType, value) switch
