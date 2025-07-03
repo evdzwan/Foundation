@@ -9,7 +9,7 @@
 
     <Defer>
         <ForEach Items="Columns" Context="column">
-            <div class="table-column" @key="column" />
+            <div class="table-column @GetColumnClass(column)" @key="column" />
         </ForEach>
 
         <div class="table-header">
@@ -58,6 +58,9 @@
         StateHasChanged();
     }
 
+    ClassList GetColumnClass(Column<TItem> column)
+        => ClassList.Create("fill", column.Fill);
+
     ClassList GetRowClass(TItem item)
         => ClassList.Create("active", Selection?.IsActive(item) is true);
 
@@ -76,7 +79,14 @@
     static RenderFragment CreateDefaultChildContent() => builder =>
     {
         var sequence = 0;
-        foreach (var property in typeof(TItem).GetProperties())
+        var usedFill = false;
+
+        var displayColumn = typeof(TItem).GetCustomAttribute<DisplayColumnAttribute>()?.DisplayColumn;
+        var properties = typeof(TItem).GetProperties()
+                                      .Where(p => p.GetCustomAttribute<DisplayAttribute>() is not null)
+                                      .ToArray();
+
+        foreach (var (property, index) in properties.Select((p, i) => (p, i)))
         {
             builder.OpenComponent(sequence++, typeof(ExpressionColumn<,>).MakeGenericType(typeof(TItem), property.PropertyType));
             var method = typeof(Table<TItem>).GetMethod(nameof(CreateColumnExpression),
@@ -88,6 +98,12 @@
             builder.AddComponentParameter(sequence++,
                                           nameof(ExpressionColumn<TItem, object?>.Expression),
                                           genericMethod.Invoke(obj: null, [property.Name]));
+
+            if (property.Name.Equals(displayColumn, StringComparison.OrdinalIgnoreCase) || (!usedFill && index == properties.Length - 1))
+            {
+                usedFill = true;
+                builder.AddComponentParameter(sequence++, nameof(Column<TItem>.Fill), true);
+            }
 
             builder.CloseComponent();
         }

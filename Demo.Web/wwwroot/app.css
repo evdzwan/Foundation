@@ -1,15 +1,152 @@
-h1:focus {
-    outline: none;
+@import 'normalize.css';
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: block;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: .5rem;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: .5rem solid transparent;
+    border-radius: .25rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-variant: small-caps;
+    font-weight: 600;
+    margin: .5em 0 .25em 0;
+    outline: none !important;
+}
+
+    h1:first-child {
+        margin: 0;
+    }
+
+a,
+a:focus,
+a:visited {
+    color: #c60;
+    text-decoration: none;
+    transition: color .1s ease;
+}
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+button {
+    background-color: #eee;
+    border: 1px solid #aaa;
+    border-radius: .25rem;
+    cursor: pointer;
+    font-size: 90%;
+    font-variant: small-caps;
+    height: 27.47px;
+    padding: .25rem;
+    user-select: none;
+}
+
+    button:disabled {
+        background-color: #bbb !important;
+        pointer-events: none;
+    }
+
+    button:hover {
+        background-color: #bbb;
+        border-color: #888;
+    }
+
+    button:focus {
+        background-color: #ddd;
+        border-color: #888;
+        outline: none;
+    }
+
+input,
+textarea {
+    background-color: #eee;
+    border: 1px solid #aaa;
+    border-radius: .25rem;
+    font-size: 90%;
+    padding: .25rem;
+}
+
+    input:disabled,
+    input:read-only,
+    textarea:disabled
+    textarea:read-only {
+        background-color: #bbb !important;
+    }
+
+    input:disabled,
+    textarea:disabled {
+        pointer-events: none;
+    }
+
+    input:focus,
+    textarea:focus {
+        background-color: #ddd;
+        border-color: #888;
+        outline: none;
+    }
+
+input {
+    line-height: 1;
+}
+
+textarea {
+    min-height: 6em;
+    resize: vertical;
+}
+
+.flex {
+    gap: .25rem;
 }
 
 .form {
-    max-width: 20em;
+    max-width: 30em;
 }
 
     .form button {
         display: block;
         width: 100%;
     }
+
+.table-header {
+    color: #888;
+}
+
+.table-body.select > .table-row {
+    cursor: pointer;
+}
+
+    .table-body.select > .table-row.active {
+        background-color: #ddd;
+    }
+
+.table-cell {
+    padding: .25rem;
+}
+
+/*TODO add table empty*/
 
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
@@ -37,11 +174,13 @@ h1:focus {
     border-color: #929292;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
     color: var(--bs-secondary-color);
     text-align: end;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
     text-align: start;
 }

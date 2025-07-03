@@ -1,3 +1,7 @@
+main {
+    padding: 1rem;
+}
+
 #blazor-error-ui {
     color-scheme: light only;
     background: lightyellow;

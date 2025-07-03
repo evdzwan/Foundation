@@ -3,4 +3,4 @@
 namespace Foundation.Protocol;
 
 [DisplayColumn(nameof(Name))]
-public sealed record Genre(int Id, string Name);
+public sealed record Genre([property: Display] int Id, [property: Display] string Name);

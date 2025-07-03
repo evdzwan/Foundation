@@ -12,7 +12,7 @@
         <DateTimeField Expression="book => book.PublishDate" Date />
         <ChoiceField Expression="book => book.Author" Items="Authors">
             <ExpressionColumn Expression="author => author.Id" />
-            <ExpressionColumn Expression="author => author.Name" />
+            <ExpressionColumn Expression="author => author.Name" Fill />
         </ChoiceField>
         <ChoiceField Expression="book => book.Genres" Items="Genres" />
 
