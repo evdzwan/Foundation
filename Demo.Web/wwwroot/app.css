@@ -117,10 +117,6 @@ textarea {
     resize: vertical;
 }
 
-.flex {
-    gap: .25rem;
-}
-
 .form {
     max-width: 30em;
 }
@@ -130,8 +126,24 @@ textarea {
         width: 100%;
     }
 
+    .form .field {
+        gap: .25rem;
+    }
+
+        .form .field label {
+            color: #888;
+            font-size: 90%;
+            font-variant: small-caps;
+        }
+
+    .form .flex {
+        gap: .5rem;
+    }
+
 .table-header {
     color: #888;
+    font-size: 90%;
+    font-variant: small-caps;
 }
 
 .table-body.select > .table-row {
@@ -146,6 +158,7 @@ textarea {
     padding: .25rem;
 }
 
+/*TODO add skeleton*/
 /*TODO add table empty*/
 
 .valid.modified:not([type=checkbox]) {

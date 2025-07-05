@@ -7,7 +7,31 @@
 @if (Visible)
 {
     <div class="field choice">
-        @Render()
+        @RenderLabel()
+
+        <button type="button" @attributes="Attributes" @onclick="ShowPopover" @ref="TriggerReference">
+            @if (EditorValue is { Length: > 0 } value)
+            {
+                @value
+            }
+            else
+            {
+                <i>Nothing selected</i>
+            }
+        </button>
+        <div popover="hint" @ref="PopoverReference">
+            @if (TableVisible)
+            {
+                <Select Selection="ActiveSelection">
+                    <Table ChildContent="ChildContent" Items="Items" />
+                </Select>
+            }
+        </div>
+
+        @if (Form is { DisplayContext: { } context })
+        {
+            @RenderValidationMessage(context)
+        }
     </div>
 }
 
@@ -28,32 +52,15 @@
 
     string EditorValue => string.Join(", ", ActiveSelection?.Select(DisplayItem ?? (item => item.ToString())) ?? []);
 
-    protected override RenderFragment RenderEditor() => __builder =>
-    {
-        <button type="button" @attributes="Attributes" @onclick="ShowPopover" @ref="TriggerReference">
-            @if (EditorValue is { Length: > 0 } value)
-            {
-                @value
-            }
-            else
-            {
-                <i>Nothing selected</i>
-            }
-        </button>
-        <div popover="hint" @ref="PopoverReference">
-            @if (TableVisible)
-            {
-                <Select Selection="ActiveSelection">
-                    <Table ChildContent="ChildContent" Items="Items" />
-                </Select>
-            }
-        </div>
-    };
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            if (AutoFocus)
+            {
+                await TriggerReference.FocusAsync();
+            }
+
             await Script.Attach(PopoverReference, ComponentReference);
         }
     }

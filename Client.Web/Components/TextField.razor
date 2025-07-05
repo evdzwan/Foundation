@@ -4,19 +4,30 @@
 @if (Visible)
 {
     <div class="field text">
-        @Render()
+        @RenderLabel()
+
+        <InputText AdditionalAttributes="Attributes" @bind-Value="EditorValue" @ref="EditorReference" />
+        @if (Form is { DisplayContext: { } context })
+        {
+            @RenderValidationMessage(context)
+        }
     </div>
 }
 
 @code {
+    InputText? EditorReference;
+
     string? EditorValue
     {
         get => Convert.ChangeType(Value, typeof(string)) as string;
         set => Value = ValueProperty is { PropertyType: { } propertyType } ? Convert.ChangeType(value, propertyType) : value;
     }
 
-    protected override RenderFragment RenderEditor() => __builder =>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        <InputText AdditionalAttributes="Attributes" @bind-Value="EditorValue" />
-    };
+        if (firstRender && AutoFocus && EditorReference is { Element: { } editorReference })
+        {
+            await editorReference.FocusAsync();
+        }
+    }
 }

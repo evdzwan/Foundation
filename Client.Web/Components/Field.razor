@@ -34,29 +34,12 @@
     protected override void OnParametersSet()
         => ValueProperty = Expression.GetPropertyOrDefault();
 
-    protected RenderFragment Render() => __builder =>
-    {
-        <Flex Vertical AlignStretch>
-            @RenderHeader()
-            <Focus Enabled="AutoFocus">
-                @RenderEditor()
-            </Focus>
-
-            @if (Form is { DisplayContext: { } context })
-            {
-                @RenderValidationMessage(context)
-            }
-        </Flex>
-    };
-
-    protected abstract RenderFragment RenderEditor();
-
-    protected virtual RenderFragment RenderHeader() => __builder =>
+    protected RenderFragment RenderLabel() => __builder =>
     {
         <label>@Expression.GetPropertyOrDefault()?.Name.Humanize(LetterCasing.Title)</label>
     };
 
-    protected virtual RenderFragment RenderValidationMessage(TContext context) => __builder =>
+    protected RenderFragment RenderValidationMessage(TContext context) => __builder =>
     {
         <ValidationMessage For="Expression.ReplaceParameter(context)" />
     };
