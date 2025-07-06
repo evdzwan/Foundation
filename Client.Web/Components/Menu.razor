@@ -46,7 +46,7 @@
 
     [JSInvokable]
     public Task OnPopoverToggled(bool open)
-        => Task.CompletedTask;
+        => Task.CompletedTask; //TODO load dynamic menu items (= lazy)?
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
