@@ -4,24 +4,24 @@
     <button type="button" disabled="@(!Pressed.HasDelegate)" @onclick="OnButtonClicked">@Title</button>
     @if (ChildContent is { } childContent)
     {
-        <button @onclick="ShowSubMenu"><span>&raquo;</span></button>
-        <Menu ChildContent="childContent" Title="@(HideTitle ? null : Title)" @ref="SubMenu" />
+        <button @onclick="ShowNestedMenu"><span>&raquo;</span></button>
+        <Menu ChildContent="childContent" Title="@(HideMenuTitle ? null : Title)" @ref="NestedMenu" />
     }
 </div>
 
 @code {
-    Menu? SubMenu;
+    Menu? NestedMenu;
 
     [CascadingParameter] Menu? Menu { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public bool HideTitle { get; set; }
+    [Parameter] public bool HideMenuTitle { get; set; }
     [Parameter] public bool Persistent { get; set; }
     [Parameter] public EventCallback<MouseEventArgs> Pressed { get; set; }
     [Parameter, EditorRequired] public required string Title { get; set; }
 
-    Task ShowSubMenu(MouseEventArgs e)
-       => SubMenu?.Show(e.ClientX - e.OffsetX, e.ClientY - e.OffsetY) ?? Task.CompletedTask;
+    Task ShowNestedMenu(MouseEventArgs e)
+       => NestedMenu?.Show(e.ClientX - e.OffsetX, e.ClientY - e.OffsetY) ?? Task.CompletedTask;
 
     async Task OnButtonClicked(MouseEventArgs e)
     {
