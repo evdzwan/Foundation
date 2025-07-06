@@ -1,0 +1,34 @@
+﻿@inherits Component
+
+<div class="menu-item">
+    <button type="button" disabled="@(!Pressed.HasDelegate)" @onclick="OnButtonClicked">@Title</button>
+    @if (ChildContent is { } childContent)
+    {
+        <button @onclick="ShowSubMenu"><span>&raquo;</span></button>
+        <Menu ChildContent="childContent" Title="@(HideTitle ? null : Title)" @ref="SubMenu" />
+    }
+</div>
+
+@code {
+    Menu? SubMenu;
+
+    [CascadingParameter] Menu? Menu { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool HideTitle { get; set; }
+    [Parameter] public bool Persistent { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> Pressed { get; set; }
+    [Parameter, EditorRequired] public required string Title { get; set; }
+
+    Task ShowSubMenu(MouseEventArgs e)
+       => SubMenu?.Show(e.ClientX - e.OffsetX, e.ClientY - e.OffsetY) ?? Task.CompletedTask;
+
+    async Task OnButtonClicked(MouseEventArgs e)
+    {
+        await Pressed.InvokeAsync(e);
+        if (!Persistent && Menu is { } menu)
+        {
+            await menu.Hide();
+        }
+    }
+}

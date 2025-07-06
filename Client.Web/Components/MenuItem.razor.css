@@ -1,0 +1,7 @@
+﻿.menu-item {
+    display: flex;
+}
+
+    .menu-item > *:first-child {
+        flex-grow: 1;
+    }

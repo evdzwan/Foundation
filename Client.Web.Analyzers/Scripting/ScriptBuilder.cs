@@ -14,7 +14,7 @@ sealed class ScriptBuilder(INamedTypeSymbol scriptType, string scriptPath) : Bui
         namespace {{scriptType.ContainingNamespace}};
 
         /// <remarks>
-        /// Generated from <c>{{scriptPath}}</c>
+        /// Interop for <c>{{scriptPath}}</c>
         /// </remarks>
         {{GetAccessibilityName(scriptType)}} partial class {{scriptType.Name}}(IJSRuntime jsRuntime, ILogger<{{scriptType.Name}}> logger) : Script(@"{{scriptPath}}", jsRuntime, logger)
         {

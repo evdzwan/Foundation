@@ -1,0 +1,64 @@
+﻿@inherits Component
+@inject MenuScript Script
+
+<div class="menu" popover style="@MenuStyle" @oncontextmenu:preventDefault="true" @ref="MenuReference">
+    <div class="menu-items">
+        @if (Title is { Length: > 0 } title)
+        {
+            <label>@title</label>
+        }
+
+        <CascadingValue Value="Parent ?? this" IsFixed>
+            @ChildContent
+        </CascadingValue>
+    </div>
+</div>
+
+@code {
+    readonly DotNetObjectReference<Menu> ComponentReference;
+
+    ElementReference MenuReference;
+    double PositionX;
+    double PositionY;
+
+    public Menu()
+        => ComponentReference = DotNetObjectReference.Create(this);
+
+    [CascadingParameter] Menu? Parent { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Title { get; set; }
+
+    StyleList MenuStyle => StyleList.Create("--pos-x", $"{PositionX}px")
+                                    .Add("--pos-y", $"{PositionY}px");
+
+    public async Task Show(double positionX, double positionY)
+    {
+        PositionX = positionX;
+        PositionY = positionY;
+
+        await Task.Yield();
+        await Script.ShowPopover(MenuReference);
+    }
+
+    public async Task Hide()
+        => await Script.HidePopover(MenuReference);
+
+    [JSInvokable]
+    public Task OnPopoverToggled(bool open)
+        => Task.CompletedTask;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Script.Attach(MenuReference, ComponentReference);
+        }
+    }
+
+    protected override async ValueTask OnDisposedAsync()
+    {
+        await Script.Detach(MenuReference);
+        ComponentReference.Dispose();
+    }
+}
