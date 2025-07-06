@@ -3,7 +3,12 @@
     flex-direction: column;
 }
 
-    .field [popover] {
+.field-value {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+    .field-value [popover] {
         inset: unset;
         left: calc(anchor(start));
         overflow: hidden;

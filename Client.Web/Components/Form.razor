@@ -2,7 +2,7 @@
 @typeparam TContext where TContext : notnull
 @inherits Component
 
-<div class="form">
+<div class="form @FormClass">
     <EditForm Model="DisplayContext ?? new object()" OnValidSubmit="OnFormValidSubmit">
         <DataAnnotationsValidator />
         <CascadingValue Value="this" IsFixed>
@@ -13,20 +13,32 @@
 
 @code {
     readonly List<Field<TContext>> Fields = [];
+    bool Loading = true;
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public IAsyncValue<TContext>? Context { get; set; }
     [Parameter] public Func<TContext, Task>? OnCommit { get; set; }
 
     internal TContext? DisplayContext { get; private set; }
+    ClassList FormClass => ClassList.Create("loading", Loading);
 
     protected override Task OnAfterRenderAsync(bool firstRender)
         => firstRender ? LoadDisplayContext() : Task.CompletedTask;
 
     async Task LoadDisplayContext()
     {
-        DisplayContext = Context is { } context ? await context.GetValue() : default;
+        Loading = true;
         StateHasChanged();
+
+        try
+        {
+            DisplayContext = Context is { } context ? await context.GetValue() : default;
+        }
+        finally
+        {
+            Loading = false;
+            StateHasChanged();
+        }
     }
 
     Task OnFormValidSubmit(EditContext editContext)

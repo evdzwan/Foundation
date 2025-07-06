@@ -21,15 +21,28 @@
         </div>
 
         <div class="table-body @BodyClass">
-            <ForEach Items="DisplayItems" Context="item">
-                <div class="table-row @GetRowClass(item)" @onclick="() => SelectRow(item)" @key="item">
+            @if (Loading)
+            {
+                <div class="table-row">
                     <ForEach Items="Columns" Context="column">
                         <div class="table-cell" @key="column">
-                            @column.RenderCell(item)
+                            ..
                         </div>
                     </ForEach>
                 </div>
-            </ForEach>
+            }
+            else
+            {
+                <ForEach Items="DisplayItems" Context="item">
+                    <div class="table-row @GetRowClass(item)" @onclick="() => SelectRow(item)" @key="item">
+                        <ForEach Items="Columns" Context="column">
+                            <div class="table-cell" @key="column">
+                                @column.RenderCell(item)
+                            </div>
+                        </ForEach>
+                    </div>
+                </ForEach>
+            }
         </div>
     </Defer>
 </div>
@@ -37,6 +50,7 @@
 @code {
     readonly List<Column<TItem>> Columns = [];
     TItem[] DisplayItems = [];
+    bool Loading = true;
 
     [CascadingParameter] ISelection<TItem>? Selection { get; set; }
     [CascadingParameter] Query? Query { get; set; }
@@ -44,7 +58,8 @@
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public IAsyncCollection<TItem>? Items { get; set; }
 
-    ClassList BodyClass => ClassList.Create("select", Selection is not null);
+    ClassList BodyClass => ClassList.Create("loading", Loading)
+                                    .Add("select", Selection is not null);
 
     protected override Task OnAfterRenderAsync(bool firstRender)
         => firstRender ? LoadDisplayItems() : Task.CompletedTask;
@@ -54,8 +69,18 @@
 
     async Task LoadDisplayItems()
     {
-        DisplayItems = Items is { } items ? await items.GetView(Query ?? new()) : [];
+        Loading = true;
         StateHasChanged();
+
+        try
+        {
+            DisplayItems = Items is { } items ? await items.GetView(Query ?? new()) : [];
+        }
+        finally
+        {
+            Loading = false;
+            StateHasChanged();
+        }
     }
 
     ClassList GetColumnClass(Column<TItem> column)

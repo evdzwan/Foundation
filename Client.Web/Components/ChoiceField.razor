@@ -8,24 +8,25 @@
 {
     <div class="field choice">
         @RenderLabel()
-
-        <button type="button" @attributes="Attributes" @onclick="ShowPopover" @ref="TriggerReference">
-            @if (EditorValue is { Length: > 0 } value)
-            {
-                @value
-            }
-            else
-            {
-                <i>Nothing selected</i>
-            }
-        </button>
-        <div popover="hint" @ref="PopoverReference">
-            @if (TableVisible)
-            {
-                <Select Selection="ActiveSelection">
-                    <Table ChildContent="ChildContent" Items="Items" />
-                </Select>
-            }
+        <div class="field-value @ValueClass">
+            <button type="button" @attributes="Attributes" @onclick="ShowPopover" @ref="TriggerReference">
+                @if (EditorValue is { Length: > 0 } value)
+                {
+                    @value
+                }
+                else
+                {
+                    <i>Nothing selected</i>
+                }
+            </button>
+            <div popover="hint" @ref="PopoverReference">
+                @if (TableVisible)
+                {
+                    <Select Selection="ActiveSelection">
+                        <Table ChildContent="ChildContent" Items="Items" />
+                    </Select>
+                }
+            </div>
         </div>
 
         @if (Form is { DisplayContext: { } context })
@@ -51,6 +52,7 @@
     [Parameter] public IAsyncCollection<TItem>? Items { get; set; }
 
     string EditorValue => string.Join(", ", ActiveSelection?.Select(DisplayItem ?? (item => item.ToString())) ?? []);
+    ClassList ValueClass => ClassList.Create("focus", PopoverOpen);
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

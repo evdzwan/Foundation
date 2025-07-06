@@ -5,8 +5,10 @@
 {
     <div class="field datetime">
         @RenderLabel()
-
-        <input @attributes="Attributes" type="@GetInputType()" @bind="EditorValue" @ref="EditorReference" />
+        <div class="field-value">
+            <input @attributes="Attributes" type="@GetInputType()" @bind="EditorValue" @ref="EditorReference" />
+        </div>
+        
         @if (Form is { DisplayContext: { } context })
         {
             @RenderValidationMessage(context)

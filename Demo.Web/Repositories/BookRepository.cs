@@ -27,7 +27,7 @@ sealed class BookRepository(ILogger<BookRepository> logger) : IBookRepository
     {
         logger.LogInformation("GetBook(id = {Id})", id);
 
-        await Task.Delay(100, cancellationToken);
+        await Task.Delay(1000, cancellationToken);
         return Books[id - 1];
     }
 

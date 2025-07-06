@@ -5,8 +5,10 @@
 {
     <div class="field text">
         @RenderLabel()
+        <div class="field-value">
+            <InputText AdditionalAttributes="Attributes" @bind-Value="EditorValue" @ref="EditorReference" />
+        </div>
 
-        <InputText AdditionalAttributes="Attributes" @bind-Value="EditorValue" @ref="EditorReference" />
         @if (Form is { DisplayContext: { } context })
         {
             @RenderValidationMessage(context)

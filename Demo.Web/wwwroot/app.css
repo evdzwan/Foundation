@@ -44,6 +44,8 @@ a,
 a:focus,
 a:visited {
     color: #c60;
+    font-size: 90%;
+    font-variant: small-caps;
     text-decoration: none;
     transition: color .1s ease;
 }
@@ -131,14 +133,40 @@ textarea {
     }
 
         .form .field label {
-            color: #888;
+            color: #aaa;
             font-size: 90%;
             font-variant: small-caps;
+        }
+
+        .form .field:not(.loading) > label:has(~ .field-value > *:focus),
+        .form .field:not(.loading) > label:has(~ .field-value.focus) {
+            color: #888;
         }
 
     .form .flex {
         gap: .5rem;
     }
+
+    .form.loading button {
+        background-color: #bbb !important;
+        pointer-events: none;
+    }
+
+    .form.loading .field-value {
+        pointer-events: none;
+        position: relative;
+        user-select: none;
+    }
+
+        .form.loading .field-value::before {
+            animation: move 1s linear infinite;
+            background: linear-gradient(-60deg, #ccc 33%, #ddd, #ccc 66%) right / 300% 100%;
+            border-radius: .25rem;
+            content: '';
+            inset: 0;
+            position: absolute;
+            z-index: 10;
+        }
 
 .menu {
     border: 1px solid #888;
@@ -203,26 +231,63 @@ textarea {
     width: 10rem;
 }
 
+.table {
+    border-spacing: .1rem;
+    user-select: none;
+}
+
 .table-header {
     color: #888;
     font-size: 90%;
     font-variant: small-caps;
+    position: relative;
 }
+
+    .table-header::before {
+        content: '';
+        inset: 0;
+        position: absolute;
+        z-index: -1;
+    }
+
+.table-row {
+    position: relative;
+}
+
+    .table-row::before {
+        border-radius: .25rem;
+        content: '';
+        inset: 0;
+        position: absolute;
+        z-index: -1;
+    }
 
 .table-body.select > .table-row {
     cursor: pointer;
 }
 
-    .table-body.select > .table-row.active {
+    .table-body.select > .table-row:hover::before {
         background-color: #ddd;
+    }
+
+    .table-body.select > .table-row.active::before {
+        background-color: #ccc;
+    }
+
+.table-body.loading .table-row {
+    cursor: unset;
+    pointer-events: none;
+}
+
+    .table-body.loading .table-row::before {
+        animation: move 1s linear infinite;
+        background: linear-gradient(-60deg, #ccc 33%, #ddd, #ccc 66%) right / 300% 100%;
+        z-index: 10;
     }
 
 .table-cell {
     padding: .25rem;
 }
-
-/*TODO add skeleton*/
-/*TODO add table empty*/
 
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
@@ -259,4 +324,10 @@ textarea {
 .form-floating > .form-control-plaintext:focus::placeholder,
 .form-floating > .form-control:focus::placeholder {
     text-align: start;
+}
+
+@keyframes move {
+    to {
+        background-position: left;
+    }
 }

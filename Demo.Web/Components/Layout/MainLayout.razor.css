@@ -1,3 +1,10 @@
+nav {
+    display: flex;
+    font-variant: small-caps;
+    gap: .5rem;
+    padding: .5rem;
+}
+
 main {
     padding: 1rem;
 }
