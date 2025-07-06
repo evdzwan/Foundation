@@ -178,8 +178,12 @@ textarea {
             inset: 0;
             padding-left: .1em;
             position: absolute;
-            top: -.15em;
+            top: -.14em;
         }
+
+.separator {
+    background-color: #aaa;
+}
 
 .menu-trigger {
     background-color: #ddd;
