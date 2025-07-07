@@ -16,7 +16,7 @@
     TValue? DisplayValue;
 
     [CascadingParameter(Name = nameof(DefaultRenderer))] RenderFragment? DefaultRenderer { get; set; }
-    [CascadingParameter] IInvoker? Invoker { get; set; }
+    [CascadingParameter] IInvoke? Invoke { get; set; }
 
     [Parameter, EditorRequired] public required IAsyncValue<TValue> Value { get; set; }
     [Parameter] public RenderFragment<TValue>? ChildContent { get; set; }
@@ -38,19 +38,6 @@
         Loading ??= DefaultRenderer;
     }
 
-    protected override void OnInitialized()
-    {
-        if (Invoker is { } invoker)
-        {
-            invoker.Invoke = LoadValue;
-        }
-    }
-
-    protected override void OnDisposed()
-    {
-        if (Invoker is { } invoker)
-        {
-            invoker.Invoke = LoadValue;
-        }
-    }
+    protected override void OnInitialized() => Invoke?.SetHandler(LoadValue);
+    protected override void OnDisposed() => Invoke?.SetHandler(handler: null);
 }

@@ -1,5 +1,5 @@
 ﻿@inherits Component
-@implements IInvoker
+@implements IInvoke
 @inject MenuScript Script
 
 <div class="menu" popover style="@MenuStyle" @oncontextmenu:preventDefault="true" @ref="MenuReference">
@@ -18,6 +18,7 @@
 </div>
 
 @code {
+    Func<CancellationToken, Task>? PopoverOpened;
     ElementReference MenuReference;
     double PositionX;
     double PositionY;
@@ -31,13 +32,6 @@
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public RenderFragment? Items { get; set; }
     [Parameter] public string? Title { get; set; }
-
-    Func<CancellationToken, Task>? Invoke { get; set; }
-    Func<CancellationToken, Task>? IInvoker.Invoke
-    {
-        get => Invoke;
-        set => Invoke = value;
-    }
 
     StyleList MenuStyle => StyleList.Create("--pos-x", $"{PositionX}px")
                                     .Add("--pos-y", $"{PositionY}px");
@@ -66,11 +60,14 @@
     [JSInvokable]
     public async Task OnPopoverToggled(bool open)
     {
-        if (open && Invoke is { } invoke)
+        if (open && PopoverOpened is { } opened)
         {
-            await invoke(ComponentLife.Token);
+            await opened(ComponentLife.Token);
         }
     }
+
+    void IInvoke.SetHandler(Func<CancellationToken, Task>? handler)
+        => PopoverOpened = handler;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
