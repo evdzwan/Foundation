@@ -1,6 +1,6 @@
 ﻿namespace Foundation;
 
-public interface IHandleCommit
+public interface IClose
 {
     Task Invoke();
 }

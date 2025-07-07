@@ -5,9 +5,7 @@
 </button>
 
 @code {
-    [CascadingParameter] IHandleCommit? HandleCommit { get; set; }
-    [CascadingParameter] IHandleDiscard? HandleDiscard { get; set; }
-
+    [CascadingParameter] IClose? Close { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object?>? Attributes { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
@@ -21,8 +19,9 @@
     async Task OnButtonClicked(MouseEventArgs e)
     {
         await Pressed.InvokeAsync(e);
-
-        await (Commit && HandleCommit is { } handleCommit ? handleCommit.Invoke() : Task.CompletedTask);
-        await (Discard && HandleDiscard is { } handleDiscard ? handleDiscard.Invoke() : Task.CompletedTask);
+        if (Discard && Close is { } close)
+        {
+            await close.Invoke();
+        }
     }
 }

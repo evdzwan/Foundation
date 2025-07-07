@@ -1,6 +1,6 @@
 ﻿@attribute [CascadingTypeParameter(nameof(TContext))]
 @typeparam TContext where TContext : notnull
-@implements IHandleDiscard
+@implements IClose
 @inject IJSRuntime JS
 @inherits Component
 
@@ -53,7 +53,7 @@
         await NavigateBack();
     }
 
-    Task IHandleDiscard.Invoke() => NavigateBack();
+    Task IClose.Invoke() => NavigateBack();
     async Task NavigateBack()
         => await JS.InvokeVoidAsync("history.back", ComponentLife.Token);
 
