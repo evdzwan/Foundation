@@ -7,10 +7,12 @@
         <Respond Condition="bounds => bounds.Width >= 768">
             <ExpressionColumn Expression="book => book.Author" Position="0" />
         </Respond>
-        <ExpressionColumn Expression="book => book.Name" Fill />
-        <TemplateColumn>
-            <a href="/books/@context.Id">Detail</a>
-        </TemplateColumn>
+        <ExpressionColumn Expression="book => book.Name" Fill>
+            <a href="/books/@context.Id">@context.Name</a>
+        </ExpressionColumn>
+        <Column>
+            <button type="button">Delete</button>
+        </Column>
     </Table>
 </Transform>
 

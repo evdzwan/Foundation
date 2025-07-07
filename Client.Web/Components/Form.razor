@@ -44,22 +44,6 @@
     Task OnFormValidSubmit(EditContext editContext)
         => OnCommit?.Invoke((TContext)editContext.Model) ?? Task.CompletedTask;
 
-    internal void AddField(Field<TContext> field)
-    {
-        if (field.Position is { } position)
-        {
-            Fields.Insert(position, field);
-        }
-        else
-        {
-            Fields.Add(field);
-        }
-        StateHasChanged();
-    }
-
-    internal void RemoveField(Field<TContext> field)
-    {
-        Fields.Remove(field);
-        StateHasChanged();
-    }
+    internal void AddField(Field<TContext> field) => Fields.Add(field);
+    internal void RemoveField(Field<TContext> field) => Fields.Remove(field);
 }

@@ -4,20 +4,6 @@
 
 @code {
     [Parameter, EditorRequired] public required Expression<Func<TItem, TValue>> Expression { get; set; }
-    [Parameter] public RenderFragment<TValue>? ChildContent { get; set; }
-
-    public override RenderFragment RenderCell(TItem item)
-    {
-        if (ChildContent is { } childContent && Expression.GetPropertyOrDefault() is { CanRead: true } property)
-        {
-            return childContent((TValue)property.GetValue(item)!);
-        }
-
-        return __builder =>
-        {
-            @item
-        };
-    }
 
     protected override void OnParametersSet()
     {
@@ -25,8 +11,16 @@
         Title ??= Expression.GetPropertyOrDefault()?.Name.Humanize(LetterCasing.Title);
     }
 
-    static RenderFragment<TValue> RenderDefaultChildContent() => value => __builder =>
+    RenderFragment<TItem>? RenderDefaultChildContent()
     {
-        @value
-    };
+        if (Expression.GetPropertyOrDefault() is { CanRead: true } property)
+        {
+            return item => __builder =>
+            {
+                @property.GetValue(item)
+            };
+        }
+
+        return null;
+    }
 }

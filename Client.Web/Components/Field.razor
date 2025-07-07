@@ -8,7 +8,6 @@
     [Parameter, EditorRequired] public required Expression<Func<TContext, object?>> Expression { get; set; }
 
     [Parameter] public bool AutoFocus { get; set; }
-    [Parameter] public int? Position { get; set; }
     [Parameter] public bool Visible { get; set; } = true;
 
     protected PropertyInfo? ValueProperty { get; private set; }
