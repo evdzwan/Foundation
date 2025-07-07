@@ -4,7 +4,7 @@
 
 <div class="table">
     <CascadingValue Value="this" IsFixed>
-        @ChildContent
+        @Content
     </CascadingValue>
 
     <Defer>
@@ -31,9 +31,9 @@
                     </ForEach>
                 </div>
             }
-            else
+            else if (DisplayItems is { Length: > 0 } displayItems)
             {
-                <ForEach Items="DisplayItems" Context="item">
+                <ForEach Items="displayItems" Context="item">
                     <div class="table-row @GetRowClass(item)" @onclick="() => SelectRow(item)" @key="item">
                         <ForEach Items="Columns" Context="column">
                             <div class="table-cell" @key="column">
@@ -42,6 +42,12 @@
                         </ForEach>
                     </div>
                 </ForEach>
+            }
+            else
+            {
+                <div class="table-empty">
+                    @Empty
+                </div>
             }
         </div>
     </Defer>
@@ -56,6 +62,8 @@
     [CascadingParameter] Query? Query { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public RenderFragment? Content { get; set; }
+    [Parameter] public RenderFragment? Empty { get; set; }
     [Parameter] public IAsyncCollection<TItem>? Items { get; set; }
 
     ClassList BodyClass => ClassList.Create("loading", Loading)
@@ -65,7 +73,10 @@
         => firstRender ? LoadDisplayItems() : Task.CompletedTask;
 
     protected override void OnParametersSet()
-        => ChildContent ??= CreateDefaultChildContent();
+    {
+        Content ??= ChildContent ?? RenderDefaultContent();
+        Empty ??= RenderDefaultEmpty();
+    }
 
     async Task LoadDisplayItems()
     {
@@ -101,7 +112,7 @@
         return Expression.Lambda<Func<TItem, TValue>>(Expression.Property(parameter, propertyName), parameter);
     }
 
-    static RenderFragment CreateDefaultChildContent() => builder =>
+    static RenderFragment RenderDefaultContent() => builder =>
     {
         var sequence = 0;
         var usedFill = false;
@@ -132,5 +143,10 @@
 
             builder.CloseComponent();
         }
+    };
+
+    static RenderFragment RenderDefaultEmpty() => __builder =>
+    {
+        <span>No data available</span>
     };
 }

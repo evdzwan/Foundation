@@ -2,13 +2,13 @@
 
 <div class="menu-item @MenuItemClass">
     <button type="button" disabled="@(!Pressed.HasDelegate)" @onclick="OnButtonClicked">@Title</button>
-    @if (ChildContent is { } childContent)
+    @if (Items is { } items)
     {
         <button @onclick="ShowNestedMenu"><span>&raquo;</span></button>
         <Menu Title="@(HideMenuTitle ? null : Title)" @ref="NestedMenu">
             <CascadingValue Value="NestedMenu" IsFixed>
                 <CascadingValue Name="DefaultRenderer" Value="RenderDefault()" IsFixed>
-                    @childContent
+                    @items
                 </CascadingValue>
             </CascadingValue>
         </Menu>
@@ -23,11 +23,16 @@
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool HideMenuTitle { get; set; }
+    [Parameter] public RenderFragment? Items { get; set; }
     [Parameter] public bool Persistent { get; set; }
     [Parameter] public EventCallback<MouseEventArgs> Pressed { get; set; }
     [Parameter] public string? Title { get; set; }
 
     ClassList MenuItemClass => ClassList.Create("loading", Loading);
+
+    protected override void OnParametersSet()
+        => Items ??= ChildContent;
+
     Task ShowNestedMenu(MouseEventArgs e)
        => NestedMenu?.Show(e.ClientX - e.OffsetX, e.ClientY - e.OffsetY) ?? Task.CompletedTask;
 

@@ -11,7 +11,7 @@
 
         <CascadingValue Name="Root" Value="this" IsFixed>
             <CascadingValue Value="this" IsFixed>
-                @ChildContent
+                @Items
             </CascadingValue>
         </CascadingValue>
     </div>
@@ -29,6 +29,7 @@
     [CascadingParameter] Menu? Parent { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public RenderFragment? Items { get; set; }
     [Parameter] public string? Title { get; set; }
 
     Func<CancellationToken, Task>? Invoke { get; set; }
@@ -78,6 +79,9 @@
             await Script.Attach(MenuReference, ComponentReference);
         }
     }
+
+    protected override void OnParametersSet()
+        => Items ??= ChildContent;
 
     protected override async ValueTask OnDisposedAsync()
     {

@@ -11,7 +11,7 @@
     <Separator />
     <MenuItem Title="Zusjes">
         <Load Value="Sisters" Context="sisters">
-            <ForEach Context="sister" Items="sisters">
+            <ForEach Items="sisters" Context="sister">
                 <MenuItem Title="@sister" Pressed="OnItemPressed" @key="sister" />
             </ForEach>
         </Load>
@@ -27,7 +27,7 @@
     </MenuItem>
     <MenuItem Title="Franse" HideMenuTitle>
         <Load Value="FrenchSausages" Context="sausages">
-            <ForEach Context="sausage" Items="sausages">
+            <ForEach Items="sausages" Context="sausage">
                 <MenuItem Title="@sausage" Pressed="OnItemPressed" @key="sausage" />
             </ForEach>
         </Load>

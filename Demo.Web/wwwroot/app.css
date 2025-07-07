@@ -305,6 +305,10 @@ textarea {
     padding: .25rem;
 }
 
+.table-empty {
+    font-size: 90%;
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }

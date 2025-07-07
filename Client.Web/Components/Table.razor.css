@@ -27,3 +27,8 @@
     display: table-cell;
     white-space: nowrap;
 }
+
+.table-empty {
+    white-space: nowrap;
+    width: 0;
+}

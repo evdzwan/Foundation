@@ -21,11 +21,11 @@
 
     protected override void OnParametersSet()
     {
-        ChildContent ??= CreateDefaultChildContent();
+        ChildContent ??= RenderDefaultChildContent();
         Title ??= Expression.GetPropertyOrDefault()?.Name.Humanize(LetterCasing.Title);
     }
 
-    static RenderFragment<TValue> CreateDefaultChildContent() => value => __builder =>
+    static RenderFragment<TValue> RenderDefaultChildContent() => value => __builder =>
     {
         @value
     };
