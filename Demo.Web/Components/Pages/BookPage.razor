@@ -2,6 +2,7 @@
 @inject IAuthorRepository AuthorRepository
 @inject IGenreRepository GenreRepository
 @inject IBookRepository BookRepository
+@inject IJSRuntime JSRuntime
 @page "/books/{id:int}"
 @page "/books/new"
 
@@ -18,7 +19,7 @@
 
         <Flex Horizontal SpaceEvenly>
             <button type="submit">Save changes</button>
-            <button type="button">Cancel</button>
+            <button type="button" @onclick="DiscardChanges">Cancel</button>
         </Flex>
     </Flex>
 </Form>
@@ -40,4 +41,7 @@
     Task CommitChanges(BookDetail book) => Id is { } id
         ? BookRepository.UpdateBook(id, book)
         : BookRepository.CreateBook(book);
+
+    async Task DiscardChanges()
+        => await JSRuntime.InvokeVoidAsync("history.back");
 }
