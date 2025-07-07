@@ -1,0 +1,52 @@
+﻿@inject RespondScript Script
+@inherits Component
+
+<div @attributes="Attributes" class="respond @RespondClass" @ref="RespondReference">
+    @if (Active)
+    {
+        @ChildContent
+    }
+</div>
+
+@code {
+    readonly DotNetObjectReference<Respond> ComponentReference;
+    ElementReference RespondReference;
+    bool Active;
+
+    public Respond()
+        => ComponentReference = DotNetObjectReference.Create(this);
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object?>? Attributes { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public Predicate<(int Width, int Height)>? Condition { get; set; }
+
+    ClassList RespondClass => ClassList.Create(Attributes)
+                                       .Add("active", Active);
+
+    [JSInvokable]
+    public async Task UpdateBounds(int width, int height)
+    {
+        var wasActive = Active;
+
+        Active = Condition?.Invoke((width, height)) is not false;
+        if (Active != wasActive)
+        {
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Script.Attach(RespondReference, ComponentReference);
+        }
+    }
+
+    protected override async ValueTask OnDisposedAsync()
+    {
+        await Script.Detach(RespondReference);
+        ComponentReference.Dispose();
+    }
+}

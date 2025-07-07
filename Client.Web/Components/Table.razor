@@ -8,6 +8,7 @@
     </CascadingValue>
 
     <Defer>
+        <div class="table-column" />
         <ForEach Items="Columns" Context="column">
             <div class="table-column @GetColumnClass(column)" @key="column" />
         </ForEach>
@@ -103,8 +104,25 @@
     void SelectRow(TItem item)
         => Selection?.Toggle(item);
 
-    internal void AddColumn(Column<TItem> column) => Columns.Add(column);
-    internal void RemoveColumn(Column<TItem> column) => Columns.Remove(column);
+    internal void AddColumn(Column<TItem> column)
+    {
+        if (column.Position is { } position)
+        {
+            Columns.Insert(position, column);
+        }
+        else
+        {
+            Columns.Add(column);
+        }
+
+        StateHasChanged();
+    }
+
+    internal void RemoveColumn(Column<TItem> column)
+    {
+        Columns.Remove(column);
+        StateHasChanged();
+    }
 
     static Expression<Func<TItem, TValue>> CreateColumnExpression<TValue>(string propertyName)
     {

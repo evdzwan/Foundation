@@ -5,6 +5,7 @@
     [CascadingParameter] protected Table<TItem>? Table { get; private set; }
 
     [Parameter] public bool Fill { get; set; }
+    [Parameter] public int? Position { get; set; }
     [Parameter] public string? Title { get; set; }
 
     public abstract RenderFragment RenderCell(TItem item);

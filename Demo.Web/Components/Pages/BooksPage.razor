@@ -4,8 +4,10 @@
 
 <Transform Query="new(Page: new(Skip: 0, Take: 20))">
     <Table Items="Books">
-        <ExpressionColumn Expression="book => book.Name" />
-        <ExpressionColumn Expression="book => book.Author" Fill />
+        <Respond Condition="bounds => bounds.Width >= 768">
+            <ExpressionColumn Expression="book => book.Author" Position="0" />
+        </Respond>
+        <ExpressionColumn Expression="book => book.Name" Fill />
         <TemplateColumn>
             <a href="/books/@context.Id">Detail</a>
         </TemplateColumn>

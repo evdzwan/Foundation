@@ -44,6 +44,15 @@
     Task OnFormValidSubmit(EditContext editContext)
         => OnCommit?.Invoke((TContext)editContext.Model) ?? Task.CompletedTask;
 
-    internal void AddField(Field<TContext> field) => Fields.Add(field);
-    internal void RemoveField(Field<TContext> field) => Fields.Remove(field);
+    internal void AddField(Field<TContext> field)
+    {
+        Fields.Add(field);
+        StateHasChanged();
+    }
+
+    internal void RemoveField(Field<TContext> field)
+    {
+        Fields.Remove(field);
+        StateHasChanged();
+    }
 }
