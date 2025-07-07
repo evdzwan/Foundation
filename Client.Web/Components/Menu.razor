@@ -1,6 +1,6 @@
-﻿@inherits Component
+﻿@inject MenuScript Script
+@inherits Component
 @implements IInvoke
-@inject MenuScript Script
 
 <div class="menu" popover style="@MenuStyle" @oncontextmenu:preventDefault="true" @ref="MenuReference">
     <div class="menu-items">
