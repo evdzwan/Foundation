@@ -1,0 +1,28 @@
+﻿@inherits Component
+
+<button @attributes="Attributes" type="@ButtonType" class="button @ButtonClass" @onclick="OnButtonClicked">
+    @ChildContent
+</button>
+
+@code {
+    [CascadingParameter] IHandleCommit? HandleCommit { get; set; }
+    [CascadingParameter] IHandleDiscard? HandleDiscard { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object?>? Attributes { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool Commit { get; set; }
+    [Parameter] public bool Discard { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> Pressed { get; set; }
+
+    ClassList ButtonClass => ClassList.Create(Attributes);
+    string ButtonType => Commit ? "submit" : "button";
+
+    async Task OnButtonClicked(MouseEventArgs e)
+    {
+        await Pressed.InvokeAsync(e);
+
+        await (Commit && HandleCommit is { } handleCommit ? handleCommit.Invoke() : Task.CompletedTask);
+        await (Discard && HandleDiscard is { } handleDiscard ? handleDiscard.Invoke() : Task.CompletedTask);
+    }
+}

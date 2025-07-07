@@ -1,5 +1,7 @@
 ﻿@attribute [CascadingTypeParameter(nameof(TContext))]
 @typeparam TContext where TContext : notnull
+@implements IHandleDiscard
+@inject IJSRuntime JS
 @inherits Component
 
 <div class="form @FormClass">
@@ -41,8 +43,19 @@
         }
     }
 
-    Task OnFormValidSubmit(EditContext editContext)
-        => OnCommit?.Invoke((TContext)editContext.Model) ?? Task.CompletedTask;
+    async Task OnFormValidSubmit(EditContext editContext)
+    {
+        if (OnCommit is { } onCommit)
+        {
+            await onCommit.Invoke((TContext)editContext.Model);
+        }
+
+        await NavigateBack();
+    }
+
+    Task IHandleDiscard.Invoke() => NavigateBack();
+    async Task NavigateBack()
+        => await JS.InvokeVoidAsync("history.back", ComponentLife.Token);
 
     internal void AddField(Field<TContext> field) => Fields.Add(field);
     internal void RemoveField(Field<TContext> field) => Fields.Remove(field);

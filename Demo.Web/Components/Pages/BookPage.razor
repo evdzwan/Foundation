@@ -18,8 +18,8 @@
         <ChoiceField Expression="book => book.Genres" Items="Genres" />
 
         <Flex Horizontal SpaceEvenly>
-            <button type="submit">Save changes</button>
-            <button type="button" @onclick="DiscardChanges">Cancel</button>
+            <Button Commit>Save changes</Button>
+            <Button Discard>Cancel</Button>
         </Flex>
     </Flex>
 </Form>
@@ -41,7 +41,4 @@
     Task CommitChanges(BookDetail book) => Id is { } id
         ? BookRepository.UpdateBook(id, book)
         : BookRepository.CreateBook(book);
-
-    async Task DiscardChanges()
-        => await JSRuntime.InvokeVoidAsync("history.back");
 }
