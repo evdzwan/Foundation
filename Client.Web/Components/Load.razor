@@ -15,6 +15,7 @@
 @code {
     TValue? DisplayValue;
 
+    [CascadingParameter(Name = nameof(DefaultRenderer))] RenderFragment? DefaultRenderer { get; set; }
     [CascadingParameter] IInvoker? Invoker { get; set; }
 
     [Parameter, EditorRequired] public required IAsyncValue<TValue> Value { get; set; }
@@ -32,7 +33,10 @@
     }
 
     protected override void OnParametersSet()
-        => Loaded ??= ChildContent;
+    {
+        Loaded ??= ChildContent;
+        Loading ??= DefaultRenderer;
+    }
 
     protected override void OnInitialized()
     {

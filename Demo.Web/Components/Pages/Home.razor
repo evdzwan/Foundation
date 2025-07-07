@@ -11,15 +11,9 @@
     <Separator />
     <MenuItem Title="Zusjes">
         <Load Value="Sisters" Context="sisters">
-            <Loaded>
-                <ForEach Context="sister" Items="sisters">
-                    <MenuItem Title="@sister" Pressed="OnItemPressed" @key="sister" />
-                </ForEach>
-            </Loaded>
-
-            <Loading>
-                <MenuItem />
-            </Loading>
+            <ForEach Context="sister" Items="sisters">
+                <MenuItem Title="@sister" Pressed="OnItemPressed" @key="sister" />
+            </ForEach>
         </Load>
     </MenuItem>
 </Menu>

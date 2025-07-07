@@ -7,7 +7,9 @@
         <button @onclick="ShowNestedMenu"><span>&raquo;</span></button>
         <Menu Title="@(HideMenuTitle ? null : Title)" @ref="NestedMenu">
             <CascadingValue Value="NestedMenu" IsFixed>
-                @childContent
+                <CascadingValue Name="DefaultRenderer" Value="RenderDefault()" IsFixed>
+                    @childContent
+                </CascadingValue>
             </CascadingValue>
         </Menu>
     }
@@ -37,4 +39,9 @@
             await menu.Hide();
         }
     }
+
+    static RenderFragment RenderDefault() => __builder =>
+    {
+        <MenuItem />
+    };
 }

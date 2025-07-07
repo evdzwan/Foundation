@@ -14,7 +14,6 @@ public static class AsyncCollection
 
         public async IAsyncEnumerator<TItem> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
-            //TODO anders oplossen
             var query = new Query(Page: new(Skip: 0, Take: 20));
             for (var i = 0; ; i++)
             {
@@ -29,7 +28,11 @@ public static class AsyncCollection
                     yield return item;
                 }
 
-                yield break;
+                //TODO anders oplossen
+                if (items.Length < query.Page.Take)
+                {
+                    yield break;
+                }
             }
         }
 
