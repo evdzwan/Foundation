@@ -24,13 +24,15 @@
         <div class="table-body @BodyClass">
             @if (Loading)
             {
-                <div class="table-row">
-                    <ForEach Items="Columns" Context="column">
-                        <div class="table-cell" @key="column">
-                            ..
-                        </div>
-                    </ForEach>
-                </div>
+                <ForEach Items="Enumerable.Range(0, Math.Max(1, DisplayItems.Length))" Context="index">
+                    <div class="table-row" @key="index">
+                        <ForEach Items="Columns" Context="column">
+                            <div class="table-cell" @key="column">
+                                ..
+                            </div>
+                        </ForEach>
+                    </div>
+                </ForEach>
             }
             else if (DisplayItems is { Length: > 0 } displayItems)
             {
