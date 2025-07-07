@@ -26,9 +26,11 @@
         <MenuItem Title="Twentse" />
     </MenuItem>
     <MenuItem Title="Franse" HideMenuTitle>
-        <MenuItem Title="Knoflook" Pressed="OnItemPressed" />
-        <MenuItem Title="Naturel" Pressed="OnItemPressed" />
-        <MenuItem Title="Peper" Pressed="OnItemPressed" />
+        <Load Value="FrenchSausages" Context="sausages">
+            <ForEach Context="sausage" Items="sausages">
+                <MenuItem Title="@sausage" Pressed="OnItemPressed" @key="sausage" />
+            </ForEach>
+        </Load>
     </MenuItem>
     <MenuItem Title="Spaanse">
         <MenuItem Title="Fuet" />
@@ -41,6 +43,12 @@
 </div>
 
 @code {
+    readonly IAsyncCollection<string> FrenchSausages = AsyncCollection.Create(async (_, _) =>
+    {
+        await Task.Delay(500);
+        return new string[] { "Knoflook", "Naturel", "Peper" };
+    });
+
     readonly IAsyncCollection<string> Sisters = AsyncCollection.Create(async (_, _) =>
     {
         await Task.Delay(1000);
