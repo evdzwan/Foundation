@@ -43,13 +43,13 @@
 </div>
 
 @code {
-    readonly IAsyncCollection<string> FrenchSausages = AsyncCollection.Create(async (_, _) =>
+    readonly IAsyncValue<string[]> FrenchSausages = AsyncValue.Create(async _ =>
     {
         await Task.Delay(500);
         return new string[] { "Knoflook", "Naturel", "Peper" };
     });
 
-    readonly IAsyncCollection<string> Sisters = AsyncCollection.Create(async (_, _) =>
+    readonly IAsyncValue<string[]> Sisters = AsyncValue.Create(async _ =>
     {
         await Task.Delay(1000);
         return new string[] { "Bertha", "Diewertje", "Hanneke" };
