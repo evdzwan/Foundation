@@ -209,6 +209,22 @@ textarea {
             top: -.14em;
         }
 
+    .menu-item.loading {
+        pointer-events: none;
+        position: relative;
+        user-select: none;
+    }
+
+        .menu-item.loading::before {
+            animation: move 1s linear infinite;
+            background: linear-gradient(-60deg, #ccc 33%, #ddd, #ccc 66%) right / 300% 100%;
+            border-radius: .25rem;
+            content: '';
+            inset: 0;
+            position: absolute;
+            z-index: 10;
+        }
+
 .separator {
     background-color: #aaa;
 }

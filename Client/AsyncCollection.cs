@@ -12,8 +12,26 @@ public static class AsyncCollection
     {
         readonly ConcurrentDictionary<Query, Task<TItem[]>> Views = [];
 
-        public IAsyncEnumerator<TItem> GetAsyncEnumerator(CancellationToken cancellationToken = default)
-            => throw new NotImplementedException();
+        public async IAsyncEnumerator<TItem> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+        {
+            //TODO anders oplossen
+            var query = new Query(Page: new(Skip: 0, Take: 20));
+            for (var i = 0; ; i++)
+            {
+                var items = await GetView(query with { Page = query.Page! with { Skip = i * query.Page.Take } }, cancellationToken);
+                if (items.Length == 0)
+                {
+                    yield break;
+                }
+
+                foreach (var item in items)
+                {
+                    yield return item;
+                }
+
+                yield break;
+            }
+        }
 
         public Task<TItem[]> GetValue(CancellationToken cancellationToken = default)
             => this.ToArray(cancellationToken);

@@ -1,33 +1,52 @@
-﻿@typeparam TContext where TContext : notnull
+﻿@typeparam TValue where TValue : notnull
 @inherits Component
 
-@if (Context is { } context)
-{
-    @Loaded?.Invoke(context)
-}
-else
-{
-    @Loading
-}
+<CascadingValue Name="@nameof(Loading)" Value="DisplayValue is not { }">
+    @if (DisplayValue is { } displayValue)
+    {
+        @Loaded?.Invoke(displayValue)
+    }
+    else
+    {
+        @Loading
+    }
+</CascadingValue>
 
 @code {
-    TContext? Context;
+    TValue? DisplayValue;
 
-    [Parameter, EditorRequired] public required IAsyncValue<TContext> Value { get; set; }
+    [CascadingParameter] IInvoker? Invoker { get; set; }
 
-    [Parameter] public RenderFragment<TContext>? ChildContent { get; set; }
-    [Parameter] public RenderFragment<TContext>? Loaded { get; set; }
+    [Parameter, EditorRequired] public required IAsyncValue<TValue> Value { get; set; }
+    [Parameter] public RenderFragment<TValue>? ChildContent { get; set; }
+    [Parameter] public RenderFragment<TValue>? Loaded { get; set; }
     [Parameter] public RenderFragment? Loading { get; set; }
 
-    public async Task LoadContext(CancellationToken cancellationToken = default)
+    public async Task LoadValue(CancellationToken cancellationToken = default)
     {
-        Context = default;
+        DisplayValue = default;
         StateHasChanged();
 
-        Context = await Value.GetValue(cancellationToken);
+        DisplayValue = await Value.GetValue(cancellationToken);
         StateHasChanged();
     }
 
     protected override void OnParametersSet()
         => Loaded ??= ChildContent;
+
+    protected override void OnInitialized()
+    {
+        if (Invoker is { } invoker)
+        {
+            invoker.Invoke = LoadValue;
+        }
+    }
+
+    protected override void OnDisposed()
+    {
+        if (Invoker is { } invoker)
+        {
+            invoker.Invoke = LoadValue;
+        }
+    }
 }

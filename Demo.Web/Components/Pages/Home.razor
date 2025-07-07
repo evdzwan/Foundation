@@ -10,9 +10,17 @@
     <MenuItem Title="Kees" />
     <Separator />
     <MenuItem Title="Zusjes">
-        <MenuItem Title="Bertha" Pressed="OnItemPressed" />
-        <MenuItem Title="Diewertje" />
-        <MenuItem Title="Hanneke" Pressed="OnItemPressed" />
+        <Load Value="Sisters" Context="sisters">
+            <Loaded>
+                <ForEach Context="sister" Items="sisters">
+                    <MenuItem Title="@sister" Pressed="OnItemPressed" @key="sister" />
+                </ForEach>
+            </Loaded>
+
+            <Loading>
+                <MenuItem />
+            </Loading>
+        </Load>
     </MenuItem>
 </Menu>
 
@@ -39,6 +47,12 @@
 </div>
 
 @code {
+    readonly IAsyncCollection<string> Sisters = AsyncCollection.Create(async (_, _) =>
+    {
+        await Task.Delay(1000);
+        return new string[] { "Bertha", "Diewertje", "Hanneke" };
+    });
+
     Menu? CoffeeMenu;
     Task ShowCoffeeMenu(MouseEventArgs e)
         => CoffeeMenu?.Show(e.ClientX, e.ClientY) ?? Task.CompletedTask;

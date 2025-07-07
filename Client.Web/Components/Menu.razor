@@ -1,4 +1,5 @@
 ﻿@inherits Component
+@implements IInvoker
 @inject MenuScript Script
 
 <div class="menu" popover style="@MenuStyle" @oncontextmenu:preventDefault="true" @ref="MenuReference">
@@ -8,19 +9,20 @@
             <label>@title</label>
         }
 
-        <CascadingValue Value="Parent ?? this" IsFixed>
-            @ChildContent
+        <CascadingValue Name="Root" Value="this" IsFixed>
+            <CascadingValue Value="this" IsFixed>
+                @ChildContent
+            </CascadingValue>
         </CascadingValue>
     </div>
 </div>
 
 @code {
-    readonly DotNetObjectReference<Menu> ComponentReference;
-
     ElementReference MenuReference;
     double PositionX;
     double PositionY;
 
+    readonly DotNetObjectReference<Menu> ComponentReference;
     public Menu()
         => ComponentReference = DotNetObjectReference.Create(this);
 
@@ -28,6 +30,13 @@
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public string? Title { get; set; }
+
+    Func<CancellationToken, Task>? Invoke { get; set; }
+    Func<CancellationToken, Task>? IInvoker.Invoke
+    {
+        get => Invoke;
+        set => Invoke = value;
+    }
 
     StyleList MenuStyle => StyleList.Create("--pos-x", $"{PositionX}px")
                                     .Add("--pos-y", $"{PositionY}px");
@@ -42,11 +51,25 @@
     }
 
     public async Task Hide()
-        => await Script.HidePopover(MenuReference);
+    {
+        if (Parent is { } parent)
+        {
+            await parent.Hide();
+        }
+        else
+        {
+            await Script.HidePopover(MenuReference);
+        }
+    }
 
     [JSInvokable]
-    public Task OnPopoverToggled(bool open)
-        => Task.CompletedTask; //TODO load dynamic menu items (= lazy)?
+    public async Task OnPopoverToggled(bool open)
+    {
+        if (open && Invoke is { } invoke)
+        {
+            await invoke(ComponentLife.Token);
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

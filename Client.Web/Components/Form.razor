@@ -23,16 +23,16 @@
     ClassList FormClass => ClassList.Create("loading", Loading);
 
     protected override Task OnAfterRenderAsync(bool firstRender)
-        => firstRender ? LoadDisplayContext() : Task.CompletedTask;
+        => firstRender ? LoadDisplayContext(ComponentLife.Token) : Task.CompletedTask;
 
-    async Task LoadDisplayContext()
+    async Task LoadDisplayContext(CancellationToken cancellationToken = default)
     {
         Loading = true;
         StateHasChanged();
 
         try
         {
-            DisplayContext = Context is { } context ? await context.GetValue() : default;
+            DisplayContext = Context is { } context ? await context.GetValue(cancellationToken) : default;
         }
         finally
         {
