@@ -1,0 +1,38 @@
+﻿@typeparam TContext where TContext : notnull
+@inherits Field<TContext>
+
+@if (Visible)
+{
+    <div class="field text">
+        @RenderLabel()
+        <div class="field-value">
+            <label class="switch">
+                <input @attributes="Attributes" type="checkbox" @bind="EditorValue" @ref="EditorReference" />
+                <span class="toggle" />
+            </label>
+        </div>
+
+        @if (Form is { DisplayContext: { } context })
+        {
+            @RenderValidationMessage(context)
+        }
+    </div>
+}
+
+@code {
+    ElementReference EditorReference;
+
+    bool EditorValue
+    {
+        get => Value is bool value ? value : false;
+        set => Value = value;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && AutoFocus)
+        {
+            await EditorReference.FocusAsync();
+        }
+    }
+}

@@ -1,0 +1,31 @@
+﻿@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject IAuthorRepository AuthorRepository
+@page "/authors/{id:int}"
+@page "/authors/new"
+
+<Form Context="Author" OnCommit="CommitChanges">
+    <Flex Vertical AlignStretch>
+        <TextField Expression="book => book.Id" Visible="Id is not null" readonly />
+        <TextField Expression="book => book.Name" AutoFocus />
+        <SwitchField Expression="book => book.PrizeWinner" />
+
+        <Flex Horizontal SpaceEvenly>
+            <Button Commit>Save changes</Button>
+            <Button Discard>Cancel</Button>
+        </Flex>
+    </Flex>
+</Form>
+
+@code {
+    readonly IAsyncValue<AuthorDetail> Author;
+
+    public AuthorPage() => Author = AsyncValue.Create(async ct => Id is { } id
+        ? await AuthorRepository.GetAuthor(id, ct)
+        : AuthorDetail.CreateNew());
+
+    [Parameter] public int? Id { get; set; }
+
+    Task CommitChanges(AuthorDetail author) => Id is { } id
+        ? AuthorRepository.UpdateAuthor(id, author)
+        : AuthorRepository.CreateAuthor(author);
+}

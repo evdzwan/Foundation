@@ -1,0 +1,39 @@
+﻿.field {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-value {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.switch {
+    cursor: pointer;
+    display: inline-block;
+    height: 1.2rem;
+    position: relative;
+    width: 3.2rem;
+}
+
+    .switch:has(input:disabled) {
+        pointer-events: none;
+    }
+
+    .switch > input {
+        display: none;
+        height: 0;
+        width: 0;
+    }
+
+        .switch > input:checked + .toggle {
+            left: calc(50% - .4rem);
+        }
+
+
+    .switch > .toggle {
+        inset: 0;
+        margin: .2rem;
+        position: absolute;
+        width: 50%;
+    }

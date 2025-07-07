@@ -1,0 +1,20 @@
+﻿@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject IAuthorRepository AuthorRepository
+@page "/authors"
+
+<Table Items="Authors">
+    <ExpressionColumn Expression="book => book.Id" />
+    <ExpressionColumn Expression="book => book.Name" Fill>
+        <a href="/authors/@context.Id">@context.Name</a>
+    </ExpressionColumn>
+</Table>
+
+<div class="page-commands">
+    <NavLink href="/authors/new">Create New...</NavLink>
+</div>
+
+@code {
+    readonly IAsyncCollection<AuthorItem> Authors;
+    public AuthorsPage()
+        => Authors = AsyncCollection.Create((transform, ct) => AuthorRepository.GetAuthors(transform, ct));
+}
