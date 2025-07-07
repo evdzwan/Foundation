@@ -1,0 +1,33 @@
+﻿@typeparam TContext where TContext : notnull
+@inherits Component
+
+@if (Context is { } context)
+{
+    @Loaded?.Invoke(context)
+}
+else
+{
+    @Loading
+}
+
+@code {
+    TContext? Context;
+
+    [Parameter, EditorRequired] public required IAsyncValue<TContext> Value { get; set; }
+
+    [Parameter] public RenderFragment<TContext>? ChildContent { get; set; }
+    [Parameter] public RenderFragment<TContext>? Loaded { get; set; }
+    [Parameter] public RenderFragment? Loading { get; set; }
+
+    public async Task LoadContext(CancellationToken cancellationToken = default)
+    {
+        Context = default;
+        StateHasChanged();
+
+        Context = await Value.GetValue(cancellationToken);
+        StateHasChanged();
+    }
+
+    protected override void OnParametersSet()
+        => Loaded ??= ChildContent;
+}

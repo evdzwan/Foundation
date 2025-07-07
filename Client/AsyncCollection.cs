@@ -15,6 +15,9 @@ public static class AsyncCollection
         public IAsyncEnumerator<TItem> GetAsyncEnumerator(CancellationToken cancellationToken = default)
             => throw new NotImplementedException();
 
+        public Task<TItem[]> GetValue(CancellationToken cancellationToken = default)
+            => this.ToArray(cancellationToken);
+
         public Task<TItem[]> GetView(Query query, CancellationToken cancellationToken = default)
             => Views.GetOrAdd(query, t => resolve(query, cancellationToken));
     }

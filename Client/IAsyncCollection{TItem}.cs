@@ -2,7 +2,7 @@
 
 namespace Foundation;
 
-public interface IAsyncCollection<TItem> : IAsyncEnumerable<TItem> where TItem : notnull
+public interface IAsyncCollection<TItem> : IAsyncEnumerable<TItem>, IAsyncValue<TItem[]> where TItem : notnull
 {
     Task<TItem[]> GetView(Query query, CancellationToken cancellationToken = default);
 }
