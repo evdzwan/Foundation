@@ -1,0 +1,41 @@
+﻿@inherits Component
+
+<div class="pagination">
+    <div class="pagination-content">
+        @ChildContent
+    </div>
+    <div class="pagination-commands">
+        @if (Page is { } currentPage)
+        {
+            <Button Pressed="() => MoveToFirstPage(currentPage)"><span>&laquo;</span></Button>
+            <Button Pressed="() => MoveToPreviousPage(currentPage)"><span>&lsaquo;</span></Button>
+            <span>@(Page.Skip + 1) - @(Page.Skip + Page.Take)</span>
+            <Button Pressed="() => MoveToNextPage(currentPage)"><span>&rsaquo;</span></Button>
+            <Button Pressed="() => MoveToLastPage(currentPage)"><span>&raquo;</span></Button>
+        }
+    </div>
+</div>
+
+@code {
+    //TODO component hernoemen
+    Page? Page;
+
+    [CascadingParameter] Transform? Transform { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    protected override void OnParametersSet()
+        => Page = Transform?.Query?.Page;
+
+    void MoveToFirstPage(Page page)
+        => Transform?.SetPage(page with { Skip = 0 });
+    
+    void MoveToPreviousPage(Page page)
+        => Transform?.SetPage(page with { Skip = Math.Max(0, page.Skip - page.Take) });
+    
+    void MoveToNextPage(Page page)
+        => Transform?.SetPage(page with { Skip = page.Skip + page.Take });
+    
+    void MoveToLastPage(Page page)
+        => Transform?.SetPage(page with { Skip = 0 });
+}

@@ -1,6 +1,6 @@
 ﻿@inherits Component
 
-<button @attributes="Attributes" type="@ButtonType" class="button @ButtonClass" @onclick="OnButtonClicked">
+<button @attributes="Attributes" type="@ButtonType" class="button @ButtonClass" @onclick="OnButtonClicked" @ref="Element">
     @ChildContent
 </button>
 
@@ -15,6 +15,7 @@
 
     ClassList ButtonClass => ClassList.Create(Attributes);
     string ButtonType => Commit ? "submit" : "button";
+    public ElementReference Element { get; private set; }
 
     async Task OnButtonClicked(MouseEventArgs e)
     {

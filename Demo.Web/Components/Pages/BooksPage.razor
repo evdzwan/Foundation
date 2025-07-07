@@ -2,7 +2,7 @@
 @inject IBookRepository BookRepository
 @page "/books"
 
-<Transform Query="new(Page: new(Skip: 0, Take: 20))">
+<Transform Query="new(Page: new(Skip: 20, Take: 20))">
     <Table Items="Books">
         <Respond Condition="bounds => bounds.Width >= 768">
             <ExpressionColumn Expression="book => book.Author" Position="0" />
@@ -14,11 +14,11 @@
             <a href="#">Delete</a>
         </Column>
     </Table>
-</Transform>
 
-<div class="page-commands">
-    <NavLink href="/books/new">Create New...</NavLink>
-</div>
+    <Pagination>
+        <a href="/books/new">Create New...</a>
+    </Pagination>
+</Transform>
 
 @code {
     readonly IAsyncCollection<BookItem> Books;

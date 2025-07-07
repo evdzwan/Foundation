@@ -1,10 +1,19 @@
 ﻿@inherits Component
 
-<CascadingValue Value="Query">
+<CascadingValue Value="this" IsFixed>
     @ChildContent
 </CascadingValue>
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public Query? Query { get; set; }
+
+    internal void SetPage(Page page)
+    {
+        if (Query is { } query)
+        {
+            Query = query with { Page = page };
+            StateHasChanged();
+        }
+    }
 }

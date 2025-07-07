@@ -40,6 +40,7 @@
     {
         PositionX = positionX;
         PositionY = positionY;
+        StateHasChanged();
 
         await Task.Yield();
         await Script.ShowPopover(MenuReference);

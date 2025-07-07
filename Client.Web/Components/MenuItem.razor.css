@@ -2,6 +2,6 @@
     display: flex;
 }
 
-    .menu-item > *:first-child {
+    .menu-item > ::deep *:first-child {
         flex-grow: 1;
     }

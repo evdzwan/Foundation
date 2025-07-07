@@ -9,7 +9,7 @@
     <div class="field choice">
         @RenderLabel()
         <div class="field-value @ValueClass">
-            <button type="button" @attributes="Attributes" @onclick="ShowPopover" @ref="TriggerReference">
+            <Button Attributes="Attributes" Pressed="ShowPopover" @ref="TriggerReference">
                 @if (EditorValue is { Length: > 0 } value)
                 {
                     @value
@@ -18,7 +18,7 @@
                 {
                     <i>Nothing selected</i>
                 }
-            </button>
+            </Button>
             <div popover="hint" @ref="PopoverReference">
                 @if (TableVisible)
                 {
@@ -40,7 +40,7 @@
     readonly DotNetObjectReference<ChoiceField<TContext, TItem>> ComponentReference;
     ISelection<TItem>? ActiveSelection;
     ElementReference PopoverReference;
-    ElementReference TriggerReference;
+    Button? TriggerReference;
     bool TableVisible;
     bool PopoverOpen;
 
@@ -60,9 +60,9 @@
     {
         if (firstRender)
         {
-            if (AutoFocus)
+            if (AutoFocus && TriggerReference is { Element: { } triggerReference })
             {
-                await TriggerReference.FocusAsync();
+                await triggerReference.FocusAsync();
             }
 
             await Script.Attach(PopoverReference, ComponentReference);
@@ -110,10 +110,10 @@
 
     async Task ShowPopover()
     {
-        if (!PopoverOpen)
+        if (!PopoverOpen && TriggerReference is { Element: { } triggerReference })
         {
             TableVisible = true;
-            await Script.ShowPopover(PopoverReference, TriggerReference);
+            await Script.ShowPopover(PopoverReference, triggerReference);
         }
     }
 

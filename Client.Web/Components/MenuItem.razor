@@ -1,10 +1,10 @@
 ﻿@inherits Component
 
 <div class="menu-item @MenuItemClass">
-    <button type="button" disabled="@(!Pressed.HasDelegate)" @onclick="OnButtonClicked">@Title</button>
+    <Button Pressed="OnButtonClicked" disabled="@(!Pressed.HasDelegate)">@Title</Button>
     @if (Items is { } items)
     {
-        <button @onclick="ShowNestedMenu"><span>&raquo;</span></button>
+        <Button Pressed="ShowNestedMenu"><span>&raquo;</span></Button>
         <Menu Title="@(HideMenuTitle ? null : Title)" @ref="NestedMenu">
             <CascadingValue Value="NestedMenu" IsFixed>
                 <CascadingValue Name="DefaultRenderer" Value="RenderDefault()" IsFixed>

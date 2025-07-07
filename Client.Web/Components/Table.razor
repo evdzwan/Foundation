@@ -58,9 +58,11 @@
     readonly List<Column<TItem>> Columns = [];
     TItem[] DisplayItems = [];
     bool Loading = true;
+    bool Initialized;
+    Query? Query;
 
     [CascadingParameter] ISelection<TItem>? Selection { get; set; }
-    [CascadingParameter] Query? Query { get; set; }
+    [CascadingParameter] Transform? Transform { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public RenderFragment? Content { get; set; }
@@ -70,13 +72,29 @@
     ClassList BodyClass => ClassList.Create("loading", Loading)
                                     .Add("select", Selection is not null);
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
-        => firstRender ? LoadDisplayItems() : Task.CompletedTask;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadDisplayItems();
+            Initialized = true;
+        }
+    }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         Content ??= ChildContent ?? RenderDefaultContent();
         Empty ??= RenderDefaultEmpty();
+
+        var newQuery = Transform?.Query;
+        if (newQuery?.Equals(Query) is not true)
+        {
+            Query = newQuery;
+            if (Initialized)
+            {
+                await LoadDisplayItems();
+            }
+        }
     }
 
     async Task LoadDisplayItems()

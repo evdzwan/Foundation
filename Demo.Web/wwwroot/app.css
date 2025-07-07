@@ -136,6 +136,7 @@ textarea {
             color: #aaa;
             font-size: 90%;
             font-variant: small-caps;
+            user-select: none;
         }
 
         .form .field:not(.loading) > label:has(~ .field-value > *:focus),
@@ -278,17 +279,17 @@ textarea {
         z-index: -1;
     }
 
-.table-body.select > .table-row {
-    cursor: pointer;
-}
-
-    .table-body.select > .table-row:hover::before {
+    .table-row:hover::before {
         background-color: #ddd;
     }
 
-    .table-body.select > .table-row.active::before {
+    .table-row.active::before {
         background-color: #ccc;
     }
+
+.table-body.select > .table-row {
+    cursor: pointer;
+}
 
 .table-body.loading .table-row {
     cursor: unset;
@@ -334,9 +335,35 @@ textarea {
         transition: .25s;
     }
 
-.page-commands {
+.pagination {
+    gap: .5rem;
     padding: .25rem .5rem;
 }
+
+.pagination-content,
+.pagination-commands {
+    gap: .25rem;
+}
+
+    .pagination-commands > button {
+        aspect-ratio: 1;
+        font-size: 150%;
+        font-weight: 600;
+        overflow: hidden;
+        position: relative;
+    }
+
+        .pagination-commands > button > * {
+            inset: 0;
+            padding-left: .1em;
+            position: absolute;
+            top: -.14em;
+        }
+
+    .pagination-commands > span {
+        font-size: 90%;
+        padding: 0 .5rem;
+    }
 
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
