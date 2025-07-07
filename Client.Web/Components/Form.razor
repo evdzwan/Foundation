@@ -46,7 +46,14 @@
 
     internal void AddField(Field<TContext> field)
     {
-        Fields.Add(field);
+        if (field.Position is { } position)
+        {
+            Fields.Insert(position, field);
+        }
+        else
+        {
+            Fields.Add(field);
+        }
         StateHasChanged();
     }
 
