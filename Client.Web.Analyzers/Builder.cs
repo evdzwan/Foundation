@@ -20,6 +20,7 @@ abstract class Builder
     protected static string GetTypeName(ITypeSymbol type) => type switch
     {
         { NullableAnnotation: NullableAnnotation.Annotated } => $"{GetTypeName(type.WithNullableAnnotation(NullableAnnotation.None))}?",
+        INamedTypeSymbol { IsGenericType: true, Name: "Nullable" } nullableType => GetTypeName(nullableType.TypeArguments[0]),
         INamedTypeSymbol { IsGenericType: true } genericType => $"{genericType.Name}<{string.Join(", ", genericType.TypeArguments.Select(GetTypeName))}>",
         IArrayTypeSymbol arrayType => $"{GetTypeName(arrayType.ElementType)}[]",
         { Name: "Boolean" } => "bool",

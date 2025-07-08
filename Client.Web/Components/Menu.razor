@@ -20,8 +20,8 @@
 @code {
     Func<CancellationToken, Task>? PopoverOpened;
     ElementReference MenuReference;
-    double PositionX;
-    double PositionY;
+    string? PositionX;
+    string? PositionY;
 
     readonly DotNetObjectReference<Menu> ComponentReference;
     public Menu()
@@ -33,17 +33,30 @@
     [Parameter] public RenderFragment? Items { get; set; }
     [Parameter] public string? Title { get; set; }
 
-    StyleList MenuStyle => StyleList.Create("--pos-x", $"{PositionX}px")
-                                    .Add("--pos-y", $"{PositionY}px");
+    StyleList MenuStyle => StyleList.Create("--pos-x", PositionX)
+                                    .Add("--pos-y", PositionY);
 
     public async Task Show(double positionX, double positionY)
     {
-        PositionX = positionX;
-        PositionY = positionY;
+        PositionX = $"{positionX}px";
+        PositionY = $"{positionY}px";
         StateHasChanged();
 
         await Task.Yield();
-        await Script.ShowPopover(MenuReference);
+        await Script.ShowPopover(MenuReference, trigger: null);
+    }
+
+    internal async Task Show(ElementReference trigger)
+    {
+        var paddingRight = await Script.GetPaddingRight(MenuReference);
+        var dx = paddingRight is { Length: > 0 } ? $" + {paddingRight} + {paddingRight}" : null;
+
+        PositionX = $"calc(anchor(end){dx})";
+        PositionY = $"calc(anchor(start))";
+        StateHasChanged();
+
+        await Task.Yield();
+        await Script.ShowPopover(MenuReference, trigger);
     }
 
     public async Task Hide()

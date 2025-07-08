@@ -13,15 +13,24 @@ export function detach(elem) {
     }
 }
 
+export function getPaddingRight(elem) {
+    return window.getComputedStyle(elem, null).getPropertyValue("padding-right");
+}
+
 async function toggle(invoker, args) {
     if (invoker !== null) {
         await invoker.invokeMethodAsync("OnPopoverToggled", args.newState == "open");
     }
 }
 
-export function showPopover(elem) {
+export function showPopover(elem, trigger) {
     if (elem !== null) {
-        elem.showPopover();
+        if (trigger !== null) {
+            elem.showPopover({ source: trigger });
+        }
+        else {
+            elem.showPopover();
+        }
     }
 }
 
