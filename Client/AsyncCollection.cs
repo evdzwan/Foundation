@@ -5,8 +5,10 @@ namespace Foundation;
 
 public static class AsyncCollection
 {
+    const int DefaultViewSize = 20;
+
     public static IAsyncCollection<TItem> Create<TItem>(Func<Query, CancellationToken, Task<TItem[]>> resolve) where TItem : notnull
-        => new RelayAsyncCollection<TItem>(viewSize: 20, resolve); //TODO anders oplossen
+        => new RelayAsyncCollection<TItem>(DefaultViewSize, resolve);
 
     sealed class RelayAsyncCollection<TItem>(int viewSize, Func<Query, CancellationToken, Task<TItem[]>> resolve) : IAsyncCollection<TItem> where TItem : notnull
     {

@@ -335,17 +335,17 @@ textarea {
         transition: .25s;
     }
 
-.pagination {
+.browse {
     gap: .5rem;
     padding: .25rem .5rem;
 }
 
-.pagination-content,
-.pagination-commands {
+.browse-content,
+.browse-commands {
     gap: .25rem;
 }
 
-    .pagination-commands > button {
+    .browse-commands > button {
         aspect-ratio: 1;
         font-size: 150%;
         font-weight: 600;
@@ -353,14 +353,14 @@ textarea {
         position: relative;
     }
 
-        .pagination-commands > button > * {
+        .browse-commands > button > * {
             inset: 0;
             padding-left: .1em;
             position: absolute;
             top: -.14em;
         }
 
-    .pagination-commands > span {
+    .browse-commands > span {
         font-size: 90%;
         padding: 0 .5rem;
     }

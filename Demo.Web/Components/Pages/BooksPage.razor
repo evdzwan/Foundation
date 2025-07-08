@@ -2,7 +2,7 @@
 @inject IBookRepository BookRepository
 @page "/books"
 
-<Transform Query="new(Page: new(Skip: 20, Take: 20))">
+<Transform Query="new(Page: new(Take: 20))">
     <Table Items="Books">
         <Respond Condition="bounds => bounds.Width >= 768">
             <ExpressionColumn Expression="book => book.Author" Position="0" />
@@ -15,9 +15,9 @@
         </Column>
     </Table>
 
-    <Pagination>
+    <Browse>
         <a href="/books/new">Create New...</a>
-    </Pagination>
+    </Browse>
 </Transform>
 
 @code {
