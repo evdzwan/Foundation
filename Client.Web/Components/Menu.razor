@@ -89,7 +89,10 @@
         {
             if (Trigger is { Element: { } triggerReference })
             {
-                var dx = await Script.GetPaddingRight(MenuReference) is { Length: > 0 } padding ? $" + {padding}" : null;
+                var bounds = await Script.GetBounds(MenuReference);
+                // await Show(triggerReference, dx: null);
+
+                var dx = bounds.Padding.Right is { Length: > 0 } padding ? $" + {padding}" : null;
                 if (dx is { Length: > 0 } && Parent is not null)
                 {
                     dx = $"{dx}{dx}";

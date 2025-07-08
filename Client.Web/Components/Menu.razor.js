@@ -13,6 +13,24 @@ export function detach(elem) {
     }
 }
 
+export function getBounds(elem) {
+    if (elem !== null) {
+        var computedStyle = window.getComputedStyle(elem, null);
+        return {
+            client: {
+                width: window.innerWidth,
+                height: window.innerHeight
+            },
+            padding: {
+                left: computedStyle.getPropertyValue("padding-left"),
+                top: computedStyle.getPropertyValue("padding-top"),
+                right: computedStyle.getPropertyValue("padding-right"),
+                bottom: computedStyle.getPropertyValue("padding-bottom")
+            }
+        };
+    }
+}
+
 export function getPaddingRight(elem) {
     return window.getComputedStyle(elem, null).getPropertyValue("padding-right");
 }
