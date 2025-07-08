@@ -3,6 +3,14 @@
 @page "/authors"
 
 <Table Items="Authors">
+    <Column Context="book">
+        <Button class="small">
+            <span>&hellip;</span>
+            <Menu Title="@book.Name">
+                <MenuItem Title="Delete" Pressed="() => { }" />
+            </Menu>
+        </Button>
+    </Column>
     <ExpressionColumn Expression="book => book.Id" />
     <ExpressionColumn Expression="book => book.Name" Fill>
         <a href="/authors/@context.Id">@context.Name</a>

@@ -47,9 +47,8 @@
         await Script.ShowPopover(MenuReference, trigger: null);
     }
 
-    public async Task Show(ElementReference trigger)
+    internal async Task Show(ElementReference trigger, string? dx)
     {
-        var dx = Parent is not null && await Script.GetPaddingRight(MenuReference) is { Length: > 0 } padding ? $" + {padding} + {padding}" : null;
         PositionX = $"calc(anchor(end){dx})";
         PositionY = $"calc(anchor(start))";
         StateHasChanged();
@@ -90,7 +89,13 @@
         {
             if (Trigger is { Element: { } triggerReference })
             {
-                await Show(triggerReference);
+                var dx = await Script.GetPaddingRight(MenuReference) is { Length: > 0 } padding ? $" + {padding}" : null;
+                if (dx is { Length: > 0 } && Parent is not null)
+                {
+                    dx = $"{dx}{dx}";
+                }
+
+                await Show(triggerReference, dx);
             }
         });
     }
