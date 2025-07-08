@@ -46,11 +46,9 @@
         await Script.ShowPopover(MenuReference, trigger: null);
     }
 
-    internal async Task Show(ElementReference trigger)
+    public async Task Show(ElementReference trigger)
     {
-        var paddingRight = await Script.GetPaddingRight(MenuReference);
-        var dx = paddingRight is { Length: > 0 } ? $" + {paddingRight} + {paddingRight}" : null;
-
+        var dx = Parent is not null && await Script.GetPaddingRight(MenuReference) is { Length: > 0 } padding ? $" + {padding} + {padding}" : null;
         PositionX = $"calc(anchor(end){dx})";
         PositionY = $"calc(anchor(start))";
         StateHasChanged();
