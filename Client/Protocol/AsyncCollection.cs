@@ -1,7 +1,7 @@
-﻿using Foundation.Protocol;
+﻿using Foundation;
 using System.Collections.Concurrent;
 
-namespace Foundation;
+namespace Foundation.Protocol;
 
 public static class AsyncCollection
 {

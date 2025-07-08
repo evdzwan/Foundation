@@ -1,4 +1,4 @@
-﻿namespace Foundation;
+﻿namespace Foundation.Protocol;
 
 public static class AsyncValue
 {
