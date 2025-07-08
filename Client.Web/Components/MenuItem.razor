@@ -4,21 +4,18 @@
     <Button Pressed="OnButtonClicked" disabled="@(!Pressed.HasDelegate)">@Title</Button>
     @if (Items is { } items)
     {
-        <Button Pressed="ShowNestedMenu" @ref="NestedMenuButton"><span>&raquo;</span></Button>
-        <Menu Title="@(HideMenuTitle ? null : Title)" @ref="NestedMenu">
-            <CascadingValue Value="NestedMenu" IsFixed>
+        <Button>
+            <span>&raquo;</span>
+            <Menu Title="@(HideMenuTitle ? null : Title)">
                 <CascadingValue Name="DefaultRenderer" Value="RenderDefault()" IsFixed>
                     @items
                 </CascadingValue>
-            </CascadingValue>
-        </Menu>
+            </Menu>
+        </Button>
     }
 </div>
 
 @code {
-    Menu? NestedMenu;
-    Button? NestedMenuButton;
-
     [CascadingParameter(Name = nameof(Loading))] bool Loading { get; set; }
     [CascadingParameter] Menu? Menu { get; set; }
 
@@ -33,16 +30,6 @@
 
     protected override void OnParametersSet()
         => Items ??= ChildContent;
-
-    Task ShowNestedMenu()
-    {
-        if (NestedMenuButton is { Element: { } nestedMenuButtonReference } && NestedMenu is { } nestedMenu)
-        {
-            return nestedMenu.Show(nestedMenuButtonReference);
-        }
-
-        return Task.CompletedTask;
-    }
 
     async Task OnButtonClicked(MouseEventArgs e)
     {

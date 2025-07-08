@@ -185,6 +185,7 @@ textarea {
         font-size: 90%;
         font-variant: small-caps;
         padding: .25rem;
+        text-align: start;
     }
 
 .menu-item {
@@ -197,17 +198,17 @@ textarea {
 
     .menu-item > *:nth-child(2) {
         aspect-ratio: 1;
-        font-size: 150%;
-        font-weight: 600;
         overflow: hidden;
         position: relative;
     }
 
-        .menu-item > *:nth-child(2) > * {
+        .menu-item > *:nth-child(2) > span:first-child {
+            font-size: 150%;
+            font-weight: 600;
             inset: 0;
             padding-left: .1em;
             position: absolute;
-            top: -.14em;
+            top: -.08em;
         }
 
     .menu-item.loading {
@@ -347,17 +348,17 @@ textarea {
 
     .browse-commands > button {
         aspect-ratio: 1;
-        font-size: 150%;
-        font-weight: 600;
         overflow: hidden;
         position: relative;
     }
 
-        .browse-commands > button > * {
+        .browse-commands > button > span:first-child {
+            font-size: 150%;
+            font-weight: 600;
             inset: 0;
             padding-left: .1em;
             position: absolute;
-            top: -.14em;
+            top: -.08em;
         }
 
     .browse-commands > span {

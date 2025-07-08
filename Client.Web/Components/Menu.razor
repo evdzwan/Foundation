@@ -28,6 +28,7 @@
         => ComponentReference = DotNetObjectReference.Create(this);
 
     [CascadingParameter] Menu? Parent { get; set; }
+    [CascadingParameter] Button? Trigger { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public RenderFragment? Items { get; set; }
@@ -81,6 +82,19 @@
     void IInvoke.SetHandler(Func<CancellationToken, Task>? handler)
         => PopoverOpened = handler;
 
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        Trigger?.SetHandler(handler: null);
+        await base.SetParametersAsync(parameters);
+        Trigger?.SetHandler(async ct =>
+        {
+            if (Trigger is { Element: { } triggerReference })
+            {
+                await Show(triggerReference);
+            }
+        });
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -95,6 +109,7 @@
     protected override async ValueTask OnDisposedAsync()
     {
         await Script.Detach(MenuReference);
+        Trigger?.SetHandler(handler: null);
         ComponentReference.Dispose();
     }
 }
