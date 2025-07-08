@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Foundation.Scripting;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Foundation.Scripting;
+namespace Foundation.Extensions;
 
 public static class FoundationConfigurationExtensions
 {

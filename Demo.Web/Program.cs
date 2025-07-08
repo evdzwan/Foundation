@@ -1,7 +1,6 @@
-using Foundation;
 using Foundation.Components;
+using Foundation.Extensions;
 using Foundation.Repositories;
-using Foundation.Scripting;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddFoundation(config => config.AddScripts([typeof(Program).Assembly]))

@@ -1,4 +1,4 @@
-﻿namespace Foundation;
+﻿namespace Foundation.Extensions;
 
 public static class EnumerableExtensions
 {

@@ -1,4 +1,4 @@
-﻿using Foundation;
+﻿using Foundation.Extensions;
 using System.Collections.Concurrent;
 
 namespace Foundation.Protocol;

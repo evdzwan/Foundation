@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Foundation;
+namespace Foundation.Extensions;
 
 public static class AsyncEnumerableExtensions
 {
