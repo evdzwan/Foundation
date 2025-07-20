@@ -1,4 +1,8 @@
-﻿@typeparam TItem
+﻿@attribute [CascadingTypeParameter(nameof(TItem))]
+@typeparam TItem
+
+<div class="table">
+</div>
 
 @code {
     [Parameter, EditorRequired] public required IAsyncCollection<TItem> Items { get; set; }

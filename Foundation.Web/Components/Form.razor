@@ -1,5 +1,9 @@
-﻿@typeparam TContext
+﻿@attribute [CascadingTypeParameter(nameof(TSubject))]
+@typeparam TSubject
+
+<div class="form">
+</div>
 
 @code {
-    [Parameter, EditorRequired] public required IAsyncValue<TContext> Context { get; set; }
+    [Parameter, EditorRequired] public required IAsyncValue<TSubject> Subject { get; set; }
 }
