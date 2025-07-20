@@ -1,8 +1,8 @@
 ﻿@attribute [CascadingTypeParameter(nameof(TSubject))]
 @typeparam TSubject
 
-<div class="form">
-</div>
+<form class="form">
+</form>
 
 @code {
     [Parameter, EditorRequired] public required IAsyncValue<TSubject> Subject { get; set; }
