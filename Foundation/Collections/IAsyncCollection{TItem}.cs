@@ -1,6 +1,7 @@
-﻿using Foundation.Threading;
+﻿using Foundation.Protocol;
+using Foundation.Threading;
 
-namespace Foundation;
+namespace Foundation.Collections;
 
 public interface IAsyncCollection<out TItem> : IAsyncEnumerable<TItem>, IAsyncValue<TItem[]>
 {

@@ -1,6 +1,6 @@
 ﻿using Foundation.Threading;
 
-namespace Foundation;
+namespace Foundation.Collections;
 
 public static class AsyncEnumerableExtensions
 {
