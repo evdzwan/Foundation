@@ -3,30 +3,60 @@
 @implements IDisposable
 @typeparam TItem
 
-<ul class="table">
-    @if (ItemsInView is { Length: > 0 } itemsInView)
-    {
-        <ForEach Items="itemsInView" Context="item">
-            <li @key="item">@item</li>
+<div class="table">
+    <CascadingValue Value="this" IsFixed>
+        @Columns
+    </CascadingValue>
+
+    <Defer>
+        <ForEach Items="RegisteredColumns" Context="column">
+            <div class="table-column" @key="column" />
         </ForEach>
-    }
-    else if (ItemsInView is { Length: 0 })
-    {
-        <li>No data available</li>
-    }
-    else
-    {
-        <li>Loading...</li>
-    }
-</ul>
+
+        <div class="table-header">
+            <ForEach Items="RegisteredColumns" Context="column">
+                <div class="table-cell" @key="column">
+                    @column.Header
+                </div>
+            </ForEach>
+        </div>
+
+        <div class="table-body">
+            @if (ItemsInView is { Length: > 0 } itemsInView)
+            {
+                <ForEach Items="itemsInView" Context="item">
+                    <div class="table-row" @key="item">
+                        <ForEach Items="RegisteredColumns" Context="column">
+                            <div class="table-cell" @key="column">
+                                @column.Cell?.Invoke(item)
+                            </div>
+                        </ForEach>
+                    </div>
+                </ForEach>
+            }
+            else if (ItemsInView is { Length: 0 })
+            {
+                <div class="table-row empty">@Empty</div>
+            }
+            else
+            {
+                <div class="table-row loading">@Loading</div>
+            }
+        </div>
+    </Defer>
+</div>
 
 @code {
-    readonly List<TableColumn<TItem>> Columns = [];
+    readonly List<TableColumn<TItem>> RegisteredColumns = [];
     const int PageSize = 10;
 
     TItem[]? ItemsInView;
     PersistingComponentStateSubscription ItemsInViewSubscription;
 
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public RenderFragment? Columns { get; set; }
+    [Parameter] public RenderFragment? Empty { get; set; }
+    [Parameter] public RenderFragment? Loading { get; set; }
     [Parameter, EditorRequired] public required IAsyncCollection<TItem> Items { get; set; }
 
     protected override void OnInitialized()
@@ -48,6 +78,13 @@
         }
     }
 
+    protected override void OnParametersSet()
+    {
+        Columns ??= ChildContent;
+        Empty ??= @<span>No data available</span>;
+        Loading ??= @<span>Loading...</span>;
+    }
+
     ITask<TItem[]> GetPage(int page)
         => Items.GetView(new(Skip: page * PageSize, Take: PageSize));
 
@@ -60,6 +97,6 @@
     void IDisposable.Dispose()
         => ItemsInViewSubscription.Dispose();
 
-    internal void AddColumn(TableColumn<TItem> column) => Columns.Add(column);
-    internal void RemoveColumn(TableColumn<TItem> column) => Columns.Remove(column);
+    internal void AddColumn(TableColumn<TItem> column) => RegisteredColumns.Add(column);
+    internal void RemoveColumn(TableColumn<TItem> column) => RegisteredColumns.Remove(column);
 }
