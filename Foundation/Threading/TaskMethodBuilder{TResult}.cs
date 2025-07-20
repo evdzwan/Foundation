@@ -23,7 +23,7 @@ public struct TaskMethodBuilder<TResult>(AsyncTaskMethodBuilder<TResult> builder
 
     public void SetStateMachine(IAsyncStateMachine stateMachine)
         => builder.SetStateMachine(stateMachine);
-    
+
     public void Start<TStateMachine>(ref TStateMachine stateMachine) where TStateMachine : IAsyncStateMachine
         => builder.Start(ref stateMachine);
 

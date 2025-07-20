@@ -15,7 +15,7 @@ sealed class TaskProxy<TResult>(Task<TResult> task) : ITask<TResult>
     sealed class TaskAwaiterProxy(TaskAwaiter<TResult> taskAwaiter) : ITaskAwaiter<TResult>
     {
         public bool IsCompleted => taskAwaiter.IsCompleted;
-        
+
         public TResult GetResult()
             => taskAwaiter.GetResult();
 
