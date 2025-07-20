@@ -1,4 +1,5 @@
 ﻿@typeparam TContext
 
 @code {
+    [Parameter, EditorRequired] public required IAsyncValue<TContext> Context { get; set; }
 }

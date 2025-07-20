@@ -1,4 +1,5 @@
 ﻿@typeparam TItem
 
 @code {
+    [Parameter, EditorRequired] public required IAsyncCollection<TItem> Items { get; set; }
 }
