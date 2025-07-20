@@ -21,6 +21,7 @@
 </ul>
 
 @code {
+    readonly List<TableColumn<TItem>> Columns = [];
     const int PageSize = 10;
 
     TItem[]? ItemsInView;
@@ -29,13 +30,21 @@
     [Parameter, EditorRequired] public required IAsyncCollection<TItem> Items { get; set; }
 
     protected override void OnInitialized()
-        => ItemsInViewSubscription = State.RegisterOnPersisting(PersistFirstPage);
+    {
+        if (State.TryTakeFromJson(nameof(ItemsInView), out TItem[]? itemsInView))
+        {
+            ItemsInView = itemsInView;
+        }
+
+        ItemsInViewSubscription = State.RegisterOnPersisting(PersistFirstPage);
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && ItemsInView is null)
         {
             ItemsInView = State.TryTakeFromJson(nameof(ItemsInView), out TItem[]? itemsInView) ? itemsInView : await GetPage(page: 0);
+            StateHasChanged();
         }
     }
 
@@ -44,10 +53,13 @@
 
     async Task PersistFirstPage()
     {
-        var itemsInView = ItemsInView = await GetPage(page: 0);
+        var itemsInView = await GetPage(page: 0);
         State.PersistAsJson(nameof(ItemsInView), itemsInView);
     }
 
     void IDisposable.Dispose()
         => ItemsInViewSubscription.Dispose();
+
+    internal void AddColumn(TableColumn<TItem> column) => Columns.Add(column);
+    internal void RemoveColumn(TableColumn<TItem> column) => Columns.Remove(column);
 }
