@@ -9,4 +9,12 @@ public static class EnumerableExtensions
             action(item);
         }
     }
+
+    public static void ForEach<TItem>(this IEnumerable<TItem> @this, Action<TItem, int> action)
+    {
+        foreach (var (item, index) in @this.Select((item, index) => (item, index)))
+        {
+            action(item, index);
+        }
+    }
 }
