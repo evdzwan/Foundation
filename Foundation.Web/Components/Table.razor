@@ -1,9 +1,53 @@
 ﻿@attribute [CascadingTypeParameter(nameof(TItem))]
+@inject PersistentComponentState State
+@implements IDisposable
 @typeparam TItem
 
 <ul class="table">
+    @if (ItemsInView is { Length: > 0 } itemsInView)
+    {
+        <ForEach Items="itemsInView" Context="item">
+            <li @key="item">@item</li>
+        </ForEach>
+    }
+    else if (ItemsInView is { Length: 0 })
+    {
+        <li>No data available</li>
+    }
+    else
+    {
+        <li>Loading...</li>
+    }
 </ul>
 
 @code {
+    const int PageSize = 10;
+
+    TItem[]? ItemsInView;
+    PersistingComponentStateSubscription ItemsInViewSubscription;
+
     [Parameter, EditorRequired] public required IAsyncCollection<TItem> Items { get; set; }
+
+    protected override void OnInitialized()
+        => ItemsInViewSubscription = State.RegisterOnPersisting(PersistFirstPage);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            ItemsInView = State.TryTakeFromJson(nameof(ItemsInView), out TItem[]? itemsInView) ? itemsInView : await GetPage(page: 0);
+        }
+    }
+
+    ITask<TItem[]> GetPage(int page)
+        => Items.GetView(new(Skip: page * PageSize, Take: PageSize));
+
+    async Task PersistFirstPage()
+    {
+        var itemsInView = ItemsInView = await GetPage(page: 0);
+        State.PersistAsJson(nameof(ItemsInView), itemsInView);
+    }
+
+    void IDisposable.Dispose()
+        => ItemsInViewSubscription.Dispose();
 }

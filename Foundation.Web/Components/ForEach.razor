@@ -1,0 +1,11 @@
+﻿@typeparam TItem
+
+@foreach (var item in Items)
+{
+    @ChildContent?.Invoke(item)
+}
+
+@code {
+    [Parameter] public RenderFragment<TItem>? ChildContent { get; set; }
+    [Parameter, EditorRequired] public required IEnumerable<TItem> Items { get; set; }
+}
