@@ -1,0 +1,58 @@
+﻿@attribute [CascadingTypeParameter(nameof(TModel))]
+@inherits Component
+@typeparam TModel
+
+<div class="form-field text">
+    <label>@Title</label>
+    <InputText @bind-Value="EditorValue" />
+    @if (ValueExpression is { } valueExpression)
+    {
+        <ValidationMessage For="valueExpression" />
+    }
+</div>
+
+@code {
+    Func<object?>? CompiledValueExpression;
+    Expression<Func<object?>>? ValueExpression;
+    PropertyInfo? ValueProperty;
+
+    [CascadingParameter] Form<TModel>? Form { get; set; }
+    [CascadingParameter] EditContext? FormContext { get; set; }
+    [Parameter, EditorRequired] public required Expression<Func<TModel, object?>> Expression { get; set; }
+    [Parameter] public string? Title { get; set; }
+
+    string? EditorValue
+    {
+        get => Convert.ChangeType(CompiledValueExpression?.Invoke(), typeof(string)) as string;
+        set => Value = ValueProperty is { PropertyType: { } propertyType } ? Convert.ChangeType(value, propertyType) : value;
+    }
+
+    object? Value
+    {
+        get
+        {
+            if (ValueProperty is { CanRead: true } property && FormContext?.Model is TModel { } model)
+            {
+                return property.GetValue(model);
+            }
+
+            return default;
+        }
+        set
+        {
+            if (ValueProperty is { CanWrite: true } property && FormContext?.Model is TModel { } model)
+            {
+                property.SetValue(model, value);
+            }
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        ValueExpression ??= FormContext?.Model is TModel { } model ? Expression.ReplaceParameter(model) : null;
+        ValueProperty ??= ValueExpression?.GetPropertyOrDefault();
+        CompiledValueExpression ??= ValueExpression?.Compile();
+
+        Title ??= ValueProperty?.Name.Humanize(LetterCasing.Title);
+    }
+}

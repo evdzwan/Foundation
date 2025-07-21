@@ -1,9 +1,69 @@
-﻿@attribute [CascadingTypeParameter(nameof(TSubject))]
-@typeparam TSubject
+﻿@attribute [CascadingTypeParameter(nameof(TModel))]
+@inject PersistentComponentState State
+@inherits Component
+@typeparam TModel
 
-<form class="form">
-</form>
+<EditForm class="form" EditContext="FormContext">
+    <DataAnnotationsValidator />
+    <CascadingValue Value="this" IsFixed>
+        @ChildContent
+    </CascadingValue>
+</EditForm>
 
 @code {
-    [Parameter, EditorRequired] public required IAsyncValue<TSubject> Subject { get; set; }
+    EditContext FormContext = new(model: new());
+    PersistingComponentStateSubscription ModelSubscription;
+    TModel? Model;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter, EditorRequired] public required IAsyncValue<TModel> Subject { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (State.TryTakeFromJson(nameof(Model), out TModel? model))
+        {
+            Model = model;
+            UpdateFormContext();
+        }
+
+        ModelSubscription = State.RegisterOnPersisting(PersistModel);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && Model is null)
+        {
+            Model = State.TryTakeFromJson(nameof(Model), out TModel? model) ? model : await GetModel();
+            UpdateFormContext();
+            StateHasChanged();
+        }
+    }
+
+    void OnFieldChanged(object? sender, FieldChangedEventArgs e) { }
+
+    ITask<TModel> GetModel()
+        => Subject.GetValue();
+
+    async Task PersistModel()
+    {
+        var model = await GetModel();
+        State.PersistAsJson(nameof(Model), model);
+    }
+
+    void UpdateFormContext()
+    {
+        if (Model?.Equals(FormContext.Model) is not true)
+        {
+            FormContext.OnFieldChanged -= OnFieldChanged;
+
+            FormContext = new(Model ?? new object());
+            if (Model is not null)
+            {
+                FormContext.OnFieldChanged += OnFieldChanged;
+            }
+        }
+    }
+
+    protected override void OnDisposing()
+        => ModelSubscription.Dispose();
 }
