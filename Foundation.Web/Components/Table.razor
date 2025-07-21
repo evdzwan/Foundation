@@ -43,15 +43,28 @@
                 <div class="table-row loading">@Loading</div>
             }
         </div>
+
+        @if (Pager is { } pager)
+        {
+            <div class="table-footer">
+                <NavLink href="@pager.GetFirstPageUri()" />
+                <NavLink href="@pager.GetPreviousPageUri()" />
+                <span>@((CurrentPage * pager.PageSize) + 1) &ndash; @((CurrentPage + 1) * pager.PageSize)</span>
+                <NavLink href="@pager.GetNextPageUri()" />
+            </div>
+        }
     </Defer>
 </div>
 
 @code {
     readonly List<Column<TItem>> Columns = [];
-    const int PageSize = 10;
+    const int DefaultPageSize = 10;
 
     TItem[]? ItemsInView;
     PersistingComponentStateSubscription ItemsInViewSubscription;
+
+    [CascadingParameter(Name = nameof(CurrentPage))] int CurrentPage { get; set; }
+    [CascadingParameter] Pager? Pager { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public RenderFragment? Content { get; set; }
@@ -61,19 +74,19 @@
 
     protected override void OnInitialized()
     {
-        if (State.TryTakeFromJson(nameof(ItemsInView), out TItem[]? itemsInView))
+        if (State.TryTakeFromJson(nameof(ItemsInView), out TItem[]? items))
         {
-            ItemsInView = itemsInView;
+            ItemsInView = items;
         }
 
-        ItemsInViewSubscription = State.RegisterOnPersisting(PersistFirstPage);
+        ItemsInViewSubscription = State.RegisterOnPersisting(PersistItemsInView);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && ItemsInView is null)
         {
-            ItemsInView = State.TryTakeFromJson(nameof(ItemsInView), out TItem[]? itemsInView) ? itemsInView : await GetPage(page: 0);
+            ItemsInView = State.TryTakeFromJson(nameof(ItemsInView), out TItem[]? items) ? items : await GetItemsInView();
             StateHasChanged();
         }
     }
@@ -85,17 +98,21 @@
         Loading ??= @<span>Loading...</span>;
     }
 
-    Task<TItem[]> GetPage(int page)
-        => Items.GetView(new(Skip: page * PageSize, Take: PageSize), CancellationToken);
+    Task<TItem[]> GetItemsInView() => Pager is { PageSize: > 0 } pager
+        ? Items.GetView(new(Skip: CurrentPage * pager.PageSize, Take: pager.PageSize), CancellationToken)
+        : Items.ToArray(CancellationToken);
 
-    async Task PersistFirstPage()
+    async Task PersistItemsInView()
     {
-        var itemsInView = await GetPage(page: 0);
-        State.PersistAsJson(nameof(ItemsInView), itemsInView);
+        var items = await GetItemsInView();
+        State.PersistAsJson(nameof(ItemsInView), items);
     }
 
-    internal void AddColumn(Column<TItem> column) => Columns.Add(column);
-    internal void RemoveColumn(Column<TItem> column) => Columns.Remove(column);
+    internal void AddColumn(Column<TItem> column)
+        => Columns.Add(column);
+
+    internal void RemoveColumn(Column<TItem> column)
+        => Columns.Remove(column);
 
     protected override void OnDisposing()
         => ItemsInViewSubscription.Dispose();

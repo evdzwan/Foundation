@@ -28,3 +28,8 @@
             .table > .table-body > .table-row.loading {
                 width: 0;
             }
+
+.table-footer {
+    display: table-footer-group;
+    width: 0;
+}
