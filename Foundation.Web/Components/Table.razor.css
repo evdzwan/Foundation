@@ -1,5 +1,6 @@
 ﻿.table {
     display: table;
+    table-layout: fixed;
 }
 
     .table > .table-column {
