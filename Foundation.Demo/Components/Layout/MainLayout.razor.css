@@ -66,7 +66,7 @@ main {
                 font-variant: small-caps;
                 font-weight: 500;
                 letter-spacing: .1em;
-                padding: .3rem;
+                padding: .25rem;
             }
 
             main > nav > section > ::deep a {
@@ -76,6 +76,10 @@ main {
                 padding: .25rem 1rem;
                 text-decoration: none;
             }
+
+                main > nav > section > ::deep a:focus {
+                    outline: none;
+                }
 
                 main > nav > section > ::deep a:not(.disabled):hover {
                     background-color: var(--fn-active-bg);
@@ -93,6 +97,10 @@ main {
             margin-top: auto;
             padding: .5rem;
         }
+
+    main > section {
+        padding: 0 .5rem .5rem 0;
+    }
 
 #blazor-error-ui {
     color-scheme: light only;

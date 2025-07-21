@@ -102,6 +102,34 @@ a:visited {
         text-decoration: underline;
     }
 
+article {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+    article > h1 {
+        margin: .5em 0 0 0;
+    }
+
+    article > p {
+        margin: .25em 0 0 0;
+    }
+
+    article > section {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+
+        article > section > h3 {
+            margin: .5em 0 0 0;
+        }
+
+        article > section > p {
+            margin: .25em 0 0 0;
+        }
+
 button {
     background-color: rgb(var(--fn-button-bg-rgb));
     border: none;
@@ -146,8 +174,9 @@ p {
 
 pre {
     background-color: var(--fn-section-bg);
+    border-bottom-right-radius: .25rem;
     border-left: .25rem solid var(--fn-section-border);
-    border-radius: .25rem;
+    border-top-right-radius: .25rem;
     color: var(--fn-section-fg);
     display: block;
     font-size: 90%;
