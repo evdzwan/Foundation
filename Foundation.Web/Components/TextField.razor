@@ -6,7 +6,7 @@
 {
     <div class="form-field text">
         <label>@Title</label>
-        <InputText @bind-Value="EditorValue" />
+        <input type="text" @bind="EditorValue" />
         @if (ValueExpression is { } valueExpression)
         {
             <ValidationMessage For="valueExpression" />
