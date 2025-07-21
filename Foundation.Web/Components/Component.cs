@@ -5,6 +5,7 @@ namespace Foundation.Components;
 public abstract class Component : ComponentBase, IAsyncDisposable
 {
     readonly CancellationTokenSource CancellationTokenSource = new();
+    protected CancellationToken CancellationToken => CancellationTokenSource.Token;
 
     protected virtual void OnDisposing() { }
     protected virtual Task OnDisposingAsync() => Task.CompletedTask;

@@ -86,7 +86,7 @@
     }
 
     Task<TItem[]> GetPage(int page)
-        => Items.GetView(new(Skip: page * PageSize, Take: PageSize));
+        => Items.GetView(new(Skip: page * PageSize, Take: PageSize), CancellationToken);
 
     async Task PersistFirstPage()
     {

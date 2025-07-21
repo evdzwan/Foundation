@@ -42,7 +42,7 @@
     void OnFieldChanged(object? sender, FieldChangedEventArgs e) { }
 
     Task<TModel> GetModel()
-        => Subject.GetValue();
+        => Subject.GetValue(CancellationToken);
 
     async Task PersistModel()
     {
