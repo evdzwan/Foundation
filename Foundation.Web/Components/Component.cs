@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Foundation;
+namespace Foundation.Components;
 
 public abstract class Component : ComponentBase, IAsyncDisposable
 {
