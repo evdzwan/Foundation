@@ -6,7 +6,7 @@
 {
     <div class="form-field date-time">
         <label>@Title</label>
-        <input type="@GetEditorType()" @bind="EditorValue" />
+        <input type="@GetEditorType()" @bind="EditorValue" @ref="EditorReference" />
         @if (ValueExpression is { } valueExpression)
         {
             <ValidationMessage For="valueExpression" />
@@ -15,6 +15,8 @@
 }
 
 @code {
+    ElementReference EditorReference;
+
     [Parameter] public bool Date { get; set; }
     [Parameter] public bool Time { get; set; }
 
@@ -29,6 +31,14 @@
             _ => null
         };
         set => Value = ValueProperty is { PropertyType: { } propertyType } ? ConvertToValue(value, propertyType) : value;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && AutoFocus)
+        {
+            await EditorReference.FocusAsync();
+        }
     }
 
     string GetEditorType() => (Date, Time) switch

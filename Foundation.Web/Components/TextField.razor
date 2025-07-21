@@ -6,7 +6,7 @@
 {
     <div class="form-field text">
         <label>@Title</label>
-        <input type="text" @bind="EditorValue" />
+        <input type="text" @bind="EditorValue" @ref="EditorReference" />
         @if (ValueExpression is { } valueExpression)
         {
             <ValidationMessage For="valueExpression" />
@@ -15,9 +15,19 @@
 }
 
 @code {
+    ElementReference EditorReference;
+
     string? EditorValue
     {
         get => Convert.ChangeType(Value, typeof(string)) as string;
         set => Value = ValueProperty is { PropertyType: { } propertyType } ? Convert.ChangeType(value, propertyType) : value;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && AutoFocus)
+        {
+            await EditorReference.FocusAsync();
+        }
     }
 }
