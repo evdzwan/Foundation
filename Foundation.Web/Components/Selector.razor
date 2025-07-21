@@ -1,0 +1,14 @@
+﻿@attribute [CascadingTypeParameter(nameof(TItem))]
+@inherits Component
+@typeparam TItem
+
+<CascadingValue Value="this" IsFixed>
+    <CascadingValue Value="Selection">
+        @ChildContent
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter, EditorRequired] public required ISelection<TItem> Selection { get; set; }
+}
