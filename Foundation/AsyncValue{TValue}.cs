@@ -1,12 +1,10 @@
-﻿using Foundation.Threading;
+﻿namespace Foundation;
 
-namespace Foundation;
-
-sealed class AsyncValue<TValue>(Func<CancellationToken, ITask<TValue>> getValue) : IAsyncValue<TValue>
+sealed class AsyncValue<TValue>(Func<CancellationToken, Task<TValue>> getValue) : IAsyncValue<TValue>
 {
     TValue? Value;
 
-    public async ITask<TValue> GetValue(CancellationToken cancellationToken = default)
+    public async Task<TValue> GetValue(CancellationToken cancellationToken = default)
         => Value ??= await getValue(cancellationToken);
 
     public void Reset()

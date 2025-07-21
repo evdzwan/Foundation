@@ -1,12 +1,11 @@
 ﻿using Foundation.Protocol;
-using Foundation.Threading;
 using System.Collections.Concurrent;
 
 namespace Foundation.Collections;
 
-sealed class AsyncCollection<TItem>(Func<Query, CancellationToken, ITask<TItem[]>> getView) : IAsyncCollection<TItem>
+sealed class AsyncCollection<TItem>(Func<Query, CancellationToken, Task<TItem[]>> getView) : IAsyncCollection<TItem>
 {
-    readonly ConcurrentDictionary<int, ITask<TItem[]>> Windows = [];
+    readonly ConcurrentDictionary<int, Task<TItem[]>> Windows = [];
     const int WindowSize = 20;
 
     public bool Complete { get; private set; }
@@ -42,10 +41,10 @@ sealed class AsyncCollection<TItem>(Func<Query, CancellationToken, ITask<TItem[]
         }
     }
 
-    public ITask<TItem[]> GetValue(CancellationToken cancellationToken = default)
+    public Task<TItem[]> GetValue(CancellationToken cancellationToken = default)
         => this.ToArray(cancellationToken);
 
-    public async ITask<TItem[]> GetView(Query query, CancellationToken cancellationToken = default)
+    public async Task<TItem[]> GetView(Query query, CancellationToken cancellationToken = default)
     {
         var skip = query.Skip ?? 0;
         var take = query.Take ?? WindowSize;

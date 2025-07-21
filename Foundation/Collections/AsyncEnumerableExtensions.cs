@@ -1,10 +1,8 @@
-﻿using Foundation.Threading;
-
-namespace Foundation.Collections;
+﻿namespace Foundation.Collections;
 
 public static class AsyncEnumerableExtensions
 {
-    public static async ITask<TItem[]> ToArray<TItem>(this IAsyncEnumerable<TItem> @this, CancellationToken cancellationToken = default)
+    public static async Task<TItem[]> ToArray<TItem>(this IAsyncEnumerable<TItem> @this, CancellationToken cancellationToken = default)
     {
         var list = new List<TItem>();
 

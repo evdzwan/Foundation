@@ -41,7 +41,7 @@
 
     void OnFieldChanged(object? sender, FieldChangedEventArgs e) { }
 
-    ITask<TModel> GetModel()
+    Task<TModel> GetModel()
         => Subject.GetValue();
 
     async Task PersistModel()

@@ -1,9 +1,7 @@
-﻿using Foundation.Threading;
+﻿namespace Foundation;
 
-namespace Foundation;
-
-public interface IAsyncValue<out TValue>
+public interface IAsyncValue<TValue>
 {
-    ITask<TValue> GetValue(CancellationToken cancellationToken = default);
+    Task<TValue> GetValue(CancellationToken cancellationToken = default);
     void Reset();
 }
