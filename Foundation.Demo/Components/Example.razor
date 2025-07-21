@@ -1,0 +1,25 @@
+﻿@attribute [StreamRendering]
+@inherits Component
+
+<pre><code>@Contents</code></pre>
+
+@code {
+    //TODO create resource cache for preloading
+    string? Contents = "Codevoorbeeld\r\nMeerdere regels";
+
+    [Parameter] public string? Resource { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Resource is { Length: > 0 } resource)
+        {
+            var streamName = $"Foundation.Examples.{resource}".Replace('\\', '.');
+            await using var stream = typeof(Example).Assembly.GetManifestResourceStream(streamName);
+            if (stream is { CanRead: true })
+            {
+                using var reader = new StreamReader(stream);
+                Contents = await reader.ReadToEndAsync(CancellationToken);
+            }
+        }
+    }
+}
