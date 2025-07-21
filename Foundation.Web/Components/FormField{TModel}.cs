@@ -13,6 +13,7 @@ public abstract class FormField<TModel> : Component
     [CascadingParameter] EditContext? FormContext { get; set; }
     [Parameter, EditorRequired] public required Expression<Func<TModel, object?>> Expression { get; set; }
     [Parameter] public string? Title { get; set; }
+    [Parameter] public bool Visible { get; set; } = true;
 
     protected object? Value
     {
