@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Foundation.Components;
 
-public abstract class FormField<TModel> : Component
+public abstract class Field<TModel> : Component
 {
     [CascadingParameter] EditContext? FormContext { get; set; }
     [Parameter] public bool AutoFocus { get; set; }
