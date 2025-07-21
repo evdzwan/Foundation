@@ -1,0 +1,78 @@
+﻿@inherits LayoutComponentBase
+
+<main>
+    <header>
+        <section>
+            <NavLink href="/" Match="NavLinkMatch.All">Foundation</NavLink>
+            <small>Razor Component Library</small>
+        </section>
+
+        <aside>
+            <button onclick="toggleTheme()">Toggle Theme</button>
+        </aside>
+    </header>
+
+    <nav>
+        <section>
+            <label>Collections</label>
+            <NavLink href="/collections/asynccollection">AsyncCollection</NavLink>
+            <NavLink href="/collections/extensions" class="disabled">Extensions</NavLink>
+            <NavLink href="/collections/selection">Selection</NavLink>
+        </section>
+
+        <section>
+            <label>Components</label>
+            <NavLink href="/components/choicefield" class="disabled">ChoiceField</NavLink>
+            <NavLink href="/components/column" class="disabled">Column</NavLink>
+            <NavLink href="/components/component" class="disabled">Component <sup>abstract</sup></NavLink>
+            <NavLink href="/components/datetimefield" class="disabled">DateTimeField</NavLink>
+            <NavLink href="/components/defer">Defer</NavLink>
+            <NavLink href="/components/field" class="disabled">Field <sup>abstract</sup></NavLink>
+            <NavLink href="/components/foreach">ForEach</NavLink>
+            <NavLink href="/components/form">Form</NavLink>
+            <NavLink href="/components/pager" class="disabled">Pager</NavLink>
+            <NavLink href="/components/selector" class="disabled">Selector</NavLink>
+            <NavLink href="/components/switchfield" class="disabled">SwitchField</NavLink>
+            <NavLink href="/components/table">Table</NavLink>
+            <NavLink href="/components/textfield" class="disabled">TextField</NavLink>
+            <NavLink href="/components/themer" class="disabled">Themer</NavLink>
+        </section>
+
+        <section>
+            <label>Expressions</label>
+            <NavLink href="/collections/extensions" class="disabled">Extensions</NavLink>
+        </section>
+
+        <section>
+            <label>Protocol</label>
+            <NavLink href="/protocol/query" class="disabled">Query</NavLink>
+        </section>
+
+        <section>
+            <label>Threading</label>
+            <NavLink href="/threading/extensions" class="disabled">Extensions</NavLink>
+            <NavLink href="/threading/itask">ITask</NavLink>
+        </section>
+
+        <section>
+            <label>Miscellaneous</label>
+            <NavLink href="/misc/asyncvalue">AsyncValue</NavLink>
+            <NavLink href="/misc/classlist">ClassList</NavLink>
+            <NavLink href="/misc/stylelist">StyleList</NavLink>
+        </section>
+
+        <footer>
+            Erik van der Zwan &copy; 2025
+        </footer>
+    </nav>
+
+    <section>
+        @Body
+    </section>
+</main>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
