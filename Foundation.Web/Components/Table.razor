@@ -1,6 +1,6 @@
 ﻿@attribute [CascadingTypeParameter(nameof(TItem))]
 @inject PersistentComponentState State
-@implements IDisposable
+@inherits Component
 @typeparam TItem
 
 <div class="table">
@@ -94,9 +94,9 @@
         State.PersistAsJson(nameof(ItemsInView), itemsInView);
     }
 
-    void IDisposable.Dispose()
-        => ItemsInViewSubscription.Dispose();
-
     internal void AddColumn(TableColumn<TItem> column) => RegisteredColumns.Add(column);
     internal void RemoveColumn(TableColumn<TItem> column) => RegisteredColumns.Remove(column);
+
+    protected override void OnDisposing()
+        => ItemsInViewSubscription.Dispose();
 }

@@ -1,5 +1,5 @@
-﻿@typeparam TItem
-@implements IDisposable
+﻿@inherits Component
+@typeparam TItem
 
 @code {
     Func<TItem, object?>? CompiledExpression;
@@ -23,6 +23,6 @@
         Header ??= Title is { Length: > 0 } title ? @<span>@title</span> : null;
     }
     
-    void IDisposable.Dispose()
+    protected override void OnDisposing()
         => Table?.RemoveColumn(this);
 }
