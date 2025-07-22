@@ -16,5 +16,5 @@ static class BookRepository
         => Create(Random.Shared.Next(1, 10_000));
 
     public static Book[] CreateRange(int start, int count)
-        => [.. Enumerable.Range(start, count).Select(i => Create(i + 1))];
+        => [.. Enumerable.Range(start, count).Select(Create)];
 }
