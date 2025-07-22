@@ -4,10 +4,12 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Foundation;
 
-public sealed class StyleList : IReadOnlyDictionary<string, object?>
+public sealed class StyleList() : IReadOnlyDictionary<string, object?>
 {
     readonly Dictionary<string, object?> Items = new(StringComparer.OrdinalIgnoreCase);
     readonly Lock UpdateLock = new();
+    public StyleList(string value) : this()
+        => AddRange(CreateRange(value));
 
     public int Count => Items.Count;
     public IEnumerable<string> Keys => Items.Keys;
@@ -114,8 +116,8 @@ public sealed class StyleList : IReadOnlyDictionary<string, object?>
     public static StyleList operator +(StyleList @this, KeyValuePair<string, object?> attribute) => @this.Add(attribute.Key, attribute.Value);
     public static StyleList operator +(StyleList @this, IEnumerable<KeyValuePair<string, object?>> attributes) => @this.AddRange(attributes);
     public static StyleList operator +(StyleList @this, IReadOnlyDictionary<string, object?>? unmatchedAttributes) => @this.AddUnmatched(unmatchedAttributes);
-    
-    public static explicit operator StyleList(string @this) => new StyleList().AddRange(CreateRange(@this));
+
+    public static explicit operator StyleList(string @this) => new(@this);
     public static StyleList operator -(StyleList @this, string key) => @this.Remove(key);
     public static StyleList operator -(StyleList @this, IEnumerable<string> keys) => @this.RemoveRange(keys);
     public static StyleList operator -(StyleList @this, IReadOnlyDictionary<string, object?>? unmatchedAttributes) => @this.RemoveUnmatched(unmatchedAttributes);

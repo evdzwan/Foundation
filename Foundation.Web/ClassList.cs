@@ -3,10 +3,12 @@ using System.Collections;
 
 namespace Foundation;
 
-public sealed class ClassList : IReadOnlyList<string>
+public sealed class ClassList() : IReadOnlyList<string>
 {
     readonly List<string> Items = [];
     readonly Lock UpdateLock = new();
+    public ClassList(string value) : this()
+        => AddRange(CreateRange(value));
 
     public int Count => Items.Count;
     public string this[int index] => Items[index];
@@ -104,7 +106,7 @@ public sealed class ClassList : IReadOnlyList<string>
     public static ClassList operator +(ClassList @this, IEnumerable<string> classNames) => @this.AddRange(classNames);
     public static ClassList operator +(ClassList @this, IReadOnlyDictionary<string, object?>? unmatchedAttributes) => @this.AddUnmatched(unmatchedAttributes);
 
-    public static explicit operator ClassList(string @this) => new ClassList().AddRange(CreateRange(@this));
+    public static explicit operator ClassList(string @this) => new(@this);
     public static ClassList operator -(ClassList @this, string className) => @this.Remove(className);
     public static ClassList operator -(ClassList @this, IEnumerable<string> classNames) => @this.RemoveRange(classNames);
     public static ClassList operator -(ClassList @this, IReadOnlyDictionary<string, object?>? unmatchedAttributes) => @this.RemoveUnmatched(unmatchedAttributes);

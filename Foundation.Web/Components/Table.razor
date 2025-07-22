@@ -70,7 +70,7 @@
     readonly List<Column<TItem>> Columns = [];
     const int DefaultPageSize = 10;
 
-    ClassList TableClass = (ClassList)"table loading";
+    ClassList TableClass = new("table loading");
     TItem[]? ItemsInView;
     bool HasBeenRendered;
 
