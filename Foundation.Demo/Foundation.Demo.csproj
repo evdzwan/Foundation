@@ -11,11 +11,4 @@
     <ProjectReference Include="..\Foundation.Web\Foundation.Web.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Examples\**" />
-    <Compile Remove="Examples\**" />
-    <Content Remove="Examples\**" />
-    <None Remove="Examples\**" />
-  </ItemGroup>
-
 </Project>
