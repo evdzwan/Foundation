@@ -1,5 +1,4 @@
 ﻿@attribute [CascadingTypeParameter(nameof(TItem))]
-@inject PersistentComponentState State
 @inherits Component
 @typeparam TItem
 
@@ -59,9 +58,7 @@
 @code {
     readonly List<Column<TItem>> Columns = [];
     const int DefaultPageSize = 10;
-
     TItem[]? ItemsInView;
-    PersistingComponentStateSubscription ItemsInViewSubscription;
 
     [CascadingParameter(Name = nameof(CurrentPage))] int CurrentPage { get; set; }
     [CascadingParameter] Pager? Pager { get; set; }
@@ -75,21 +72,11 @@
     [Parameter] public RenderFragment? Loading { get; set; }
     [Parameter, EditorRequired] public required IAsyncCollection<TItem> Items { get; set; }
 
-    protected override void OnInitialized()
-    {
-        if (State.TryTakeFromJson(nameof(ItemsInView), out TItem[]? items))
-        {
-            ItemsInView = items;
-        }
-
-        ItemsInViewSubscription = State.RegisterOnPersisting(PersistItemsInView);
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && ItemsInView is null)
         {
-            ItemsInView = State.TryTakeFromJson(nameof(ItemsInView), out TItem[]? items) ? items : await GetItemsInView();
+            ItemsInView = await GetItemsInView();
             StateHasChanged();
         }
     }
@@ -105,18 +92,9 @@
         ? Items.GetView(new(Skip: CurrentPage * pager.PageSize, Take: pager.PageSize), CancellationToken)
         : Items.ToArray(CancellationToken);
 
-    async Task PersistItemsInView()
-    {
-        var items = await GetItemsInView();
-        State.PersistAsJson(nameof(ItemsInView), items);
-    }
-
     internal void AddColumn(Column<TItem> column)
         => Columns.Add(column);
 
     internal void RemoveColumn(Column<TItem> column)
         => Columns.Remove(column);
-
-    protected override void OnDisposing()
-        => ItemsInViewSubscription.Dispose();
 }

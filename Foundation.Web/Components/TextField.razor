@@ -4,9 +4,17 @@
 
 @if (Visible)
 {
-    <div class="form-field text">
+    <div class="field text">
         <label>@Title</label>
-        <input type="text" @bind="EditorValue" @ref="EditorReference" />
+        @if (MultiLine)
+        {
+            <textarea readonly="@ReadOnly" @bind="EditorValue" @ref="EditorReference" />
+        }
+        else
+        {
+            <input type="text" readonly="@ReadOnly" @bind="EditorValue" @ref="EditorReference" />
+        }
+
         @if (ValueExpression is { } valueExpression)
         {
             <ValidationMessage For="valueExpression" />
@@ -16,6 +24,8 @@
 
 @code {
     ElementReference EditorReference;
+
+    [Parameter] public bool MultiLine { get; set; }
 
     string? EditorValue
     {

@@ -4,9 +4,10 @@
 
 @if (Visible)
 {
-    <div class="form-field date-time">
+    <div class="field date-time">
         <label>@Title</label>
-        <input type="@GetEditorType()" @bind="EditorValue" @ref="EditorReference" />
+        <input type="@GetEditorType()" readonly="@ReadOnly" @bind="EditorValue" @ref="EditorReference" />
+
         @if (ValueExpression is { } valueExpression)
         {
             <ValidationMessage For="valueExpression" />

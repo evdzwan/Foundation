@@ -12,6 +12,7 @@ public abstract class Field<TModel> : Component
     [CascadingParameter] EditContext? FormContext { get; set; }
     [Parameter] public bool AutoFocus { get; set; }
     [Parameter, EditorRequired] public required Expression<Func<TModel, object?>> Expression { get; set; }
+    [Parameter] public bool ReadOnly { get; set; }
     [Parameter] public string? Title { get; set; }
     [Parameter] public bool Visible { get; set; } = true;
 
@@ -41,7 +42,7 @@ public abstract class Field<TModel> : Component
     protected override void OnParametersSet()
     {
         ValueExpression ??= FormContext?.Model is TModel { } model ? Expression.ReplaceParameter(model) : null;
-        ValueProperty ??= ValueExpression?.GetPropertyOrDefault();
+        ValueProperty ??= Expression.GetPropertyOrDefault();
         Title ??= ValueProperty?.Name.Humanize(LetterCasing.Title);
     }
 }
