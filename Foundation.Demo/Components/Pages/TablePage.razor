@@ -27,6 +27,9 @@
     readonly IAsyncCollection<Book> Books = AsyncCollection.Create(async page =>
     {
         await Task.Delay(1_000);
-        return AllBooks.Skip(page.Skip).Take(page.Take).ToArray();
+
+        var books = AllBooks.Skip(page.Skip).Take(page.Take).ToArray();
+        Console.WriteLine($"Retrieved Book[{books.Length}] for {page}");
+        return books;
     });
 }

@@ -15,6 +15,8 @@
     readonly IAsyncValue<Book> Book = AsyncValue.Create(async () =>
     {
         await Task.Delay(1_000);
-        return BookRepository.CreateRandom();
+        var book = BookRepository.CreateRandom();
+        Console.WriteLine($"Retrieved Book {{ Id = {book.Id} }}");
+        return book;
     });
 }
