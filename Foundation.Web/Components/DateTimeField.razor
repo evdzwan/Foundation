@@ -6,8 +6,9 @@
 {
     <div class="field date-time">
         <label>@Title</label>
-        <input type="@GetEditorType()" readonly="@ReadOnly" @bind="EditorValue" @ref="EditorReference" />
-
+        <div class="field-value">
+            <input type="@GetEditorType()" readonly="@ReadOnly" @bind="EditorValue" @ref="EditorReference" />
+        </div>
         @if (ValueExpression is { } valueExpression)
         {
             <ValidationMessage For="valueExpression" />

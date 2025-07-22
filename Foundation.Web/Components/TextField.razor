@@ -6,15 +6,16 @@
 {
     <div class="field text">
         <label>@Title</label>
-        @if (MultiLine)
-        {
-            <textarea readonly="@ReadOnly" @bind="EditorValue" @ref="EditorReference" />
-        }
-        else
-        {
-            <input type="text" readonly="@ReadOnly" @bind="EditorValue" @ref="EditorReference" />
-        }
-
+        <div class="field-value">
+            @if (MultiLine)
+            {
+                <textarea readonly="@ReadOnly" @bind="EditorValue" @ref="EditorReference" />
+            }
+            else
+            {
+                <input type="text" readonly="@ReadOnly" @bind="EditorValue" @ref="EditorReference" />
+            }
+        </div>
         @if (ValueExpression is { } valueExpression)
         {
             <ValidationMessage For="valueExpression" />

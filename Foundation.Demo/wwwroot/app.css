@@ -214,6 +214,26 @@ ul {
     gap: .5rem;
 }
 
+    .form.loading .field-value {
+        pointer-events: none;
+        position: relative;
+        user-select: none;
+    }
+
+        .form.loading .field-value::before {
+            animation: move 1s linear infinite;
+            background: linear-gradient(-60deg, #ccc 33%, #ddd, #ccc 66%) right / 300% 100%;
+            border-radius: .25rem;
+            content: '';
+            inset: 0;
+            position: absolute;
+            z-index: 10;
+        }
+
+        .form.loading .field-value > * {
+            outline: none;
+        }
+
 .field {
     display: flex;
     flex-direction: column;
@@ -231,6 +251,11 @@ ul {
         .field > label:not(:has(~ *:focus)) {
             color: var(--fn-muted);
         }
+
+    .field > .field-value {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
 
 .table {
     border-spacing: .1rem;
