@@ -6,7 +6,7 @@ namespace Foundation.Collections;
 sealed class AsyncCollection<TItem>(Func<Page, CancellationToken, Task<TItem[]>> getView) : IAsyncCollection<TItem>
 {
     readonly ConcurrentDictionary<int, Task<TItem[]>> Windows = [];
-    const int WindowSize = 50;
+    const int WindowSize = 20;
 
     public bool Complete { get; private set; }
 
