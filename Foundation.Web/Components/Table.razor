@@ -99,7 +99,7 @@
 
     protected override void OnParametersSet()
     {
-        Content ??= ChildContent;
+        Content ??= ChildContent ?? CreateDefaultContent();
         Empty ??= @<span>No data available</span>;
     }
 
@@ -134,4 +134,35 @@
 
     internal void RemoveColumn(Column<TItem> column)
         => Columns.Remove(column);
+
+    static RenderFragment CreateDefaultContent() => builder =>
+    {
+        var sequence = 0;
+        var usedFill = false;
+        var displayColumn = typeof(TItem).GetCustomAttribute<DisplayColumnAttribute>()?.DisplayColumn;
+        var properties = typeof(TItem).GetProperties()
+                                      .Where(p => p.GetCustomAttribute<DisplayAttribute>() is not null)
+                                      .ToArray();
+
+        foreach (var (property, index) in properties.Select((p, i) => (p, i)))
+        {
+            builder.OpenComponent(sequence++, typeof(Column<>).MakeGenericType(typeof(TItem)));
+
+            var parameter = Expression.Parameter(typeof(TItem), "item");
+            var columnExpression = Expression.Lambda<Func<TItem, object?>>(Expression.Convert(Expression.Property(parameter, property.Name), typeof(object)), parameter);
+            builder.AddComponentParameter(sequence++, nameof(Column<TItem>.Expression), columnExpression);
+
+            if (property.GetCustomAttribute<KeyAttribute>() is not null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(Column<TItem>.AlignEnd), true);
+            }
+            else if (property.Name.Equals(displayColumn, StringComparison.OrdinalIgnoreCase) || (!usedFill && index == properties.Length - 1))
+            {
+                usedFill = true;
+                builder.AddComponentParameter(sequence++, nameof(Column<TItem>.Fill), true);
+            }
+
+            builder.CloseComponent();
+        }
+    };
 }

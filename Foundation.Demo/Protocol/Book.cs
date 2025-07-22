@@ -1,9 +1,12 @@
-﻿namespace Foundation.Protocol;
+﻿using System.ComponentModel.DataAnnotations;
 
-sealed record Book(int Id)
+namespace Foundation.Protocol;
+
+[DisplayColumn(nameof(Title))]
+sealed record Book([property: Display, Key] int Id)
 {
-    public required string Title { get; set; }
-    public required string Summary { get; set; }
+    [Display] public required string Title { get; set; }
+    [MinLength(10)] public required string Summary { get; set; }
     public required DateOnly PublicationDate { get; set; }
     public required int AuthorId { get; set; }
 }

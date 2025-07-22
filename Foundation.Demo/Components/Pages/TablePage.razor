@@ -4,8 +4,9 @@
 <PageTitle>Table</PageTitle>
 <h1>Table</h1>
 
+<h3>Selection &amp; Pagination</h3>
 <Selector Selection="SelectedBooks">
-    <Pager PageSize="20">
+    <Pager PageSize="15">
         <Table Items="Books">
             <Column Expression="book => book.Id" AlignEnd />
             <Column Expression="book => book.Title" Fill />
@@ -13,6 +14,11 @@
         </Table>
     </Pager>
 </Selector>
+
+<h3>Columns</h3>
+<Pager PageSize="5">
+    <Table Items="Books" />
+</Pager>
 
 @code {
     readonly ISelection<Book> SelectedBooks = Selection.Multiple<Book>();
