@@ -5,56 +5,43 @@
 <article>
     <h1>Form</h1>
     <p>
-        Blabla verhaaltje
+        Use <code>Form&lt;TModel&gt;</code> to...
     </p>
-
-    <Form Subject="Book">
-        <TextField Expression="book => book.Id" ReadOnly />
-        <TextField Expression="book => book.Title" />
-        <TextField Expression="book => book.Summary" MultiLine />
-        <DateTimeField Expression="book => book.PublicationDate" Date />
-    </Form>
 
     <section>
         <h3>Data Binding</h3>
         <p>
-            Blabla verhaaltje
+            Use the <code>Subject</code> parameter...
         </p>
+        <Form Subject="Book">
+            <TextField Expression="book => book.Id" ReadOnly />
+            <TextField Expression="book => book.Title" />
+            <TextField Expression="book => book.Summary" MultiLine />
+            <DateTimeField Expression="book => book.PublicationDate" Date />
+        </Form>
         <Example Resource="Components\Form\DataBinding.razor" />
         <p>
-            Blabla verhaaltje
+            Please note that...
         </p>
     </section>
 
     <section>
-        <h3>Fields</h3>
+        <h3>Loading</h3>
         <p>
-            Blabla verhaaltje
+            By using <code><NavLink href="/misc/asyncvalue" class="disabled">AsyncValue</NavLink></code>...
+            You can force the loading state by...
         </p>
-        <Example Resource="Components\Form\ChoiceField.razor" />
-        <p>
-            Blabla verhaaltje
-        </p>
-        <Example Resource="Components\Form\DateTimeField.razor" />
-        <p>
-            Blabla verhaaltje
-        </p>
-        <Example Resource="Components\Form\SwitchField.razor" />
-        <p>
-            Blabla verhaaltje
-        </p>
-        <Example Resource="Components\Form\TextField.razor" />
-        <p>
-            Blabla verhaaltje
-        </p>
-        <Example Resource="Components\Form\Field.razor" />
+        <Form Subject="Book">
+            <TextField Expression="book => book.Title" />
+        </Form>
+        <Example Resource="Components\Form\Loading.razor" />
     </section>
 </article>
 
 @code {
     readonly IAsyncValue<Book> Book = AsyncValue.Create(async () =>
     {
-        await Task.Delay(2_000);
+        await Task.Delay(1_000);
         return BookRepository.CreateRandom();
     });
 }

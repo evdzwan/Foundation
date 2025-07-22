@@ -18,7 +18,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && Model is null)
+        if (firstRender)
         {
             Model = await GetModel();
             UpdateFormContext();

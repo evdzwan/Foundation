@@ -33,14 +33,14 @@
                     </div>
                 </ForEach>
             }
-            else if (ItemsInView is { Length: 0 })
+@*             else if (ItemsInView is { Length: 0 })
             {
                 <div class="table-row empty">@Empty</div>
             }
             else
             {
                 <div class="table-row loading">@Loading</div>
-            }
+            } *@
         </div>
 
         @if (Pager is { } pager)
@@ -74,7 +74,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && ItemsInView is null)
+        if (firstRender)
         {
             ItemsInView = await GetItemsInView();
             StateHasChanged();
@@ -89,8 +89,8 @@
     }
 
     Task<TItem[]> GetItemsInView() => Pager is { PageSize: > 0 } pager
-        ? Items.GetView(new(Skip: CurrentPage * pager.PageSize, Take: pager.PageSize), CancellationToken)
-        : Items.ToArray(CancellationToken);
+        ? Items.GetView(new(Skip: CurrentPage * pager.PageSize, Take: pager.PageSize))
+        : Items.ToArray();
 
     internal void AddColumn(Column<TItem> column)
         => Columns.Add(column);

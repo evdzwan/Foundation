@@ -87,12 +87,6 @@ main {
                     color: var(--fn-active-fg);
                 }
 
-                main > nav > section > ::deep a.disabled {
-                    cursor: unset;
-                    opacity: .4;
-                    pointer-events: none;
-                }
-
         main > nav > footer {
             font-size: 90%;
             margin-top: auto;
@@ -100,7 +94,7 @@ main {
         }
 
     main > section {
-        padding: 0 .5rem .5rem 0;
+        padding: 0 .5rem 1rem 0;
     }
 
 #blazor-error-ui {

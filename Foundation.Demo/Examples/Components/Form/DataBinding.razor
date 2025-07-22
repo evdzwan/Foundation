@@ -1,4 +1,16 @@
-﻿<h3>DataBinding</h3>
+﻿@rendermode InteractiveServer
+
+<Form Subject="Book">
+    <TextField Expression="book => book.Id" ReadOnly />
+    <TextField Expression="book => book.Title" />
+    <TextField Expression="book => book.Summary" MultiLine />
+    <DateTimeField Expression="book => book.PublicationDate" Date />
+</Form>
 
 @code {
+    readonly IAsyncValue<Book> Book = AsyncValue.Create(async () =>
+    {
+        await Task.Delay(2_000);
+        return BookRepository.CreateRandom();
+    });
 }

@@ -1,6 +1,6 @@
 ﻿namespace Foundation.Protocol;
 
-public sealed record Book(int Id)
+sealed record Book(int Id)
 {
     public required string Title { get; set; }
     public required string Summary { get; set; }

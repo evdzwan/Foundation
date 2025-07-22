@@ -102,6 +102,12 @@ a:visited {
         text-decoration: underline;
     }
 
+    a.disabled {
+        cursor: unset;
+        opacity: .4;
+        pointer-events: none;
+    }
+
 article {
     display: flex;
     flex-direction: column;
@@ -236,7 +242,6 @@ ul {
     display: flex;
     flex-direction: column;
     gap: .5rem;
-    max-width: 30em;
 }
 
 .field {

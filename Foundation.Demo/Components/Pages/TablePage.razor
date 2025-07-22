@@ -1,0 +1,60 @@
+﻿@rendermode InteractiveServer
+@page "/components/table"
+
+<PageTitle>Table</PageTitle>
+<article>
+    <h1>Table</h1>
+    <p>
+        Use <code>Table&lt;TItem&gt;</code> to...
+    </p>
+
+    <section>
+        <h3>Data Binding</h3>
+        <p>
+            Use the <code>Items</code> parameter...
+        </p>
+        <Table Items="Books">
+            <Column Expression="book => book.Id" />
+            <Column Expression="book => book.Title" />
+            <Column Expression="book => book.AuthorId" />
+            <Column Expression="book => book.PublicationDate" />
+        </Table>
+        <Example Resource="Components\Table\DataBinding.razor" />
+        <p>
+            Please note that...
+        </p>
+    </section>
+
+    <section>
+        <h3>Loading</h3>
+        <p>
+            By using <code><NavLink href="/collections/asynccollection" class="disabled">AsyncCollection</NavLink></code>...
+            You can force the loading state by...
+        </p>
+        <Table Items="Books">
+            <Column Expression="book => book.Title" />
+        </Table>
+        <Example Resource="Components\Table\Loading.razor" />
+    </section>
+
+    <section>
+        <h3>Paging</h3>
+    </section>
+
+    <section>
+        <h3>Selection</h3>
+    </section>
+</article>
+
+@code {
+    readonly IAsyncCollection<Book> Books = AsyncCollection.Create(async query =>
+    {
+        if (query.Skip > 0)
+        {
+            return [];
+        }
+
+        await Task.Delay(1_000);
+        return BookRepository.CreateRange(0, 10);
+    });
+}

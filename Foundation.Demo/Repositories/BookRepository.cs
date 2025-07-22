@@ -2,7 +2,7 @@
 
 namespace Foundation.Repositories;
 
-public static class BookRepository
+static class BookRepository
 {
     public static Book Create(int id) => new(id)
     {
@@ -14,4 +14,7 @@ public static class BookRepository
 
     public static Book CreateRandom()
         => Create(Random.Shared.Next(1, 10_000));
+
+    public static Book[] CreateRange(int start, int count)
+        => [.. Enumerable.Range(start, count).Select(i => Create(i + 1))];
 }

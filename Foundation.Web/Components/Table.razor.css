@@ -3,31 +3,31 @@
     table-layout: fixed;
 }
 
-    .table > .table-column {
-        display: table-column;
+.table-column {
+    display: table-column;
+}
+
+.table-header {
+    display: table-header-group;
+}
+
+.table-body {
+    display: table-row-group;
+}
+
+.table-row {
+    display: table-row;
+}
+
+    .table-row.empty,
+    .table-row.loading {
+        width: 0;
     }
 
-    .table > .table-header {
-        display: table-header-group;
-    }
-
-        .table > .table-header > .table-cell {
-            display: table-cell;
-            white-space: nowrap;
-        }
-
-    .table > .table-body {
-        display: table-row-group;
-    }
-
-        .table > .table-body > .table-row {
-            display: table-row;
-        }
-
-            .table > .table-body > .table-row.empty,
-            .table > .table-body > .table-row.loading {
-                width: 0;
-            }
+.table-cell {
+    display: table-cell;
+    white-space: nowrap;
+}
 
 .table-footer {
     display: table-footer-group;
