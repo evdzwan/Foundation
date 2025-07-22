@@ -3,10 +3,10 @@ using System.Collections.Concurrent;
 
 namespace Foundation.Collections;
 
-sealed class AsyncCollection<TItem>(Func<Query, CancellationToken, Task<TItem[]>> getView) : IAsyncCollection<TItem>
+sealed class AsyncCollection<TItem>(Func<Page, CancellationToken, Task<TItem[]>> getView) : IAsyncCollection<TItem>
 {
     readonly ConcurrentDictionary<int, Task<TItem[]>> Windows = [];
-    const int WindowSize = 20;
+    const int WindowSize = 50;
 
     public bool Complete { get; private set; }
 
@@ -44,18 +44,18 @@ sealed class AsyncCollection<TItem>(Func<Query, CancellationToken, Task<TItem[]>
     public Task<TItem[]> GetValue(CancellationToken cancellationToken = default)
         => this.ToArray(cancellationToken);
 
-    public async Task<TItem[]> GetView(Query query, CancellationToken cancellationToken = default)
+    public async Task<TItem[]> GetView(Page page, CancellationToken cancellationToken = default)
     {
-        var skip = query.Skip ?? 0;
-        var take = query.Take ?? WindowSize;
+        var skip = page.Skip;
+        var take = page.Take;
 
         var windowStart = (int)Math.Floor(skip / (WindowSize * 1d));
-        var windowCount = (int)Math.Ceiling(take / (WindowSize * 1d));
+        var windowCount = (int)Math.Ceiling((skip + take) / (WindowSize * 1d)) - windowStart;
 
         var items = new List<TItem>();
         foreach (var i in Enumerable.Range(windowStart, windowCount))
         {
-            var viewItems = await Windows.GetOrAdd(i, j => getView(query with { Skip = j * WindowSize, Take = WindowSize }, cancellationToken));
+            var viewItems = await Windows.GetOrAdd(i, j => getView(page with { Skip = j * WindowSize, Take = WindowSize }, cancellationToken));
             items.AddRange(viewItems);
 
             if (viewItems.Length < WindowSize)

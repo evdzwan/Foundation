@@ -1,3 +1,3 @@
 ﻿namespace Foundation.Protocol;
 
-public sealed record Query(int? Skip = null, int? Take = null);
+public sealed record Query(Page? Page = null);
