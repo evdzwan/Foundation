@@ -1,4 +1,5 @@
-﻿@page "/components/form"
+﻿@rendermode InteractiveServer
+@page "/components/form"
 
 <PageTitle>Form</PageTitle>
 <article>
@@ -6,6 +7,13 @@
     <p>
         Blabla verhaaltje
     </p>
+
+    <Form Subject="Book">
+        <TextField Expression="book => book.Id" ReadOnly />
+        <TextField Expression="book => book.Title" />
+        <TextField Expression="book => book.Summary" MultiLine />
+        <DateTimeField Expression="book => book.PublicationDate" Date />
+    </Form>
 
     <section>
         <h3>Data Binding</h3>
@@ -42,3 +50,11 @@
         <Example Resource="Components\Form\Field.razor" />
     </section>
 </article>
+
+@code {
+    readonly IAsyncValue<Book> Book = AsyncValue.Create(async () =>
+    {
+        await Task.Delay(2_000);
+        return BookRepository.CreateRandom();
+    });
+}

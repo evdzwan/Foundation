@@ -229,6 +229,18 @@ ul {
     gap: .25rem;
 }
 
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }
