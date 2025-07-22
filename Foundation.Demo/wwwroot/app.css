@@ -9,6 +9,8 @@
     --fn-button-bg: #bbb;
     --fn-button-bg-rgb: 187, 187, 187;
     --fn-button-fg: #222;
+    --fn-loading-bg: #ccc;
+    --fn-loading-fg: #ddd;
     --fn-input-bg: #ddd;
     --fn-input-fg: #222;
     --fn-input-border: #bbb;
@@ -34,6 +36,8 @@
     --fn-input-fg: #ddd;
     --fn-input-border: #555;
     --fn-input-border-active: #eb0;
+    --fn-loading-bg: #333;
+    --fn-loading-fg: #444;
     --fn-muted: #999;
     --fn-section-bg: #444;
     --fn-section-border: #eb0;
@@ -184,12 +188,6 @@ textarea {
         padding: .25rem .5rem;
     }
 
-        input:not([type=range]):focus,
-        textarea:focus {
-            /*border-color: var(--fn-input-border-active);*/
-            /*outline: .1rem solid var(--fn-input-border-active);*/
-        }
-
     input[type=range] {
         accent-color: var(--fn-input-border-active);
         margin: .5rem 0 0;
@@ -239,6 +237,11 @@ ul {
     user-select: none;
 }
 
+    .table.loading .table-row::before {
+        animation: move 1s linear infinite;
+        background: linear-gradient(-60deg, var(--fn-loading-bg) 33%, var(--fn-loading-fg), var(--fn-loading-bg) 66%) right / 300% 100%;
+    }
+
 .table-header {
     color: var(--fn-muted);
     font-size: 90%;
@@ -247,18 +250,23 @@ ul {
     user-select: none;
 }
 
+.table-row::before {
+    border-radius: .25rem;
+}
+
 .table-row.selectable {
     cursor: pointer;
     transition: .1s ease;
 }
 
+.table-row:hover,
 .table-row.selected {
     color: var(--fn-active-fg);
 }
 
+    .table-row:hover::before,
     .table-row.selected::before {
         background-color: var(--fn-active-bg);
-        border-radius: .25rem;
     }
 
     .table-row.selected + .selected::before {
@@ -273,6 +281,10 @@ ul {
 
 .table-cell {
     padding: .25rem .5rem;
+}
+
+.table-empty {
+    font-size: 90%;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -308,4 +320,10 @@ ul {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
+}
+
+@keyframes move {
+    to {
+        background-position: left;
+    }
 }

@@ -2,6 +2,10 @@
     display: table;
 }
 
+    .table.loading .table-row::before {
+        z-index: 0;
+    }
+
 .table-column {
     display: table-column;
 }
@@ -38,6 +42,7 @@
         z-index: -1;
     }
 
+    .table-row:hover,
     .table-row.selected {
         z-index: 0;
     }

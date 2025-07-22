@@ -2,7 +2,7 @@
 @inherits Component
 @typeparam TItem
 
-<div class="table">
+<div class="@TableClass">
     <CascadingValue Value="this" IsFixed>
         @Content
     </CascadingValue>
@@ -69,8 +69,10 @@
 @code {
     readonly List<Column<TItem>> Columns = [];
     const int DefaultPageSize = 10;
-    bool HasBeenRendered;
+
+    ClassList TableClass = (ClassList)"table loading";
     TItem[]? ItemsInView;
+    bool HasBeenRendered;
 
     [CascadingParameter(Name = nameof(CurrentPage))] int CurrentPage { get; set; }
     [CascadingParameter] Pager? Pager { get; set; }
@@ -88,6 +90,7 @@
         if (firstRender)
         {
             ItemsInView = await GetItemsInView();
+            TableClass -= "loading";
             StateHasChanged();
         }
 
@@ -107,7 +110,10 @@
         if (CurrentPage != currentPage && HasBeenRendered)
         {
             ItemsInView = null;
+            TableClass += "loading";
+
             ItemsInView = await GetItemsInView();
+            TableClass -= "loading";
             StateHasChanged();
         }
     }

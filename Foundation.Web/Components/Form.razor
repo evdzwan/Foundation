@@ -2,7 +2,7 @@
 @inherits Component
 @typeparam TModel
 
-<EditForm class="form" EditContext="FormContext">
+<EditForm class="@FormClass" EditContext="FormContext">
     <DataAnnotationsValidator />
     <CascadingValue Value="this" IsFixed>
         @ChildContent
@@ -10,6 +10,7 @@
 </EditForm>
 
 @code {
+    ClassList FormClass = (ClassList)"form loading";
     EditContext FormContext = new(model: new());
     TModel? Model;
 
@@ -22,6 +23,8 @@
         {
             Model = await GetModel();
             UpdateFormContext();
+            
+            FormClass -= "loading";
             StateHasChanged();
         }
     }

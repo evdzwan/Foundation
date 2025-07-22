@@ -5,7 +5,7 @@
 <h1>Table</h1>
 
 <Selector Selection="SelectedBooks">
-    <Pager>
+    <Pager PageSize="20">
         <Table Items="Books">
             <Column Expression="book => book.Id" />
             <Column Expression="book => book.Title" />
@@ -16,14 +16,11 @@
 
 @code {
     readonly ISelection<Book> SelectedBooks = Selection.Multiple<Book>();
-    readonly IAsyncCollection<Book> Books = AsyncCollection.Create(async query =>
-    {
-        if (query.Skip < 100)
-        {
-            await Task.Delay(1_000);
-            return BookRepository.CreateRange(query.Skip ?? 0, query.Take ?? 10);
-        }
 
-        return [];
+    static readonly Book[] AllBooks = BookRepository.CreateRange(1, 100);
+    readonly IAsyncCollection<Book> Books = AsyncCollection.Create(async page =>
+    {
+        await Task.Delay(1_000);
+        return AllBooks.Skip(page.Skip).Take(page.Take).ToArray();
     });
 }
