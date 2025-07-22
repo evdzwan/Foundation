@@ -10,12 +10,12 @@
     <Defer>
         <div class="table-column" />
         <ForEach Items="Columns" Context="column">
-            <div class="table-column @GetColumnClass(column)" @key="column" />
+            <div class="table-column @column.Class" @key="column" />
         </ForEach>
 
         <div class="table-header">
             <ForEach Items="Columns" Context="column">
-                <div class="table-cell" @key="column">
+                <div class="table-cell @column.CellClass" @key="column">
                     @column.Header
                 </div>
             </ForEach>
@@ -27,7 +27,7 @@
                 <ForEach Items="itemsInView" Context="item">
                     <div class="table-row @GetRowClass(item)" @onclick="() => OnRowPressed(item)" @key="item">
                         <ForEach Items="Columns" Context="column">
-                            <div class="table-cell" @key="column">
+                            <div class="table-cell @column.CellClass" @key="column">
                                 @column.Cell?.Invoke(item)
                             </div>
                         </ForEach>
@@ -45,7 +45,7 @@
                 <ForEach Items="Enumerable.Range(1, Pager?.PageSize ?? 1)" Context="index">
                     <div class="table-row" @key="index">
                         <ForEach Items="Columns" Context="column">
-                            <div class="table-cell" @key="column">
+                            <div class="table-cell @column.CellClass" @key="column">
                                 ..
                             </div>
                         </ForEach>
@@ -121,9 +121,6 @@
     Task<TItem[]> GetItemsInView() => Pager is { PageSize: > 0 } pager
         ? Items.GetView(new(Skip: CurrentPage * pager.PageSize, Take: pager.PageSize))
         : Items.ToArray();
-
-    ClassList GetColumnClass(Column<TItem> column)
-        => new ClassList().Add("fill", column.Fill);
 
     ClassList GetRowClass(TItem item)
         => new ClassList().Add("selectable", Selector is not null)

@@ -7,9 +7,9 @@
 <Selector Selection="SelectedBooks">
     <Pager PageSize="20">
         <Table Items="Books">
-            <Column Expression="book => book.Id" />
-            <Column Expression="book => book.Title" />
-            <Column Expression="book => book.PublicationDate" />
+            <Column Expression="book => book.Id" AlignEnd />
+            <Column Expression="book => book.Title" Fill />
+            <Column Expression="book => book.PublicationDate" AlignEnd />
         </Table>
     </Pager>
 </Selector>

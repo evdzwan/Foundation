@@ -5,12 +5,21 @@
     Func<TItem, object?>? CompiledExpression;
 
     [CascadingParameter] Table<TItem>? Table { get; set; }
+    [Parameter] public bool AlignCenter { get; set; }
+    [Parameter] public bool AlignEnd { get; set; }
+    [Parameter] public bool AlignStart { get; set; }
+
     [Parameter] public RenderFragment<TItem>? Cell { get; set; }
     [Parameter] public RenderFragment<TItem>? ChildContent { get; set; }
     [Parameter] public Expression<Func<TItem, object?>>? Expression { get; set; }
     [Parameter] public bool Fill { get; set; }
     [Parameter] public RenderFragment? Header { get; set; }
     [Parameter] public string? Title { get; set; }
+
+    public ClassList Class => new ClassList().Add("fill", Fill);
+    public ClassList CellClass => new ClassList().Add("align-center", AlignCenter)
+                                                 .Add("align-end", AlignEnd)
+                                                 .Add("align-start", AlignStart);
 
     protected override void OnInitialized()
         => Table?.AddColumn(this);

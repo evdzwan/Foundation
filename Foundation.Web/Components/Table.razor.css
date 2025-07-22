@@ -1,5 +1,6 @@
 ﻿.table {
     display: table;
+    width: 100%;
 }
 
     .table.loading .table-row::before {
@@ -51,6 +52,18 @@
     display: table-cell;
     white-space: nowrap;
 }
+
+    .table-cell.align-center {
+        text-align: center;
+    }
+
+    .table-cell.align-end {
+        text-align: end;
+    }
+
+    .table-cell.align-start {
+        text-align: start;
+    }
 
 .table-empty {
     white-space: nowrap;
