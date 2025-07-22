@@ -99,12 +99,10 @@ public sealed class ClassList : IReadOnlyList<string>
     static string[] CreateRange(string classNames)
         => classNames.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-    public static implicit operator string(ClassList @this) => @this.ToString();
     public static ClassList operator +(ClassList @this, string className) => @this.Add(className);
     public static ClassList operator +(ClassList @this, IEnumerable<string> classNames) => @this.AddRange(classNames);
     public static ClassList operator +(ClassList @this, IReadOnlyDictionary<string, object?>? unmatchedAttributes) => @this.AddUnmatched(unmatchedAttributes);
 
-    public static implicit operator ClassList(string @this) => new ClassList().AddRange(CreateRange(@this));
     public static ClassList operator -(ClassList @this, string className) => @this.Remove(className);
     public static ClassList operator -(ClassList @this, IEnumerable<string> classNames) => @this.RemoveRange(classNames);
     public static ClassList operator -(ClassList @this, IReadOnlyDictionary<string, object?>? unmatchedAttributes) => @this.RemoveUnmatched(unmatchedAttributes);

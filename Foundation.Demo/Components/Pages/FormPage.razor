@@ -2,41 +2,14 @@
 @page "/components/form"
 
 <PageTitle>Form</PageTitle>
-<article>
-    <h1>Form</h1>
-    <p>
-        Use <code>Form&lt;TModel&gt;</code> to...
-    </p>
+<h1>Form</h1>
 
-    <section>
-        <h3>Data Binding</h3>
-        <p>
-            Use the <code>Subject</code> parameter...
-        </p>
-        <Form Subject="Book">
-            <TextField Expression="book => book.Id" ReadOnly />
-            <TextField Expression="book => book.Title" />
-            <TextField Expression="book => book.Summary" MultiLine />
-            <DateTimeField Expression="book => book.PublicationDate" Date />
-        </Form>
-        <Example Resource="Components\Form\DataBinding.razor" />
-        <p>
-            Please note that...
-        </p>
-    </section>
-
-    <section>
-        <h3>Loading</h3>
-        <p>
-            By using <code><NavLink href="/misc/asyncvalue" class="disabled">AsyncValue</NavLink></code>...
-            You can force the loading state by...
-        </p>
-        <Form Subject="Book">
-            <TextField Expression="book => book.Title" />
-        </Form>
-        <Example Resource="Components\Form\Loading.razor" />
-    </section>
-</article>
+<Form Subject="Book">
+    <TextField Expression="book => book.Id" ReadOnly />
+    <TextField Expression="book => book.Title" AutoFocus />
+    <TextField Expression="book => book.Summary" MultiLine />
+    <DateTimeField Expression="book => book.PublicationDate" Date />
+</Form>
 
 @code {
     readonly IAsyncValue<Book> Book = AsyncValue.Create(async () =>

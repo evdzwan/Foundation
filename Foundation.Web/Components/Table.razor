@@ -8,8 +8,9 @@
     </CascadingValue>
 
     <Defer>
+        <div class="table-column" />
         <ForEach Items="Columns" Context="column">
-            <div class="table-column" @key="column" />
+            <div class="table-column @GetColumnClass(column)" @key="column" />
         </ForEach>
 
         <div class="table-header">
@@ -24,7 +25,7 @@
             @if (ItemsInView is { Length: > 0 } itemsInView)
             {
                 <ForEach Items="itemsInView" Context="item">
-                    <div class="table-row" @key="item">
+                    <div class="table-row @GetRowClass(item)" @onclick="() => OnRowPressed(item)" @key="item">
                         <ForEach Items="Columns" Context="column">
                             <div class="table-cell" @key="column">
                                 @column.Cell?.Invoke(item)
@@ -33,23 +34,33 @@
                     </div>
                 </ForEach>
             }
-@*             else if (ItemsInView is { Length: 0 })
+            else if (ItemsInView is { Length: 0 })
             {
-                <div class="table-row empty">@Empty</div>
+                <div class="table-empty">
+                    @Empty
+                </div>
             }
             else
             {
-                <div class="table-row loading">@Loading</div>
-            } *@
+                <ForEach Items="Enumerable.Range(1, Pager?.PageSize ?? 1)" Context="index">
+                    <div class="table-row" @key="index">
+                        <ForEach Items="Columns" Context="column">
+                            <div class="table-cell" @key="column">
+                                ..
+                            </div>
+                        </ForEach>
+                    </div>
+                </ForEach>
+            }
         </div>
 
         @if (Pager is { } pager)
         {
             <div class="table-footer">
-                <NavLink href="@pager.GetFirstPageUri()" />
-                <NavLink href="@pager.GetPreviousPageUri()" />
+                <NavLink href="@pager.GetFirstPageUri()">&le;</NavLink>
+                <NavLink href="@pager.GetPreviousPageUri()">&lt;</NavLink>
                 <span>@((CurrentPage * pager.PageSize) + 1) &ndash; @((CurrentPage + 1) * pager.PageSize)</span>
-                <NavLink href="@pager.GetNextPageUri()" />
+                <NavLink href="@pager.GetNextPageUri()">&gt;</NavLink>
             </div>
         }
     </Defer>
@@ -58,6 +69,7 @@
 @code {
     readonly List<Column<TItem>> Columns = [];
     const int DefaultPageSize = 10;
+    bool HasBeenRendered;
     TItem[]? ItemsInView;
 
     [CascadingParameter(Name = nameof(CurrentPage))] int CurrentPage { get; set; }
@@ -69,7 +81,6 @@
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public RenderFragment? Content { get; set; }
     [Parameter] public RenderFragment? Empty { get; set; }
-    [Parameter] public RenderFragment? Loading { get; set; }
     [Parameter, EditorRequired] public required IAsyncCollection<TItem> Items { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -79,18 +90,41 @@
             ItemsInView = await GetItemsInView();
             StateHasChanged();
         }
+
+        HasBeenRendered = true;
     }
 
     protected override void OnParametersSet()
     {
         Content ??= ChildContent;
         Empty ??= @<span>No data available</span>;
-        Loading ??= @<span>Loading...</span>;
+    }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        var currentPage = CurrentPage;
+        await base.SetParametersAsync(parameters);
+        if (CurrentPage != currentPage && HasBeenRendered)
+        {
+            ItemsInView = null;
+            ItemsInView = await GetItemsInView();
+            StateHasChanged();
+        }
     }
 
     Task<TItem[]> GetItemsInView() => Pager is { PageSize: > 0 } pager
         ? Items.GetView(new(Skip: CurrentPage * pager.PageSize, Take: pager.PageSize))
         : Items.ToArray();
+
+    ClassList GetColumnClass(Column<TItem> column)
+        => new ClassList().Add("fill", column.Fill);
+
+    ClassList GetRowClass(TItem item)
+        => new ClassList().Add("selectable", Selector is not null)
+                          .Add("selected", Selection?.IsActive(item) is true);
+
+    void OnRowPressed(TItem item)
+        => Selection?.Toggle(item);
 
     internal void AddColumn(Column<TItem> column)
         => Columns.Add(column);

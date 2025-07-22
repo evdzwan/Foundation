@@ -110,12 +110,10 @@ public sealed class StyleList : IReadOnlyDictionary<string, object?>
                      .Select(attribute => attribute.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
                      .Select(attribute => new KeyValuePair<string, object?>(key: attribute[0], value: attribute[1]));
 
-    public static implicit operator string(StyleList @this) => @this.ToString();
     public static StyleList operator +(StyleList @this, KeyValuePair<string, object?> attribute) => @this.Add(attribute.Key, attribute.Value);
     public static StyleList operator +(StyleList @this, IEnumerable<KeyValuePair<string, object?>> attributes) => @this.AddRange(attributes);
     public static StyleList operator +(StyleList @this, IReadOnlyDictionary<string, object?>? unmatchedAttributes) => @this.AddUnmatched(unmatchedAttributes);
-
-    public static implicit operator StyleList(string @this) => new StyleList().AddRange(CreateRange(@this));
+    
     public static StyleList operator -(StyleList @this, string key) => @this.Remove(key);
     public static StyleList operator -(StyleList @this, IEnumerable<string> keys) => @this.RemoveRange(keys);
     public static StyleList operator -(StyleList @this, IReadOnlyDictionary<string, object?>? unmatchedAttributes) => @this.RemoveUnmatched(unmatchedAttributes);
