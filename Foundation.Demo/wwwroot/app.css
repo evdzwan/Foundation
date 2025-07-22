@@ -193,20 +193,23 @@ pre {
         padding: unset;
     }
 
-input, textarea {
+input,
+textarea {
     background-color: var(--fn-input-bg);
     color: var(--fn-input-fg);
 }
 
-    input:not([type=range]), textarea {
+    input:not([type=range]),
+    textarea {
         border: .1rem solid var(--fn-input-border);
         border-radius: .25rem;
         padding: .25rem .5rem;
     }
 
-        input:not([type=range]):focus, textarea:focus {
-            border-color: var(--fn-input-border-active);
-            outline: .1rem solid var(--fn-input-border-active);
+        input:not([type=range]):focus,
+        textarea:focus {
+            /*border-color: var(--fn-input-border-active);*/
+            /*outline: .1rem solid var(--fn-input-border-active);*/
         }
 
     input[type=range] {
@@ -233,6 +236,7 @@ ul {
     display: flex;
     flex-direction: column;
     gap: .5rem;
+    max-width: 30em;
 }
 
 .field {
@@ -240,6 +244,19 @@ ul {
     flex-direction: column;
     gap: .25rem;
 }
+
+    .field > label {
+        color: var(--fn-muted);
+        font-size: 90%;
+        font-variant: small-caps;
+        font-weight: 500;
+        padding-left: .25rem;
+        user-select: none;
+    }
+
+        .field > label:has(~ *:focus) {
+            color: unset;
+        }
 
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
