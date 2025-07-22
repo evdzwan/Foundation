@@ -246,7 +246,6 @@ ul {
 }
 
     .field > label {
-        color: var(--fn-muted);
         font-size: 90%;
         font-variant: small-caps;
         font-weight: 500;
@@ -254,8 +253,8 @@ ul {
         user-select: none;
     }
 
-        .field > label:has(~ *:focus) {
-            color: unset;
+        .field > label:not(:has(~ *:focus)) {
+            color: var(--fn-muted);
         }
 
 .valid.modified:not([type=checkbox]) {
