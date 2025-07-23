@@ -16,6 +16,7 @@
                 <input type="text" readonly="@ReadOnly" @bind="EditorValue" @ref="EditorReference" />
             }
         </div>
+
         @if (ValueExpression is { } valueExpression)
         {
             <ValidationMessage For="valueExpression" />

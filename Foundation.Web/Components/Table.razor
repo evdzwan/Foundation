@@ -4,17 +4,17 @@
 
 <div class="@TableClass">
     <CascadingValue Value="this" IsFixed>
-        @Content
+        @Columns
     </CascadingValue>
 
     <Defer>
         <div class="table-column" />
-        <ForEach Items="Columns" Context="column">
+        <ForEach Items="RegisteredColumns" Context="column">
             <div class="table-column @column.Class" @key="column" />
         </ForEach>
 
         <div class="table-header">
-            <ForEach Items="Columns" Context="column">
+            <ForEach Items="RegisteredColumns" Context="column">
                 <div class="table-cell @column.CellClass" @key="column">
                     @column.Header
                 </div>
@@ -26,7 +26,7 @@
             {
                 <ForEach Items="itemsInView" Context="item">
                     <div class="table-row @GetRowClass(item)" @onclick="() => OnRowPressed(item)" @key="item">
-                        <ForEach Items="Columns" Context="column">
+                        <ForEach Items="RegisteredColumns" Context="column">
                             <div class="table-cell @column.CellClass" @key="column">
                                 @column.Cell?.Invoke(item)
                             </div>
@@ -44,7 +44,7 @@
             {
                 <ForEach Items="Enumerable.Range(1, Pager?.PageSize ?? 1)" Context="index">
                     <div class="table-row" @key="index">
-                        <ForEach Items="Columns" Context="column">
+                        <ForEach Items="RegisteredColumns" Context="column">
                             <div class="table-cell @column.CellClass" @key="column">
                                 ..
                             </div>
@@ -67,7 +67,7 @@
 </div>
 
 @code {
-    readonly List<Column<TItem>> Columns = [];
+    readonly List<Column<TItem>> RegisteredColumns = [];
     const int DefaultPageSize = 10;
 
     ClassList TableClass = new("table loading");
@@ -81,7 +81,7 @@
     [CascadingParameter] Selector<TItem>? Selector { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public RenderFragment? Content { get; set; }
+    [Parameter] public RenderFragment? Columns { get; set; }
     [Parameter] public RenderFragment? Empty { get; set; }
     [Parameter, EditorRequired] public required IAsyncCollection<TItem> Items { get; set; }
 
@@ -99,7 +99,7 @@
 
     protected override void OnParametersSet()
     {
-        Content ??= ChildContent ?? CreateDefaultContent();
+        Columns ??= ChildContent ?? CreateDefaultColumns();
         Empty ??= @<span>No data available</span>;
     }
 
@@ -130,12 +130,12 @@
         => Selection?.Toggle(item);
 
     internal void AddColumn(Column<TItem> column)
-        => Columns.Add(column);
+        => RegisteredColumns.Add(column);
 
     internal void RemoveColumn(Column<TItem> column)
-        => Columns.Remove(column);
+        => RegisteredColumns.Remove(column);
 
-    static RenderFragment CreateDefaultContent() => builder =>
+    static RenderFragment CreateDefaultColumns() => builder =>
     {
         var sequence = 0;
         var usedFill = false;
