@@ -38,7 +38,10 @@ public abstract class Script(string path, IJSRuntime jsRuntime) : IAsyncDisposab
     {
         try
         {
-            Module ??= await jsRuntime.InvokeAsync<IJSObjectReference>("import", cancellationToken, [path]);
+            if (jsRuntime.GetType().GetProperty("IsInitialized") is { CanRead: true } property && property.GetValue(jsRuntime) is true)
+            {
+                Module ??= await jsRuntime.InvokeAsync<IJSObjectReference>("import", cancellationToken, [path]);
+            }
         }
         catch (JSDisconnectedException) { }
     }
