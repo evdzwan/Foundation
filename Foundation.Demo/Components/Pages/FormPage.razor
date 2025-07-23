@@ -17,12 +17,16 @@
     readonly IAsyncCollection<Author> Authors = AsyncCollection.Create(async page =>
     {
         await Task.Delay(250);
-        return AllAuthors.Skip(page.Skip).Take(page.Take).ToArray();
+
+        var authors = AllAuthors.Skip(page.Skip).Take(page.Take).ToArray();
+        Console.WriteLine($"Retrieved Author[{authors.Length}] for {page}");
+        return authors;
     });
 
     readonly IAsyncValue<Book> Book = AsyncValue.Create(async () =>
     {
         await Task.Delay(1_000);
+
         var book = BookRepository.CreateRandom();
         Console.WriteLine($"Retrieved Book {{ Id = {book.Id} }}");
         return book;

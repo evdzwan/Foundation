@@ -22,6 +22,8 @@
             <div popover @ref="PopoverReference">
                 @if (PopoverLoaded)
                 {
+                    @* TODO scroll(er) toevoegen? *@
+                    @* TODO pager(/browse) toevoegen (zonder url change (Silent (opt-out), QueryParameterName (opt-in)) *@
                     <Selector Selection="Selection">
                         <Table Columns="Columns" Empty="Empty" Items="Items" />
                     </Selector>
