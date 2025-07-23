@@ -222,7 +222,7 @@ ul {
 
         .form.loading .field-value::before {
             animation: move 1s linear infinite;
-            background: linear-gradient(-60deg, #ccc 33%, #ddd, #ccc 66%) right / 300% 100%;
+            background: linear-gradient(-60deg, var(--fn-loading-bg) 33%, var(--fn-loading-fg), var(--fn-loading-bg) 66%) right / 300% 100%;
             border-radius: .25rem;
             content: '';
             inset: 0;
@@ -248,13 +248,23 @@ ul {
         user-select: none;
     }
 
-        .field > label:not(:has(~ *:focus)) {
+        .field > label:not(:has(~ .field-value > *:focus)) {
             color: var(--fn-muted);
         }
 
     .field > .field-value {
         display: grid;
         grid-template-columns: 1fr;
+    }
+
+    .field.choice > .field-value > button {
+        font-variant: unset;
+        text-align: start;
+    }
+
+    .field.choice > .field-value > [popover] {
+        background-color: var(--fn-active-bg);
+        color: var(--fn-active-fg);
     }
 
 .table {

@@ -8,10 +8,18 @@
     <TextField Expression="book => book.Id" ReadOnly />
     <TextField Expression="book => book.Title" AutoFocus />
     <TextField Expression="book => book.Summary" MultiLine />
+    <ChoiceField Expression="book => book.Author" Items="Authors" />
     <DateTimeField Expression="book => book.PublicationDate" Date />
 </Form>
 
 @code {
+    static readonly Author[] AllAuthors = AuthorRepository.CreateRange(1, 100);
+    readonly IAsyncCollection<Author> Authors = AsyncCollection.Create(async page =>
+    {
+        await Task.Delay(250);
+        return AllAuthors.Skip(page.Skip).Take(page.Take).ToArray();
+    });
+
     readonly IAsyncValue<Book> Book = AsyncValue.Create(async () =>
     {
         await Task.Delay(1_000);

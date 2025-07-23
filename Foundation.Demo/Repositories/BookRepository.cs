@@ -9,7 +9,7 @@ static class BookRepository
         Title = $"Title of Book {id}",
         Summary = $"Summary of...\r\nBook {id}",
         PublicationDate = DateOnly.FromDateTime(DateTime.Today).AddDays(-id),
-        AuthorId = (id - 1) % 1_000 + 1
+        Author = AuthorRepository.Create((id - 1) % 1_000 + 1)
     };
 
     public static Book CreateRandom()

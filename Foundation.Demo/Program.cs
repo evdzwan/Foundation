@@ -1,7 +1,9 @@
 using Foundation.Components;
+using Foundation.Scripting;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddRazorComponents()
+builder.Services.AddScripts()
+                .AddRazorComponents()
                 .AddInteractiveServerComponents();
 
 var app = builder.Build();
