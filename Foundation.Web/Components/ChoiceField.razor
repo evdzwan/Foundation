@@ -23,11 +23,11 @@
             <div popover @ref="PopoverReference">
                 @if (PopoverLoaded)
                 {
-                    @* TODO scroll(er) toevoegen? *@
-                    @* TODO pager(/browse) toevoegen (zonder url change (Silent (opt-out), QueryParameterName (opt-in)) *@
-                    <Selector Selection="TableSelection">
-                        <Table Columns="Columns" Empty="Empty" Items="Items" />
-                    </Selector>
+                    <Select Selection="TableSelection">
+                        <Browse PageSize="8">
+                            <Table Columns="Columns" Empty="Empty" Items="Items" />
+                        </Browse>
+                    </Select>
                 }
             </div>
         </div>
@@ -71,7 +71,7 @@
     {
         base.OnParametersSet();
         Columns ??= ChildContent;
-        
+
         TableSelectionChangedSubscription?.Dispose();
         TableSelection = CreateSelection(ValueProperty?.PropertyType, Value);
         TableSelectionChangedSubscription = TableSelection?.Subscribe(OnTableSelectionChanged);

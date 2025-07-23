@@ -42,7 +42,7 @@
             }
             else
             {
-                <ForEach Items="Enumerable.Range(1, Pager?.PageSize ?? 1)" Context="index">
+                <ForEach Items="Enumerable.Range(1, Browse?.PageSize ?? 1)" Context="index">
                     <div class="table-row" @key="index">
                         <ForEach Items="RegisteredColumns" Context="column">
                             <div class="table-cell @column.CellClass" @key="column">
@@ -54,13 +54,10 @@
             }
         </div>
 
-        @if (Pager is { } pager)
+        @if (Browse is { } browse)
         {
             <div class="table-footer">
-                <NavLink href="@pager.GetFirstPageUri()">&le;</NavLink>
-                <NavLink href="@pager.GetPreviousPageUri()">&lt;</NavLink>
-                <span>@((CurrentPage * pager.PageSize) + 1) &ndash; @((CurrentPage + 1) * pager.PageSize)</span>
-                <NavLink href="@pager.GetNextPageUri()">&gt;</NavLink>
+                @browse.RenderPagination()
             </div>
         }
     </Defer>
@@ -75,10 +72,10 @@
     bool HasBeenRendered;
 
     [CascadingParameter(Name = nameof(CurrentPage))] int CurrentPage { get; set; }
-    [CascadingParameter] Pager? Pager { get; set; }
+    [CascadingParameter] Browse? Browse { get; set; }
 
     [CascadingParameter] ISelection<TItem>? Selection { get; set; }
-    [CascadingParameter] Selector<TItem>? Selector { get; set; }
+    [CascadingParameter] Select<TItem>? Select { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public RenderFragment? Columns { get; set; }
@@ -118,12 +115,12 @@
         }
     }
 
-    Task<TItem[]> GetItemsInView() => Pager is { PageSize: > 0 } pager
-        ? Items.GetView(new(Skip: CurrentPage * pager.PageSize, Take: pager.PageSize))
+    Task<TItem[]> GetItemsInView() => Browse is { PageSize: > 0 } browse
+        ? Items.GetView(new(Skip: CurrentPage * browse.PageSize, Take: browse.PageSize))
         : Items.ToArray();
 
     ClassList GetRowClass(TItem item)
-        => new ClassList().Add("selectable", Selector is not null)
+        => new ClassList().Add("selectable", Select is not null)
                           .Add("selected", Selection?.IsActive(item) is true);
 
     void OnRowPressed(TItem item)

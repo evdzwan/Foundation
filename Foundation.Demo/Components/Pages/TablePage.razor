@@ -5,15 +5,15 @@
 <h1>Table</h1>
 
 <h3>Selection &amp; Pagination</h3>
-<Selector Selection="SelectedBooks">
-    <Pager PageSize="15">
+<Select Selection="SelectedBooks">
+    <Browse PageSize="15" Persist>
         <Table Items="Books">
             <Column Expression="book => book.Id" AlignEnd />
             <Column Expression="book => book.Title" Fill />
             <Column Expression="book => book.PublicationDate" AlignEnd />
         </Table>
-    </Pager>
-</Selector>
+    </Browse>
+</Select>
 
 @code {
     readonly ISelection<Book> SelectedBooks = Selection.Multiple<Book>();

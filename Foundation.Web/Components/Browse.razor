@@ -1,0 +1,55 @@
+﻿@inject NavigationManager Navigation
+@inherits Component
+
+<CascadingValue Value="this" IsFixed>
+    <CascadingValue Value="CurrentPage" Name="@nameof(CurrentPage)">
+        @ChildContent
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+    [SupplyParameterFromQuery(Name = "page")] int QueryPage { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public int CurrentPage { get; set; }
+    [Parameter] public EventCallback<int> CurrentPageChanged { get; set; }
+    [Parameter] public int PageSize { get; set; } = 10;
+    [Parameter] public bool Persist { get; set; }
+
+    int LowerBound => CurrentPage * PageSize + 1;
+    int UpperBound => (CurrentPage + 1) * PageSize;
+
+    public virtual RenderFragment RenderPagination() => __builder =>
+    {
+        <div class="pagination">
+            <button @onclick="() => SetPage(0)">&le;</button>
+            <button @onclick="() => SetPage(CurrentPage - 1)">&lt;</button>
+            <span>@LowerBound &ndash; @UpperBound</span>
+            <button @onclick="() => SetPage(CurrentPage + 1)">&gt;</button>
+        </div>
+    };
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Persist)
+        {
+            await SetPage(QueryPage);
+        }
+    }
+
+    async Task SetPage(int page)
+    {
+        var currentPage = Math.Max(0, page);
+        if (currentPage != CurrentPage)
+        {
+            CurrentPage = currentPage;
+            await CurrentPageChanged.InvokeAsync(CurrentPage);
+
+            if (Persist && QueryPage != CurrentPage)
+            {
+                var uri = Navigation.GetUriWithQueryParameter("page", CurrentPage);
+                Navigation.NavigateTo(uri);
+            }
+        }
+    }
+}
