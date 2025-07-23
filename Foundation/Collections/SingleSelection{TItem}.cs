@@ -1,18 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿namespace Foundation.Collections;
 
-namespace Foundation.Collections;
-
-sealed class SingleSelection<TItem>(TItem? activeItem) : ObservableCollection<TItem>(activeItem is { } ? [activeItem] : []), ISelection<TItem>
+sealed class SingleSelection<TItem>(TItem? activeItem) : Selection<TItem>(activeItem is { } ? [activeItem] : [])
 {
-    public bool Multiple { get; } = false;
+    public override bool Multiple { get; } = false;
 
-    public void Activate(TItem item)
+    protected override void ActivateItem(TItem item)
     {
         if (this is ISelection<TItem> { Cursor: { } cursor })
         {
-            Remove(cursor);
+            DeactivateItem(cursor);
         }
 
-        Add(item);
+        base.ActivateItem(item);
     }
 }

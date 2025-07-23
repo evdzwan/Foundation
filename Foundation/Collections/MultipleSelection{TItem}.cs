@@ -1,11 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿namespace Foundation.Collections;
 
-namespace Foundation.Collections;
-
-sealed class MultipleSelection<TItem>(IEnumerable<TItem> activeItems) : ObservableCollection<TItem>(activeItems), ISelection<TItem>
+sealed class MultipleSelection<TItem>(IEnumerable<TItem> activeItems) : Selection<TItem>(activeItems)
 {
-    public bool Multiple { get; } = true;
-
-    public void Activate(TItem item)
-        => Add(item);
+    public override bool Multiple { get; } = true;
 }

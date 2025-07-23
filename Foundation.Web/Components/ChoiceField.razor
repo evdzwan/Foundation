@@ -1,4 +1,5 @@
-﻿@attribute [CascadingTypeParameter(nameof(TModel))]
+﻿@using System.Collections.Specialized
+@attribute [CascadingTypeParameter(nameof(TModel))]
 @inject ChoiceFieldScript Script
 @inherits Field<TModel>
 @typeparam TModel
@@ -24,7 +25,7 @@
                 {
                     @* TODO scroll(er) toevoegen? *@
                     @* TODO pager(/browse) toevoegen (zonder url change (Silent (opt-out), QueryParameterName (opt-in)) *@
-                    <Selector Selection="Selection">
+                    <Selector Selection="TableSelection">
                         <Table Columns="Columns" Empty="Empty" Items="Items" />
                     </Selector>
                 }
@@ -39,9 +40,8 @@
 }
 
 @code {
-    //https://blog.lhotka.net/2024/03/30/Blazor-8-Render-Mode-Detection
-
-    ISelection<TItem>? Selection;
+    ISelection<TItem>? TableSelection;
+    IDisposable? TableSelectionChangedSubscription;
     ElementReference EditorReference;
     ElementReference PopoverReference;
     bool PopoverLoaded;
@@ -53,7 +53,7 @@
     [Parameter] public RenderFragment? Empty { get; set; }
     [Parameter, EditorRequired] public required IAsyncCollection<TItem> Items { get; set; }
 
-    string EditorValue => string.Join(", ", Selection?.Select(DisplayItem) ?? []);
+    string EditorValue => string.Join(", ", TableSelection?.Select(DisplayItem) ?? []);
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -71,8 +71,11 @@
     {
         base.OnParametersSet();
         Columns ??= ChildContent;
+        
+        TableSelectionChangedSubscription?.Dispose();
+        TableSelection = CreateSelection(ValueProperty?.PropertyType, Value);
+        TableSelectionChangedSubscription = TableSelection?.Subscribe(OnTableSelectionChanged);
     }
-
 
     [JSInvokable]
     public Task OnPopoverToggled(bool open)
@@ -81,6 +84,20 @@
         return InvokeAsync(StateHasChanged);
     }
 
+    async void OnTableSelectionChanged(ISelection<TItem> selection)
+    {
+        Value = DetermineValue(selection, Value);
+        await InvokeAsync(async () =>
+        {
+            if (TableSelection is { Multiple: false })
+            {
+                await HidePopover();
+                await EditorReference.FocusAsync();
+            }
+
+            StateHasChanged();
+        });
+    }
 
     async Task ShowPopover()
     {
@@ -99,9 +116,11 @@
         }
     }
 
-    //NOTE script zou niet moeten werken tijdens prerendering (RendererInfo?)
     protected override async Task OnDisposingAsync()
-        => await Script.Detach(PopoverReference);
+    {
+        TableSelectionChangedSubscription?.Dispose();
+        await Script.Detach(PopoverReference);
+    }
 
     static Func<TItem, string?> CreateDefaultDisplayItem()
     {
@@ -112,5 +131,38 @@
         }
 
         return item => item?.ToString();
+    }
+
+    static ISelection<TItem>? CreateSelection(Type? valueType, object? value) => (valueType, value) switch
+    {
+        (_, IEnumerable<TItem> items) => Selection.Multiple(items),
+        (_, TItem item) => Selection.Single(item),
+        ({ } type, _) when type.IsAssignableTo(typeof(IEnumerable<>).MakeGenericType([typeof(TItem)])) => Selection.Multiple<TItem>(),
+        ({ } type, _) when type.IsAssignableTo(typeof(TItem)) => Selection.Single<TItem>(),
+        _ => null
+    };
+
+    static object? DetermineValue(ISelection<TItem> selection, object? value) => (selection, value) switch
+    {
+        ({ Multiple: true }, ICollection<TItem> collection) => UpdateCollection(collection, selection),
+        ({ Multiple: true }, _) => selection.ToArray(),
+        ({ Multiple: false }, _) => selection.Cursor,
+        _ => value
+    };
+
+    static ICollection<TItem> UpdateCollection(ICollection<TItem> collection, ISelection<TItem> selection)
+    {
+        var originalCollection = collection.ToArray();
+        foreach (var item in originalCollection.Except(selection))
+        {
+            collection.Remove(item);
+        }
+
+        foreach (var item in selection.Except(originalCollection))
+        {
+            collection.Add(item);
+        }
+
+        return collection;
     }
 }
