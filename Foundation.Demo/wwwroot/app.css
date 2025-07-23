@@ -266,9 +266,6 @@ ul {
         text-align: start;
     }
 
-        .field.choice > .field-value > button:focus {
-        }
-
     .field.choice > .field-value > [popover] {
         --offset: .25rem;
         background-color: var(--fn-section-bg);
