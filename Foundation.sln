@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Web", "Foundatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Demo", "Foundation.Demo\Foundation.Demo.csproj", "{D9DFE4D7-6189-4DBF-92FA-AA6C1A63286C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Analyzers", "Foundation.Analyzers\Foundation.Analyzers.csproj", "{525283EA-F169-4383-8EAA-FA1D621D1F17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D9DFE4D7-6189-4DBF-92FA-AA6C1A63286C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9DFE4D7-6189-4DBF-92FA-AA6C1A63286C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9DFE4D7-6189-4DBF-92FA-AA6C1A63286C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{525283EA-F169-4383-8EAA-FA1D621D1F17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{525283EA-F169-4383-8EAA-FA1D621D1F17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{525283EA-F169-4383-8EAA-FA1D621D1F17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{525283EA-F169-4383-8EAA-FA1D621D1F17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
