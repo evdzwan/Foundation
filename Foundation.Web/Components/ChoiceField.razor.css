@@ -3,6 +3,7 @@
     inset: unset;
     left: calc(anchor(start));
     overflow: hidden;
+    padding: 0;
     position: absolute;
     top: calc(anchor(bottom) + var(--offset));
     width: calc(anchor-size(width));
