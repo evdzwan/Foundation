@@ -1,0 +1,9 @@
+﻿.field-value > [popover] {
+    --offset: 0;
+    inset: unset;
+    left: calc(anchor(start));
+    overflow: hidden;
+    position: absolute;
+    top: calc(anchor(bottom) + var(--offset));
+    width: calc(anchor-size(width));
+}
