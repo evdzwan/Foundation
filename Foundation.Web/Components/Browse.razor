@@ -16,19 +16,6 @@
     [Parameter] public int PageSize { get; set; } = 10;
     [Parameter] public bool Persist { get; set; }
 
-    int LowerBound => CurrentPage * PageSize + 1;
-    int UpperBound => (CurrentPage + 1) * PageSize;
-
-    public virtual RenderFragment RenderPagination() => __builder =>
-    {
-        <div class="pagination">
-            <button @onclick="() => SetPage(0)">&le;</button>
-            <button @onclick="() => SetPage(CurrentPage - 1)">&lt;</button>
-            <span>@LowerBound &ndash; @UpperBound</span>
-            <button @onclick="() => SetPage(CurrentPage + 1)">&gt;</button>
-        </div>
-    };
-
     protected override async Task OnParametersSetAsync()
     {
         if (Persist)
@@ -36,6 +23,10 @@
             await SetPage(QueryPage);
         }
     }
+
+    public Task MoveToFirstPage() => SetPage(0);
+    public Task MoveToPreviousPage() => SetPage(CurrentPage - 1);
+    public Task MoveToNextPage() => SetPage(CurrentPage + 1);
 
     async Task SetPage(int page)
     {

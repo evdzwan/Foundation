@@ -17,7 +17,9 @@
 
 .table-header {
     display: table-header-group;
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
     .table-header::before {
@@ -26,6 +28,15 @@
         position: absolute;
         z-index: -1;
     }
+
+    .table-header > .table-cell {
+        vertical-align: middle;
+    }
+
+.table-header-title {
+    align-items: center;
+    display: flex;
+}
 
 .table-body {
     display: table-row-group;
@@ -66,11 +77,6 @@
     }
 
 .table-empty {
-    white-space: nowrap;
-    width: 0;
-}
-
-.table-footer {
     white-space: nowrap;
     width: 0;
 }
