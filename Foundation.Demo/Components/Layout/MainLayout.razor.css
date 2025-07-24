@@ -51,10 +51,6 @@ main {
             color: var(--fn-button-fg-active);
         }
 
-        .anchors > ::deep a:not(.disabled):focus {
-            outline: .125rem solid var(--fn-button-outline);
-        }
-
         .anchors > ::deep a.active {
             border-right: .25rem solid var(--fn-button-outline);
         }
