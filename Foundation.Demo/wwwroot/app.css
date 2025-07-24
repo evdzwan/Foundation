@@ -1,48 +1,86 @@
 @import 'normalize.css';
 
 :root, [data-theme="light"] {
-    --fn-active-bg: #c60;
-    --fn-active-fg: #ddd;
-    --fn-anchor-fg: #c60;
-    --fn-body-bg: #ddd;
-    --fn-body-fg: #222;
-    --fn-button-bg: #bbb;
-    --fn-button-bg-rgb: 187, 187, 187;
+    /*anchor*/
+    --fn-anchor-fg: #06c;
+    /*body*/
+    --fn-body-bg: #eee;
+    --fn-body-fg: #111;
+    /*button*/
+    --fn-button-bg: #ccc;
+    --fn-button-bg-active: #06c;
+    --fn-button-bg-rgb: 204,204,204;
     --fn-button-fg: #222;
-    --fn-loading-bg: #ccc;
-    --fn-loading-fg: #ddd;
+    --fn-button-fg-active: #eee;
+    --fn-button-link-bg: transparent;
+    --fn-button-link-bg-active: transparent;
+    --fn-button-link-fg: #222;
+    --fn-button-link-fg-active: #06c;
+    --fn-button-link-fg-rgb: 34,34,34;
+    --fn-button-outline: #06c;
+    /*input*/
     --fn-input-bg: #ddd;
+    --fn-input-bg-focus: #06c;
+    --fn-input-bg-rgb: 221,221,221;
     --fn-input-fg: #222;
-    --fn-input-border: #bbb;
-    --fn-input-border-active: #c60;
+    --fn-input-fg-focus: #eee;
+    --fn-input-outline: #06c;
+    --fn-input-outline-hover: #ccc;
+    /*table*/
+    --fn-table-row-bg-hover: #ccc;
+    --fn-table-row-bg-selected: #06c;
+    --fn-table-row-fg-hover: #222;
+    --fn-table-row-fg-selected: #eee;
+    /*scroll*/
+    --fn-scroll: #ccc;
+    --fn-scroll-hover: #aaa;
+    /*misc*/
     --fn-muted: #666;
-    --fn-section-bg: #ccc;
-    --fn-section-border: #c60;
-    --fn-section-fg: #222;
-    --fn-shadow-rgb: 48, 48, 48;
+    --fn-shadow: #333;
+    --fn-skeleton: #ddd;
+    --fn-skeleton-accent: #ccc;
 }
 
 [data-theme="dark"] {
     color-scheme: dark;
-    --fn-active-bg: #eb0;
-    --fn-active-fg: #222;
-    --fn-anchor-fg: #eb0;
+    /*anchor*/
+    --fn-anchor-fg: #06c;
+    /*body*/
     --fn-body-bg: #222;
     --fn-body-fg: #ddd;
-    --fn-button-bg: #666;
-    --fn-button-bg-rgb: 102, 102, 102;
-    --fn-button-fg: #ddd;
-    --fn-input-bg: #222;
-    --fn-input-fg: #ddd;
-    --fn-input-border: #555;
-    --fn-input-border-active: #eb0;
-    --fn-loading-bg: #333;
-    --fn-loading-fg: #444;
+    /*button*/
+    --fn-button-bg: #444;
+    --fn-button-bg-active: #06c;
+    --fn-button-bg-rgb: 68,68,68;
+    --fn-button-fg: #eee;
+    --fn-button-fg-active: #eee;
+    --fn-button-link-bg: transparent;
+    --fn-button-link-bg-active: transparent;
+    --fn-button-link-fg: #eee;
+    --fn-button-link-fg-active: #06c;
+    --fn-button-link-fg-rgb: 238,238,238;
+    --fn-button-outline: #06c;
+    /*input*/
+    --fn-input-bg: #333;
+    --fn-input-bg-focus: #06c;
+    --fn-input-bg-rgb: 51,51,51;
+    --fn-input-fg: #eee;
+    --fn-input-fg-focus: #eee;
+    --fn-input-outline: #06c;
+    --fn-input-outline-hover: #ccc;
+    /*table*/
+    --fn-table-row-bg-hover: #444;
+    --fn-table-row-bg-selected: #06c;
+    --fn-table-row-fg-hover: #eee;
+    --fn-table-row-fg-selected: #eee;
+    /*scroll*/
+    --fn-scroll: #444;
+    --fn-scroll-hover: #666;
+    /*misc*/
     --fn-muted: #999;
-    --fn-section-bg: #444;
-    --fn-section-border: #eb0;
-    --fn-section-fg: #ddd;
-    --fn-shadow-rgb: 48, 48, 48;
+    --fn-shadow: #000;
+    --fn-skeleton: #333;
+    --fn-skeleton-accent: #444;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -50,6 +88,24 @@
         scroll-behavior: smooth;
     }
 }
+
+::-webkit-scrollbar {
+    width: .5rem;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--fn-scroll);
+    border: .5rem solid transparent;
+    border-radius: .25rem;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: var(--fn-scroll-hover);
+    }
 
 html,
 body {
@@ -63,20 +119,6 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-::-webkit-scrollbar {
-    width: .5rem;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.5);
-    border: .5rem solid transparent;
-    border-radius: .25rem;
-}
-
 h1,
 h2,
 h3,
@@ -86,10 +128,15 @@ h6 {
     font-variant: small-caps;
     font-weight: 600;
     margin: .5em 0 .25em 0;
-    outline: none !important;
+    outline: none;
 }
 
-    h1:first-child {
+    h1:first-child,
+    h2:first-child,
+    h3:first-child,
+    h4:first-child,
+    h5:first-child,
+    h6:first-child {
         margin-top: 0;
     }
 
@@ -113,11 +160,12 @@ a:visited {
     }
 
 button {
-    background-color: rgb(var(--fn-button-bg-rgb));
+    background-color: var(--fn-button-bg);
     border: none;
     border-radius: .25rem;
     color: var(--fn-button-fg);
     font-variant: small-caps;
+    outline: none;
     padding: .25rem .5rem;
     transition: .25s ease;
     user-select: none;
@@ -132,65 +180,57 @@ button {
     }
 
         button:not(:disabled):hover {
-            background-color: var(--fn-active-bg);
-            color: var(--fn-active-fg);
+            background-color: var(--fn-button-bg-active);
+            color: var(--fn-button-fg-active);
         }
 
-    button:focus {
-        outline: none;
+        button:not(:disabled):not(.link):focus {
+            outline: .125rem solid var(--fn-button-outline);
+        }
+
+    button.link {
+        background-color: var(--fn-button-link-bg);
+        color: var(--fn-button-link-fg);
     }
 
-code {
-    background-color: var(--fn-section-bg);
-    border-radius: .25rem;
-    color: var(--fn-section-fg);
-    font-family: 'Cascadia Mono', 'Liberation Mono', 'Courier New', 'Courier', monospace;
-    font-size: 80%;
-    font-variant: normal;
-    padding: .25em .4em .2em;
-}
+        button.link:disabled {
+            color: rgba(var(--fn-button-link-fg-rgb), .3);
+        }
 
-p {
-    margin: .5em 0 1em 0;
-}
-
-pre {
-    background-color: var(--fn-section-bg);
-    border-bottom-right-radius: .25rem;
-    border-left: .25rem solid var(--fn-section-border);
-    border-top-right-radius: .25rem;
-    color: var(--fn-section-fg);
-    display: block;
-    font-size: 90%;
-    margin: 0;
-    padding: .25rem .5rem;
-    overflow-x: hidden;
-    white-space: pre-wrap;
-}
-
-    pre > code {
-        background-color: unset;
-        border-radius: unset;
-        color: unset;
-        padding: unset;
-    }
+        button.link:not(:disabled):hover {
+            background-color: var(--fn-button-link-bg-active);
+            color: var(--fn-button-link-fg-active);
+        }
 
 input,
 textarea {
     background-color: var(--fn-input-bg);
+    border: .125rem solid var(--fn-input-bg);
+    border-radius: .25rem;
     color: var(--fn-input-fg);
+    outline: none;
+    padding: .25rem .5rem;
+    transition: .25s ease;
 }
 
-    input:not([type=range]),
-    textarea {
-        border: .1rem solid var(--fn-input-border);
-        border-radius: .25rem;
-        padding: .25rem .5rem;
+    input:disabled,
+    input:read-only,
+    textarea:disabled,
+    textarea:read-only {
+        background-color: rgba(var(--fn-input-bg-rgb), .3);
+        border-color: rgba(var(--fn-input-bg-rgb), .3);
     }
 
-    input[type=range] {
-        accent-color: var(--fn-input-border-active);
-        margin: .5rem 0 0;
+    input:not(:disabled):hover,
+    textarea:not(:disabled):hover {
+        border-color: var(--fn-input-outline-hover);
+    }
+
+    input:not(:disabled):focus,
+    textarea:not(:disabled):focus {
+        background-color: var(--fn-input-bg-focus);
+        border-color: var(--fn-input-outline);
+        color: var(--fn-input-fg-focus);
     }
 
 input {
@@ -200,12 +240,6 @@ input {
 textarea {
     min-height: 6em;
     resize: vertical;
-}
-
-ul {
-    display: flex;
-    flex-direction: column;
-    gap: .25rem;
 }
 
 .form {
@@ -222,7 +256,7 @@ ul {
 
         .form.loading .field-value::before {
             animation: move 1s linear infinite;
-            background: linear-gradient(-60deg, var(--fn-loading-bg) 33%, var(--fn-loading-fg), var(--fn-loading-bg) 66%) right / 300% 100%;
+            background: linear-gradient(-60deg, var(--fn-skeleton) 33%, var(--fn-skeleton-accent), var(--fn-skeleton) 66%) right / 300% 100%;
             border-radius: .25rem;
             content: '';
             inset: 0;
@@ -230,14 +264,11 @@ ul {
             z-index: 10;
         }
 
-        .form.loading .field-value > * {
-            outline: none;
-        }
-
 .field {
     display: flex;
     flex-direction: column;
     gap: .25rem;
+    width: 30rem;
 }
 
     .field > label {
@@ -262,9 +293,48 @@ ul {
     }
 
     .field.choice > .field-value > button {
+        align-items: center;
+        background-color: var(--fn-input-bg);
+        border: .125rem solid var(--fn-input-bg);
+        border-radius: .25rem;
+        color: var(--fn-input-fg);
+        display: flex;
         font-variant: unset;
+        gap: .5rem;
+        line-height: 1;
+        outline: none !important;
+        padding: .25rem .5rem;
         text-align: start;
     }
+
+        .field.choice > .field-value > button:disabled {
+            background-color: var(--fn-input-bg);
+        }
+
+        .field.choice > .field-value > button:hover {
+            border-color: var(--fn-input-outline-hover);
+        }
+
+        .field.choice > .field-value > button:focus {
+            background-color: var(--fn-input-bg-focus);
+            border-color: var(--fn-input-outline);
+            color: var(--fn-input-fg-focus);
+        }
+
+        .field.choice > .field-value > button > * {
+            flex-grow: 1;
+        }
+
+        .field.choice > .field-value > button > svg {
+            display: block;
+            flex-grow: 0;
+            height: 1.2em;
+            transition: .25s ease;
+        }
+
+        .field.choice > .field-value > button:has(~ [popover]:popover-open) > svg {
+            transform: rotate(.5turn);
+        }
 
     .field.choice > .field-value > [popover] {
         --offset: .25rem;
@@ -272,7 +342,7 @@ ul {
         border: none;
         border-radius: .25rem;
         color: var(--fn-body-fg);
-        filter: drop-shadow(.1rem .1rem .25rem rgb(var(--fn-shadow-rgb)));
+        filter: drop-shadow(.1rem .1rem .25rem var(--fn-shadow));
         max-height: 16rem;
         overflow: auto;
     }
@@ -284,7 +354,7 @@ ul {
 
     .table.loading .table-row::before {
         animation: move 1s linear infinite;
-        background: linear-gradient(-60deg, var(--fn-loading-bg) 33%, var(--fn-loading-fg), var(--fn-loading-bg) 66%) right / 300% 100%;
+        background: linear-gradient(-60deg, var(--fn-skeleton) 33%, var(--fn-skeleton-accent), var(--fn-skeleton) 66%) right / 300% 100%;
     }
 
 .table-header {
@@ -297,6 +367,7 @@ ul {
 
     .table-header::before {
         background-color: var(--fn-body-bg);
+        border-radius: .25rem;
     }
 
 .table-header-title {
@@ -314,23 +385,12 @@ ul {
     }
 
         .table-header-title > .pagination > button {
-            background-color: transparent;
-            border: none;
             line-height: 0;
-            padding: .2em;
+            padding: .15em;
         }
 
-            .table-header-title > .pagination > button:not(.disabled) {
-                color: var(--fn-anchor-fg);
-            }
-
-                .table-header-title > .pagination > button:not(.disabled):hover {
-                    background-color: var(--fn-active-bg);
-                    color: var(--fn-active-fg);
-                }
-
             .table-header-title > .pagination > button > svg {
-                height: .8em;
+                height: .75em;
             }
 
 .table-row::before {
@@ -342,25 +402,31 @@ ul {
     transition: .1s ease;
 }
 
-    .table-row.selectable:hover,
-    .table-row.selected {
-        color: var(--fn-active-fg);
+    .table-row.selectable:hover {
+        color: var(--fn-table-row-fg-hover);
     }
 
-        .table-row.selectable:hover::before,
-        .table-row.selected::before {
-            background-color: var(--fn-active-bg);
-        }
+    .table-row.selectable.selected {
+        color: var(--fn-table-row-fg-selected);
+    }
 
-        .table-row.selected + .selected::before {
-            border-start-start-radius: unset;
-            border-start-end-radius: unset;
-        }
+    .table-row.selectable:hover::before {
+        background-color: var(--fn-table-row-bg-hover);
+    }
 
-        .table-row.selected:has(+.selected)::before {
-            border-end-start-radius: unset;
-            border-end-end-radius: unset;
-        }
+    .table-row.selectable.selected::before {
+        background-color: var(--fn-table-row-bg-selected);
+    }
+
+    .table-row.selectable.selected + .selected::before {
+        border-start-start-radius: unset;
+        border-start-end-radius: unset;
+    }
+
+    .table-row.selectable.selected:has(+.selected)::before {
+        border-end-start-radius: unset;
+        border-end-end-radius: unset;
+    }
 
 .table-cell {
     padding: .25rem;

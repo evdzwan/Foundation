@@ -60,12 +60,12 @@
 
     static object? ConvertToValue(string? text, Type valueType)
     {
-        var method = typeof(DateTimeField<>).GetMethod(nameof(ConvertToValue),
-                                                       genericParameterCount: 1,
-                                                       BindingFlags.Static | BindingFlags.NonPublic,
-                                                       [typeof(string)])!;
+        var method = typeof(DateTimeField<TModel>).GetMethod(nameof(ConvertToValue),
+                                                             genericParameterCount: 1,
+                                                             BindingFlags.Static | BindingFlags.NonPublic,
+                                                             [typeof(string)])!;
 
-        var genericMethod = method.MakeGenericMethod(valueType);
+        var genericMethod = method.MakeGenericMethod([valueType]);
         return genericMethod.Invoke(obj: null, [text]);
     }
 
