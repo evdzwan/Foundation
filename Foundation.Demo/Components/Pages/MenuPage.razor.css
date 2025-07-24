@@ -1,8 +1,8 @@
 ﻿.triggers {
+    align-items: start;
     display: flex;
     flex-direction: column;
     gap: .25rem;
-    width: 32rem;
 }
 
     .triggers > div {
@@ -16,6 +16,7 @@
         justify-content: center;
         position: relative;
         user-select: none;
+        width: 32rem;
     }
 
         .triggers > div > div {
