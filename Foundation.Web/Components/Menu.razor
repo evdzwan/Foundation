@@ -1,0 +1,63 @@
+﻿@inherits Component
+@inject MenuScript Script
+
+<div class="menu" style="@MenuStyle" @attributes="Attributes" @oncontextmenu:preventDefault @ref="MenuReference">
+    @if (Title is { Length: > 0 } title)
+    {
+        <h4>@Title</h4>
+    }
+
+    <div class="menu-items">
+        <CascadingValue Value="this" IsFixed>
+            @ChildContent
+        </CascadingValue>
+    </div>
+</div>
+
+@code {
+    readonly Dictionary<string, object?> Attributes = [];
+    ElementReference MenuReference;
+    StyleList MenuStyle = new();
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool Persistent { get; set; }
+    [Parameter] public string? Title { get; set; }
+
+    public async Task Show(MouseEventArgs e)
+    {
+        SetPosition($"{e.ClientX}px", $"{e.ClientY}px");
+        StateHasChanged();
+
+        await Task.Yield();
+        await Script.ShowPopover(MenuReference, trigger: null, CancellationToken);
+    }
+
+    public async Task Show(ElementReference trigger)
+    {
+        SetPosition("calc(anchor(end) + .5rem)", "anchor(start)");
+        StateHasChanged();
+
+        await Task.Yield();
+        await Script.ShowPopover(MenuReference, trigger, CancellationToken);
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (Persistent)
+        {
+            Attributes.Remove("popover");
+        }
+        else
+        {
+            Attributes["popover"] = "auto";
+        }
+    }
+
+    void SetPosition(string x, string y)
+    {
+        MenuStyle.Remove("--pos-x");
+        MenuStyle.Add("--pos-x", x);
+        MenuStyle.Remove("--pos-y");
+        MenuStyle.Add("--pos-y", y);
+    }
+}

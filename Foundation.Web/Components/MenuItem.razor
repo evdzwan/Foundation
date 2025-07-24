@@ -1,0 +1,29 @@
+﻿@inherits Component
+
+<div class="menu-item" @ref="MenuItemReference">
+    <button @onclick="ShowSubMenu">@Title</button>
+    @if (ChildContent is { } childContent)
+    {
+        <CascadingValue Value="this" IsFixed>
+            <Menu Title="@Title" @ref="SubMenu">
+                @childContent
+            </Menu>
+        </CascadingValue>
+    }
+</div>
+
+@code {
+    ElementReference MenuItemReference;
+    Menu? SubMenu;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Title { get; set; }
+
+    async Task ShowSubMenu(MouseEventArgs e)
+    {
+        if (SubMenu is { } subMenu)
+        {
+            await subMenu.Show(MenuItemReference);
+        }
+    }
+}

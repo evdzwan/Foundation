@@ -1,0 +1,14 @@
+﻿.menu[popover] {
+    --pos-x: 0;
+    --pos-y: 0;
+    inset: unset;
+    left: var(--pos-x);
+    margin: 0;
+    position: fixed;
+    top: var(--pos-y);
+}
+
+.menu-items {
+    display: flex;
+    flex-direction: column;
+}

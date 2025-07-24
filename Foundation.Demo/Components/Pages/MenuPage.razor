@@ -1,0 +1,52 @@
+﻿@rendermode InteractiveServer
+@page "/components/menu"
+
+<PageTitle>Menu</PageTitle>
+
+<h3>Hierarchical &amp; Lazy Loading</h3>
+<Menu Persistent>
+    <MenuItem Title="First menu item" />
+    <MenuItem Title="Second menu item">
+        <MenuItem Title="First menu item" />
+        <MenuItem Title="Second menu item">
+            <MenuItem Title="First menu item" />
+            <MenuItem Title="Second menu item" />
+            <MenuItem Title="Third menu item" />
+        </MenuItem>
+    </MenuItem>
+    <MenuItem Title="Third menu item">
+        <MenuItem Title="First menu item" />
+        <MenuItem Title="Second menu item" />
+        <MenuItem Title="Third menu item" />
+    </MenuItem>
+    <MenuItem Title="Fourth menu item" />
+</Menu>
+
+<h3>Triggers</h3>
+<div class="triggers">
+    <button @onclick="() => MainMenu?.Show(TriggerReference) ?? Task.CompletedTask" @ref="TriggerReference">Demo Trigger</button>
+    <div @oncontextmenu="e => MainMenu?.Show(e) ?? Task.CompletedTask" @oncontextmenu:preventDefault @oncontextmenu:stopPropagation>
+        Context area
+        <div @oncontextmenu="e => SubMenu?.Show(e) ?? Task.CompletedTask" @oncontextmenu:preventDefault @oncontextmenu:stopPropagation>
+            Child area
+        </div>
+    </div>
+</div>
+
+<Menu Title="Main Menu" @ref="MainMenu">
+    <MenuItem Title="First menu item" />
+    <MenuItem Title="Second menu item" />
+    <MenuItem Title="Third menu item" />
+</Menu>
+
+<Menu Title="Sub Menu" @ref="SubMenu">
+    <MenuItem Title="First menu item" />
+    <MenuItem Title="Second menu item" />
+    <MenuItem Title="Third menu item" />
+</Menu>
+
+@code {
+    ElementReference TriggerReference;
+    Menu? MainMenu;
+    Menu? SubMenu;
+}

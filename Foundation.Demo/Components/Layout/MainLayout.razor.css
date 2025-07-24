@@ -46,13 +46,10 @@ main {
         text-decoration: none;
     }
 
-        .anchors > ::deep a:hover {
+        .anchors > ::deep a:hover,
+        .anchors > ::deep a.active {
             background-color: var(--fn-button-bg-active);
             color: var(--fn-button-fg-active);
-        }
-
-        .anchors > ::deep a.active {
-            border-right: .25rem solid var(--fn-button-outline);
         }
 
         .anchors > ::deep a.disabled {
