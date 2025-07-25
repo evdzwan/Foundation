@@ -35,16 +35,13 @@
 </Menu>
 
 <Menu Name="ChildMenu" Title="Child Menu" OnItemPressed="OnMenuItemPressed">
-    @if (context is IEnumerable<int> itemIds)
-    {
-        <ForEach Items="itemIds" Context="itemId">
-            <MenuItem Title="@($"MenuItem {itemId}")" Disabled="Random.Shared.Next(4) == 0" @key="itemId">
-                <ForEach Items="Enumerable.Range(1, itemId)" Context="childItemId">
-                    <MenuItem Title="@($"MenuItem {childItemId}")" />
-                </ForEach>
-            </MenuItem>
-        </ForEach>
-    }
+    <ForEach Items="context as IEnumerable<int> ?? []" Context="itemId">
+        <MenuItem Title="@($"MenuItem {itemId}")" Disabled="Random.Shared.Next(4) == 0" @key="itemId">
+            <ForEach Items="Enumerable.Range(1, itemId)" Context="childItemId">
+                <MenuItem Title="@($"MenuItem {childItemId}")" />
+            </ForEach>
+        </MenuItem>
+    </ForEach>
 </Menu>
 
 @code {
