@@ -7,31 +7,44 @@
 
 <h3>Surface</h3>
 <div class="triggers">
-    <button @onclick="ShowMenu">Demo Trigger</button>
-</div>
+    <button @onclick="@(e => ShowMenu("Button Menu", e))">Demo trigger</button>
 
+    <div @oncontextmenu="@(e => ShowMenu("Context Menu", e))" @oncontextmenu:preventDefault @oncontextmenu:stopPropagation>
+        Context area
+        <div @oncontextmenu="@(e => ShowMenu("Child Menu", e))" @oncontextmenu:preventDefault @oncontextmenu:stopPropagation>
+            Child area
+        </div>
+    </div>
+</div>
 @code {
     Task OnMenuItemPressed(MenuItem item) => OnMenuItemPressed(item, custom: false);
     async Task OnMenuItemPressed(MenuItem item, bool custom)
-        => await JS.InvokeVoidAsync("alert", $"MenuItemPressed: {item.Context}, Custom={custom}");
+    {
+        if (item.Context is { } context)
+        {
+            await JS.InvokeVoidAsync("alert", $"MenuItemPressed: {context}, Custom={custom}");
+        }
+    }
 
-    void ShowMenu(MouseEventArgs e) => AddToSurface(RenderMenu("Demo Menu", e.ClientX, e.ClientY));
+    void ShowMenu(string title, MouseEventArgs e) => AddToSurface(RenderMenu(title, e.ClientX, e.ClientY));
     RenderFragment RenderMenu(string title, double left, double top) => __builder =>
     {
         <Menu Title="@title" Offset="(left, top)" OnItemPressed="OnMenuItemPressed">
-            <MenuItem Title="First Demo MenuItem" Context="@("MenuItem 1")" />
-            <MenuItem Context="@("MenuItem 2")">
-                <Content>Second Demo MenuItem</Content>
-                <Items>
-                    <MenuItem Title="@($"First Demo MenuItem (for {title})")" Context="@("MenuItem 2-1")" />
-                    <MenuItem OnPressed="item => OnMenuItemPressed(item, custom: true)" Context="@("MenuItem 2-2")">
-                        <Content>Second <b>Demo</b> MenuItem (for @title)</Content>
-                    </MenuItem>
-                </Items>
-            </MenuItem>
-            <MenuItem>
-                <Content>Third <b>Demo</b> MenuItem</Content>
-            </MenuItem>
+            <Items>
+                <MenuItem Title="First Demo MenuItem" Context="@("MenuItem 1")" />
+                <MenuItem Context="@("MenuItem 2")">
+                    <Content>Second Demo MenuItem</Content>
+                    <Items>
+                        <MenuItem Title="@($"First Demo MenuItem (for {title})")" Context="@("MenuItem 2-1")" />
+                        <MenuItem OnPressed="item => OnMenuItemPressed(item, custom: true)" Context="@("MenuItem 2-2")">
+                            Second <b>Demo</b> MenuItem (for @title)
+                        </MenuItem>
+                    </Items>
+                </MenuItem>
+                <MenuItem>
+                    Third <b>Demo</b> MenuItem
+                </MenuItem>
+            </Items>
         </Menu>
     };
 }

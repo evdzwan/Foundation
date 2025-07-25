@@ -58,10 +58,7 @@
     }
 
     protected override void OnParametersSet()
-    {
-        Header ??= @<span>@Title</span>;
-        Items ??= ChildContent;
-    }
+        => Header ??= ChildContent ??= @<span>@Title</span>;
 
     [JSInvokable]
     public Task OnPopoverToggled(bool open)
