@@ -9,7 +9,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddFoundation(this IServiceCollection @this)
         => @this.AddScripts([typeof(ServiceCollectionExtensions).Assembly])
-                .AddScoped<SurfaceController>();
+                .AddScoped<MenuController>();
 
     public static IServiceCollection AddScripts(this IServiceCollection @this, IEnumerable<Assembly> assemblies)
     {

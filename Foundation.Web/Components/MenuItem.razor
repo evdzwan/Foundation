@@ -1,40 +1,32 @@
 ﻿@inherits Component
 
-<div class="menu-item" @ref="MenuItemReference">
-    <button type="button" @onclick="OnButtonPressed">@Content</button>
+<div class="menu-item">
+    <button type="button" disabled="@Disabled" @onclick="OnButtonPressed">@Title</button>
 
-    @if (Items is { } items)
+    @if (ChildContent is { } childContent)
     {
-        <button class="link toggle" type="button" @onclick="ShowChildMenu">
+        <button class="link toggle" type="button" disabled="@Disabled" @onclick="ShowChildMenu">
             <svg fill="currentColor" viewBox="0 0 24 24">
                 <path d="M10.061 19.061 17.121 12l-7.06-7.061-2.122 2.122L12.879 12l-4.94 4.939z" />
             </svg>
         </button>
 
         <CascadingValue Value="this" IsFixed>
-            <Menu Header="Content" @ref="ChildMenu">
-                <Items>
-                    @items
-                </Items>
+            <Menu Title="@Title" @ref="ChildMenu">
+                @childContent
             </Menu>
         </CascadingValue>
     }
 </div>
 
 @code {
-    ElementReference MenuItemReference;
     Menu? ChildMenu;
 
     [CascadingParameter] Menu? Parent { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public RenderFragment? Content { get; set; }
-    [Parameter] public object? Context { get; set; }
-    [Parameter] public RenderFragment? Items { get; set; }
+    [Parameter] public bool Disabled { get; set; }
     [Parameter] public EventCallback<MenuItem> OnPressed { get; set; }
     [Parameter] public string? Title { get; set; }
-
-    protected override void OnParametersSet()
-        => Content ??= ChildContent ??= @<span>@Title</span>;
 
     async Task OnButtonPressed()
     {

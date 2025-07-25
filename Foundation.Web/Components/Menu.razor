@@ -1,43 +1,45 @@
-﻿@inject MenuScript Script
+﻿@inject MenuController Controller
+@inject MenuScript Script
 @inherits Component
 
-<div popover class="menu" style="@MenuStyle" @oncontextmenu:preventDefault @ref="MenuReference">
-    <h4>@Header</h4>
-
+<div popover class="menu" style="@MenuStyle" @ref="MenuReference">
+    <h4>@Title</h4>
     <div class="menu-items">
-        <CascadingValue Value="Parent ?? this" IsFixed>
-            @Items
+        <CascadingValue Value="Parent ?? this">
+            @ChildContent?.Invoke(Context)
         </CascadingValue>
     </div>
 </div>
 
 @code {
-    readonly StyleList MenuStyle = new();
+    (double Left, double Top)? Offset;
     ElementReference MenuReference;
+    IDisposable? MenuSubscription;
     bool MenuOpen;
 
     [CascadingParameter] Menu? Parent { get; set; }
-    [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public RenderFragment? Header { get; set; }
-    [Parameter] public RenderFragment? Items { get; set; }
-    [Parameter] public (double Left, double Top)? Offset { get; set; }
+    [Parameter] public RenderFragment<object?>? ChildContent { get; set; }
+    [Parameter] public string? Name { get; set; }
     [Parameter] public EventCallback<MenuItem> OnItemPressed { get; set; }
     [Parameter] public string? Title { get; set; }
 
-    public async Task Hide()
-        => await Script.HidePopover(MenuReference, CancellationToken);
+    internal object? Context { get; set; }
+    StyleList MenuStyle => new StyleList().Add("--left", $"{Offset?.Left}px", Offset is not null)
+                                          .Add("--top", $"{Offset?.Top}px", Offset is not null);
 
-    public Task Show(MouseEventArgs e)
+    public async Task Hide()
     {
-        Offset = (e.ClientX, e.ClientY);
-        return Show();
+        if (MenuOpen)
+        {
+            await Script.HidePopover(MenuReference, CancellationToken);
+        }
     }
 
-    async Task Show()
+    public async Task Show(MouseEventArgs e)
     {
-        if (!MenuOpen && Offset is { } offset)
+        if (!MenuOpen)
         {
-            SetPosition($"{offset.Left}px", $"{offset.Top}px");
+            Offset = (e.ClientX, e.ClientY);
             StateHasChanged();
 
             await Task.Yield();
@@ -50,15 +52,16 @@
         if (firstRender)
         {
             await Script.Attach(MenuReference, ComponentReference, CancellationToken);
-            if (Parent is null)
-            {
-                await Show();
-            }
         }
     }
 
-    protected override void OnParametersSet()
-        => Header ??= ChildContent ??= @<span>@Title</span>;
+    protected override void OnInitialized()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            MenuSubscription = Controller.RegisterMenu(this);
+        }
+    }
 
     [JSInvokable]
     public Task OnPopoverToggled(bool open)
@@ -67,14 +70,10 @@
         return InvokeAsync(StateHasChanged);
     }
 
-    void SetPosition(string left, string top)
-    {
-        MenuStyle.Remove("--left");
-        MenuStyle.Add("--left", left);
-        MenuStyle.Remove("--top");
-        MenuStyle.Add("--top", top);
-    }
-
     protected override async Task OnDisposingAsync()
-        => await Script.Detach(MenuReference);
+    {
+        Context = null;
+        MenuSubscription?.Dispose();
+        await Script.Detach(MenuReference);
+    }
 }
