@@ -12,10 +12,12 @@
 </div>
 
 @code {
-    (double Left, double Top)? Offset;
     ElementReference MenuReference;
     IDisposable? MenuSubscription;
     bool MenuOpen;
+
+    object? Context;
+    (double Left, double Top)? Offset;
 
     [CascadingParameter] Menu? Parent { get; set; }
     [Parameter] public RenderFragment<object?>? ChildContent { get; set; }
@@ -23,7 +25,6 @@
     [Parameter] public EventCallback<MenuItem> OnItemPressed { get; set; }
     [Parameter] public string? Title { get; set; }
 
-    internal object? Context { get; set; }
     StyleList MenuStyle => new StyleList().Add("--left", $"{Offset?.Left}px", Offset is not null)
                                           .Add("--top", $"{Offset?.Top}px", Offset is not null);
 
@@ -35,10 +36,12 @@
         }
     }
 
-    public async Task Show(MouseEventArgs e)
+    public Task Show(MouseEventArgs e) => Show(context: null, e);
+    public async Task Show(object? context, MouseEventArgs e)
     {
         if (!MenuOpen)
         {
+            Context = context;
             Offset = (e.ClientX, e.ClientY);
             StateHasChanged();
 
