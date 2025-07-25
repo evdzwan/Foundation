@@ -2,7 +2,7 @@
 @inject MenuScript Script
 @inherits Component
 
-<div popover class="menu" style="@MenuStyle" @ref="MenuReference">
+<div popover class="menu" style="@MenuStyle" @oncontextmenu:preventDefault @ref="MenuReference">
     <h4>@Title</h4>
     <div class="menu-items">
         <CascadingValue Value="Parent ?? this">

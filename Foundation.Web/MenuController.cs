@@ -11,9 +11,11 @@ public sealed class MenuController : IDisposable
     public Task HideMenu(string name)
         => Menus.GetValueOrDefault(name) is { } menu ? menu.Hide() : Task.CompletedTask;
 
-    public Task ShowMenu(string name, MouseEventArgs e) => ShowMenu(name, context: null, e);
-    public Task ShowMenu(string name, object? context, MouseEventArgs e)
+    public Task ShowMenu(string name, MouseEventArgs e)
         => Menus.GetValueOrDefault(name) is { } menu ? menu.Show(e) : Task.CompletedTask;
+
+    public Task ShowMenu(string name, object? context, MouseEventArgs e)
+        => Menus.GetValueOrDefault(name) is { } menu ? menu.Show(context, e) : Task.CompletedTask;
 
     internal IDisposable RegisterMenu(Menu menu)
         => menu.Name is { Length: > 0 } name && Menus.TryAdd(name, menu)
