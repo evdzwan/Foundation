@@ -27,11 +27,11 @@
             <div popover @ref="PopoverReference">
                 @if (PopoverLoaded)
                 {
-                    <Select Selection="TableSelection">
-                        <Browse PageSize="12">
+                    <Browse PageSize="12">
+                        <Select Selection="TableSelection">
                             <Table Columns="Columns" Empty="Empty" Items="Items" />
-                        </Browse>
-                    </Select>
+                        </Select>
+                    </Browse>
                 }
             </div>
         </div>

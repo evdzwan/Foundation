@@ -3,16 +3,16 @@
 
 <PageTitle>Table</PageTitle>
 
-<h3>Selection &amp; Pagination</h3>
-<Select Selection="SelectedBooks">
-    <Browse PageSize="15" Persist>
+<h3>Persistent Browsing &amp; Selection</h3>
+<Browse PageSize="15" Persist>
+    <Select Selection="SelectedBooks">
         <Table Items="Books">
             <Column Expression="book => book.Id" AlignEnd />
             <Column Expression="book => book.Title" Fill />
             <Column Expression="book => book.PublicationDate" AlignEnd />
         </Table>
-    </Browse>
-</Select>
+    </Select>
+</Browse>
 
 @code {
     readonly ISelection<Book> SelectedBooks = Selection.Multiple<Book>();
