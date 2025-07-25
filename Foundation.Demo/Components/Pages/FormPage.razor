@@ -10,6 +10,7 @@
     <TextField Expression="book => book.Summary" MultiLine />
     <ChoiceField Expression="book => book.Author" Items="Authors" />
     <DateTimeField Expression="book => book.PublicationDate" Date />
+    <SwitchField Expression="book => book.Illustrated" />
 </Form>
 
 @code {

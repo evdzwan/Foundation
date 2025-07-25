@@ -1,0 +1,42 @@
+﻿@attribute [CascadingTypeParameter(nameof(TModel))]
+@inherits Field<TModel>
+@typeparam TModel
+
+@if (Visible)
+{
+    <div class="field switch">
+        <label>@Title</label>
+        <div class="field-value">
+            <button type="button" @onclick="ToggleValue" @ref="EditorReference">
+                <div class="indicator @IndicatorClass" />
+            </button>
+        </div>
+
+        @if (ValueExpression is { } valueExpression)
+        {
+            <ValidationMessage For="valueExpression" />
+        }
+    </div>
+}
+
+@code {
+    ElementReference EditorReference;
+
+    ClassList IndicatorClass => new ClassList().Add("active", EditorValue);
+    bool EditorValue
+    {
+        get => Value is bool value ? value : false;
+        set => Value = value;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && AutoFocus)
+        {
+            await EditorReference.FocusAsync();
+        }
+    }
+
+    void ToggleValue()
+        => EditorValue = !EditorValue;
+}

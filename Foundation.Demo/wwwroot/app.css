@@ -292,7 +292,8 @@ textarea {
         color: unset;
     }
 
-    .field.choice > .field-value > button {
+    .field.choice > .field-value > button,
+    .field.switch > .field-value > button {
         align-items: center;
         background-color: var(--fn-input-bg);
         border: .125rem solid var(--fn-input-bg);
@@ -307,15 +308,18 @@ textarea {
         text-align: start;
     }
 
-        .field.choice > .field-value > button:disabled {
+        .field.choice > .field-value > button:disabled,
+        .field.switch > .field-value > button:disabled {
             background-color: var(--fn-input-bg);
         }
 
-        .field.choice > .field-value > button:hover {
+        .field.choice > .field-value > button:hover,
+        .field.switch > .field-value > button:hover {
             border-color: var(--fn-input-outline-hover);
         }
 
-        .field.choice > .field-value > button:focus {
+        .field.choice > .field-value > button:focus,
+        .field.switch > .field-value > button:focus {
             background-color: var(--fn-input-bg-focus);
             border-color: var(--fn-input-outline);
             color: var(--fn-input-fg-focus);
@@ -346,6 +350,22 @@ textarea {
         max-height: 16rem;
         overflow: auto;
     }
+
+    .field.switch > .field-value {
+        --size: 1.5em;
+        width: 4rem;
+    }
+
+        .field.switch > .field-value > button:focus > .indicator {
+            background-color: var(--fn-input-fg-focus);
+        }
+
+        .field.switch > .field-value > button > .indicator {
+            --border-offset: .125rem;
+            --offset: .25em;
+            background-color: var(--fn-input-fg);
+            transition: .25s ease;
+        }
 
 .menu {
     background-color: var(--fn-body-bg);

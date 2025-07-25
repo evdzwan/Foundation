@@ -9,4 +9,5 @@ sealed record Book([property: Key, Display] int Id)
     [MinLength(10)] public required string Summary { get; set; }
     public required DateOnly PublicationDate { get; set; }
     public required Author Author { get; set; }
+    public bool Illustrated { get; set; }
 }
