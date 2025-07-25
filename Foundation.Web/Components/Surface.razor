@@ -1,0 +1,51 @@
+﻿@inject SurfaceController Controller
+@inherits Component
+
+<ForEach Items="Fragments" Context="fragment">
+    @fragment
+</ForEach>
+
+@code {
+    readonly List<RenderFragment> Fragments = [];
+    IDisposable? Subscription;
+
+    protected override void OnInitialized()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            Subscription = Controller.Subscribe(OnFragmentAdded, OnFragmentRemoved);
+        }
+    }
+
+    async void OnFragmentAdded(RenderFragment fragment)
+    {
+        try
+        {
+            await InvokeAsync(() =>
+            {
+                Fragments.Add(fragment);
+                StateHasChanged();
+            });
+        }
+        catch (Exception ex) { await DispatchExceptionAsync(ex); }
+    }
+
+    async void OnFragmentRemoved(RenderFragment fragment)
+    {
+        try
+        {
+            await InvokeAsync(() =>
+            {
+                Fragments.Remove(fragment);
+                StateHasChanged();
+            });
+        }
+        catch (Exception ex) { await DispatchExceptionAsync(ex); }
+    }
+
+    protected override void OnDisposing()
+    {
+        Subscription?.Dispose();
+        Fragments.Clear();
+    }
+}

@@ -1,11 +1,11 @@
-﻿.menu[popover] {
-    --pos-x: 0;
-    --pos-y: 0;
+﻿.menu {
+    --left: 0;
+    --top: 0;
     inset: unset;
-    left: var(--pos-x);
+    left: var(--left);
     margin: 0;
     position: fixed;
-    top: var(--pos-y);
+    top: var(--top);
 }
 
 .menu-items {

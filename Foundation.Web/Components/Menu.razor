@@ -1,63 +1,83 @@
-﻿@inherits Component
-@inject MenuScript Script
+﻿@inject MenuScript Script
+@inherits Component
 
-<div class="menu" style="@MenuStyle" @attributes="Attributes" @oncontextmenu:preventDefault @ref="MenuReference">
-    @if (Title is { Length: > 0 } title)
-    {
-        <h4>@Title</h4>
-    }
+<div popover class="menu" style="@MenuStyle" @oncontextmenu:preventDefault @ref="MenuReference">
+    <h4>@Header</h4>
 
     <div class="menu-items">
-        <CascadingValue Value="this" IsFixed>
-            @ChildContent
+        <CascadingValue Value="Parent ?? this" IsFixed>
+            @Items
         </CascadingValue>
     </div>
 </div>
 
 @code {
-    readonly Dictionary<string, object?> Attributes = [];
+    readonly StyleList MenuStyle = new();
     ElementReference MenuReference;
-    StyleList MenuStyle = new();
+    bool MenuOpen;
 
+    [CascadingParameter] Menu? Parent { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public bool Persistent { get; set; }
+    [Parameter] public RenderFragment? Header { get; set; }
+    [Parameter] public RenderFragment? Items { get; set; }
+    [Parameter] public (double Left, double Top)? Offset { get; set; }
+    [Parameter] public EventCallback<MenuItem> OnItemPressed { get; set; }
     [Parameter] public string? Title { get; set; }
 
-    public async Task Show(MouseEventArgs e)
-    {
-        SetPosition($"{e.ClientX}px", $"{e.ClientY}px");
-        StateHasChanged();
+    public async Task Hide()
+        => await Script.HidePopover(MenuReference, CancellationToken);
 
-        await Task.Yield();
-        await Script.ShowPopover(MenuReference, trigger: null, CancellationToken);
+    public Task Show(MouseEventArgs e)
+    {
+        Offset = (e.ClientX, e.ClientY);
+        return Show();
     }
 
-    public async Task Show(ElementReference trigger)
+    async Task Show()
     {
-        SetPosition("calc(anchor(end) + .5rem)", "anchor(start)");
-        StateHasChanged();
+        if (!MenuOpen && Offset is { } offset)
+        {
+            SetPosition($"{offset.Left}px", $"{offset.Top}px");
+            StateHasChanged();
 
-        await Task.Yield();
-        await Script.ShowPopover(MenuReference, trigger, CancellationToken);
+            await Task.Yield();
+            await Script.ShowPopover(MenuReference, trigger: null, CancellationToken);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Script.Attach(MenuReference, ComponentReference, CancellationToken);
+            if (Parent is null)
+            {
+                await Show();
+            }
+        }
     }
 
     protected override void OnParametersSet()
     {
-        if (Persistent)
-        {
-            Attributes.Remove("popover");
-        }
-        else
-        {
-            Attributes["popover"] = "auto";
-        }
+        Header ??= @<span>@Title</span>;
+        Items ??= ChildContent;
     }
 
-    void SetPosition(string x, string y)
+    [JSInvokable]
+    public Task OnPopoverToggled(bool open)
     {
-        MenuStyle.Remove("--pos-x");
-        MenuStyle.Add("--pos-x", x);
-        MenuStyle.Remove("--pos-y");
-        MenuStyle.Add("--pos-y", y);
+        MenuOpen = open;
+        return InvokeAsync(StateHasChanged);
     }
+
+    void SetPosition(string left, string top)
+    {
+        MenuStyle.Remove("--left");
+        MenuStyle.Add("--left", left);
+        MenuStyle.Remove("--top");
+        MenuStyle.Add("--top", top);
+    }
+
+    protected override async Task OnDisposingAsync()
+        => await Script.Detach(MenuReference);
 }

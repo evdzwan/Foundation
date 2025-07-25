@@ -1,8 +1,8 @@
+using Foundation;
 using Foundation.Components;
-using Foundation.Scripting;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScripts()
+builder.Services.AddFoundation()
                 .AddRazorComponents()
                 .AddInteractiveServerComponents();
 

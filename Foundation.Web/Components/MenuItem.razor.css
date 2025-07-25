@@ -1,4 +1,7 @@
 ﻿.menu-item {
     display: flex;
-    flex-direction: column;
 }
+
+    .menu-item > button:not(.toggle) {
+        flex-grow: 1;
+    }
