@@ -44,6 +44,7 @@ main {
         outline: none;
         padding: .25rem .5rem;
         text-decoration: none;
+        user-select: none;
     }
 
         .anchors > ::deep a:hover,
