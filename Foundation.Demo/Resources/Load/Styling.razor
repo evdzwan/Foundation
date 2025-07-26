@@ -7,12 +7,5 @@
 </Load>
 
 @code {
-    readonly IAsyncValue<Book[]> Books = AsyncValue.Create(async () =>
-    {
-        await Task.Delay(2_000);
-
-        var books = BookRepository.CreateRange(1, 5);
-        Console.WriteLine($"Retrieved Book[{books.Length}]");
-        return books;
-    });
+    readonly IAsyncValue<Book[]> Books = AsyncValue.Create(...);
 }

@@ -159,6 +159,10 @@ a:visited {
         pointer-events: none;
     }
 
+    a:has(> code) {
+        font-variant: unset !important;
+    }
+
 button {
     background-color: var(--fn-button-bg);
     border: none;
