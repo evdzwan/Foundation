@@ -17,7 +17,7 @@ else
 
     [Parameter] public RenderFragment<TModel>? ChildContent { get; set; }
     [Parameter] public RenderFragment<TModel>? Loaded { get; set; }
-    [Parameter] public RenderFragment Loading { get; set; } = @<span>Loading...</span>;
+    [Parameter] public RenderFragment Loading { get; set; } = @<div class="loading-indicator">Loading...</div>;
     [Parameter, EditorRequired] public required IAsyncValue<TModel> Subject { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

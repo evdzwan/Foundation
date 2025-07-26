@@ -242,6 +242,10 @@ textarea {
     resize: vertical;
 }
 
+ul {
+    margin: 0;
+}
+
 .form {
     display: flex;
     flex-direction: column;

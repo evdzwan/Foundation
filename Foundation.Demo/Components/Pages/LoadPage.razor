@@ -1,0 +1,34 @@
+﻿@rendermode InteractiveServer
+@page "/components/load"
+
+<PageTitle>Load</PageTitle>
+<h3>Without Loading Template</h3>
+<Load Subject="Books" Context="books">
+    <ul>
+        <ForEach Items="books" Context="book">
+            <li @key="book">@book.Title</li>
+        </ForEach>
+    </ul>
+</Load>
+
+<h3>With Loading Template</h3>
+<ul>
+    <Load Subject="Books" Context="books">
+        <Loaded>
+            <ForEach Items="books" Context="book">
+                <li @key="book">@book.Title</li>
+            </ForEach>
+        </Loaded>
+        <Loading>
+            <li>Loading...</li>
+        </Loading>
+    </Load>
+</ul>
+
+@code {
+    readonly IAsyncValue<Book[]> Books = AsyncValue.Create(async () =>
+    {
+        await Task.Delay(1_000);
+        return BookRepository.CreateRange(1, 5);
+    });
+}
