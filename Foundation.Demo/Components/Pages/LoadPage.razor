@@ -2,28 +2,32 @@
 @page "/components/load"
 
 <PageTitle>Load</PageTitle>
-<h3>Without Loading Template</h3>
-<Load Subject="Books" Context="books">
-    <ul>
-        <ForEach Items="books" Context="book">
-            <li @key="book">@book.Title</li>
-        </ForEach>
-    </ul>
-</Load>
-
-<h3>With Loading Template</h3>
-<ul>
+<h3>Styling</h3>
+<div class="example">
     <Load Subject="Books" Context="books">
-        <Loaded>
+        <ul>
             <ForEach Items="books" Context="book">
                 <li @key="book">@book.Title</li>
             </ForEach>
-        </Loaded>
-        <Loading>
-            <li>Loading... <span class="indicator" /></li>
-        </Loading>
+        </ul>
     </Load>
-</ul>
+</div>
+
+<h3>Loading Template</h3>
+<div class="example">
+    <ul>
+        <Load Subject="Books" Context="books">
+            <Loaded>
+                <ForEach Items="books" Context="book">
+                    <li @key="book">@book.Title</li>
+                </ForEach>
+            </Loaded>
+            <Loading>
+                <li>Loading...</li>
+            </Loading>
+        </Load>
+    </ul>
+</div>
 
 @code {
     readonly IAsyncValue<Book[]> Books = AsyncValue.Create(async () =>
