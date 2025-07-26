@@ -1,0 +1,8 @@
+﻿.overlay {
+    position: relative;
+}
+
+    .overlay > ::deep * {
+        inset: 0;
+        position: absolute;
+    }
