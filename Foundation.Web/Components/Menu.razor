@@ -5,15 +5,19 @@
 <div popover class="menu" style="@MenuStyle" @oncontextmenu:preventDefault @ref="MenuReference">
     <h4>@Title</h4>
     <div class="menu-items">
-        <CascadingValue Value="Parent ?? this">
-            @ChildContent?.Invoke(Context)
-        </CascadingValue>
+        @if (MenuOpened)
+        {
+            <CascadingValue Value="Parent ?? this">
+                @ChildContent?.Invoke(Context)
+            </CascadingValue>
+        }
     </div>
 </div>
 
 @code {
     ElementReference MenuReference;
     IDisposable? MenuSubscription;
+    bool MenuOpened;
     bool MenuOpen;
 
     object? Context;
@@ -43,6 +47,7 @@
         {
             Context = context;
             Offset = (e.ClientX, e.ClientY);
+            MenuOpened = true;
             StateHasChanged();
 
             await Task.Yield();

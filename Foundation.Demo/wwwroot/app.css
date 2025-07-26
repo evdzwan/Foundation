@@ -382,10 +382,28 @@ textarea {
         gap: .25rem;
     }
 
-.menu-item svg {
-    display: block;
-    height: 1em;
+.menu-item {
+    user-select: none;
 }
+
+    .menu-item.loading::before {
+        animation: move 1s linear infinite;
+        background: linear-gradient(-60deg, var(--fn-skeleton) 33%, var(--fn-skeleton-accent), var(--fn-skeleton) 66%) right / 300% 100%;
+        border-radius: .25rem;
+    }
+
+    .menu-item > button {
+        font-variant: unset;
+        text-align: left;
+    }
+
+        .menu-item > button > svg {
+            display: block;
+            height: 1em;
+        }
+
+    .menu-item.loading {
+    }
 
 .table {
     border-spacing: .1rem;

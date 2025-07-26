@@ -1,7 +1,23 @@
 ﻿.menu-item {
     display: flex;
+    position: relative;
 }
+
+    .menu-item::before {
+        content: '';
+        inset: 0;
+        position: absolute;
+        z-index: -1;
+    }
 
     .menu-item > button:not(.toggle) {
         flex-grow: 1;
     }
+
+    .menu-item.loading {
+        pointer-events: none;
+    }
+
+        .menu-item.loading::before {
+            z-index: 0;
+        }

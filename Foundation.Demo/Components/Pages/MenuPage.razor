@@ -30,7 +30,19 @@
 
 <Menu Name="ContextMenu" Title="Context Menu" OnItemPressed="OnMenuItemPressed">
     <MenuItem Title="First MenuItem" />
-    <MenuItem Title="Second MenuItem" />
+    <MenuItem Title="Second MenuItem (Lazy Children)">
+        <Load Subject="Books">
+            <Loaded Context="books">
+                <ForEach Items="books" Context="book">
+                    <MenuItem Title="@book.Title" Context="@book" @key="book" />
+                </ForEach>
+            </Loaded>
+
+            <Loading>
+                <MenuItem Title="Loading..." />
+            </Loading>
+        </Load>
+    </MenuItem>
     <MenuItem Title="Third MenuItem (No Handler)" OnPressed="() => { }" />
 </Menu>
 
@@ -45,7 +57,13 @@
 </Menu>
 
 @code {
+    readonly IAsyncValue<Book[]> Books = AsyncValue.Create(async () =>
+    {
+        await Task.Delay(1_000);
+        return BookRepository.CreateRange(1, 5);
+    });
+
     Task OnMenuItemPressed(MenuItem item) => OnMenuItemPressed(item, custom: false);
     async Task OnMenuItemPressed(MenuItem item, bool custom)
-        => await JS.InvokeVoidAsync("alert", $"MenuItemPressed: {item.Title}, Custom={custom}");
+        => await JS.InvokeVoidAsync("alert", $"MenuItemPressed: {item.Context ?? item.Title}, Custom={custom}");
 }
