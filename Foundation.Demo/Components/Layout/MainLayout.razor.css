@@ -59,7 +59,8 @@ main {
 
         .anchors > ::deep a > svg {
             display: block;
-            height: 1.4em;
+            height: 1.2em;
+            padding: 0 .1em;
         }
 
 .brand {

@@ -208,6 +208,7 @@ button {
 
 code {
     font-size: 90%;
+    padding-left: .1em;
 }
 
 input,
@@ -510,7 +511,7 @@ ul {
     display: flex;
     flex-direction: column;
     gap: .5rem;
-    max-width: 65rem;
+    max-width: 61rem;
 }
 
 .valid.modified:not([type=checkbox]) {
