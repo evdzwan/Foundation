@@ -1,0 +1,37 @@
+﻿@inherits Component
+@typeparam TModel
+
+@if (Model is { } model)
+{
+    @Loaded?.Invoke(model)
+}
+else
+{
+    <CascadingValue Name="@nameof(Loading)" Value="true" IsFixed>
+        @Loading
+    </CascadingValue>
+}
+
+@code {
+    TModel? Model;
+
+    [Parameter] public RenderFragment<TModel>? ChildContent { get; set; }
+    [Parameter] public RenderFragment<TModel>? Loaded { get; set; }
+    [Parameter] public RenderFragment Loading { get; set; } = @<span>Loading...</span>;
+    [Parameter, EditorRequired] public required IAsyncValue<TModel> Subject { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Model = await GetModel();
+            StateHasChanged();
+        }
+    }
+
+    protected override void OnParametersSet()
+        => Loaded ??= ChildContent;
+
+    Task<TModel> GetModel()
+        => Subject.GetValue(CancellationToken);
+}
