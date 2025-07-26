@@ -23,6 +23,24 @@
     <nav>
         <div class="anchors">
             <h3>Components</h3>
+            <NavLink href="/components/browse" class="disabled">
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16 3H8c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h8c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM2 7v10c0 1.103.897 2 2 2V5c-1.103 0-2 .897-2 2zm18-2v14c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2z" />
+                </svg>
+                <span>Browse</span>
+            </NavLink>
+            <NavLink href="/components/defer" class="disabled">
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="m3.553 18.895 4 2a1.001 1.001 0 0 0 .894 0L12 19.118l3.553 1.776a.99.99 0 0 0 .894.001l4-2c.339-.17.553-.516.553-.895v-5c0-.379-.214-.725-.553-.895L17 10.382V6c0-.379-.214-.725-.553-.895l-4-2a1 1 0 0 0-.895 0l-4 2C7.214 5.275 7 5.621 7 6v4.382l-3.447 1.724A.998.998 0 0 0 3 13v5c0 .379.214.725.553.895zM8 12.118l2.264 1.132-2.913 1.457-2.264-1.132L8 12.118zm4-2.5 3-1.5v2.264l-3 1.5V9.618zm6.264 3.632-2.882 1.441-2.264-1.132L16 12.118l2.264 1.132zM8 18.882l-.062-.031V16.65L11 15.118v2.264l-3 1.5zm8 0v-2.264l3-1.5v2.264l-3 1.5zM12 5.118l2.264 1.132-2.882 1.441-2.264-1.132L12 5.118z" />
+                </svg>
+                <span>Defer</span>
+            </NavLink>
+            <NavLink href="/components/foreach" class="disabled">
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 10H5c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2zM5 6h14v2H5zm2-4h10v2H7z" />
+                </svg>
+                <span>ForEach</span>
+            </NavLink>
             <NavLink href="/components/form">
                 <svg fill="currentColor" viewBox="0 0 24 24">
                     <path d="M20 3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-9 14H5v-2h6v2zm8-4H5v-2h14v2zm0-4H5V7h14v2z" />
@@ -42,11 +60,39 @@
                 </svg>
                 <span>Menu</span>
             </NavLink>
+            <NavLink href="/components/respond" class="disabled">
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20 3H7c-1.103 0-2 .897-2 2v2H4c-1.103 0-2 .897-2 2v10c0 1.103.897 2 2 2h6c1.103 0 2-.897 2-2h8c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM6 9h4l-.003 9H4V9h2zm6 8V9c0-1.103-.897-2-2-2H7V5h11v12h-6z" />
+                </svg>
+                <span>Respond</span>
+            </NavLink>
+            <NavLink href="/components/select" class="disabled">
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.978 13.21a1 1 0 0 0-.396-1.024l-14-10a.999.999 0 0 0-1.575.931l2 17a1 1 0 0 0 1.767.516l3.612-4.416 3.377 5.46 1.701-1.052-3.357-5.428 6.089-1.218a.995.995 0 0 0 .782-.769z" />
+                </svg>
+                <span>Select</span>
+            </NavLink>
             <NavLink href="/components/table">
                 <svg fill="currentColor" viewBox="0 0 24 24">
                     <path d="M4 11h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zM4 21h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1z" />
                 </svg>
                 <span>Table</span>
+            </NavLink>
+
+            <h3>Utilities</h3>
+            <NavLink href="/utilities/asynccollection" class="disabled">
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="m2.513 12.833 9.022 5.04a.995.995 0 0 0 .973.001l8.978-5a1 1 0 0 0-.002-1.749l-9.022-5a1 1 0 0 0-.968-.001l-8.978 4.96a1 1 0 0 0-.003 1.749z" />
+                    <path d="m3.485 15.126-.971 1.748 9 5a1 1 0 0 0 .971 0l9-5-.971-1.748L12 19.856l-8.515-4.73zM20 8V6h2V4h-2V2h-2v2h-2v2h2v2z" />
+                </svg>
+                <span>AsyncCollection</span>
+            </NavLink>
+            <NavLink href="/utilities/asyncvalue" class="disabled">
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="m21.484 11.125-9.022-5a1 1 0 0 0-.968-.001l-8.978 4.96a1 1 0 0 0-.003 1.749l9.022 5.04a.995.995 0 0 0 .973.001l8.978-5a1 1 0 0 0-.002-1.749z" />
+                    <path d="M20.515 15.126 12 19.856l-8.515-4.73-.971 1.748 9 5a1 1 0 0 0 .971 0l9-5-.97-1.748zM16 4h6v2h-6z" />
+                </svg>
+                <span>AsyncValue</span>
             </NavLink>
         </div>
 
