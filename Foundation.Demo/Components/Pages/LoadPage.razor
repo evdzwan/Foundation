@@ -20,7 +20,7 @@
             </ForEach>
         </Loaded>
         <Loading>
-            <li>Loading...</li>
+            <li>Loading... <span class="indicator" /></li>
         </Loading>
     </Load>
 </ul>
@@ -28,7 +28,7 @@
 @code {
     readonly IAsyncValue<Book[]> Books = AsyncValue.Create(async () =>
     {
-        await Task.Delay(1_000);
+        await Task.Delay(2_000);
         return BookRepository.CreateRange(1, 5);
     });
 }
