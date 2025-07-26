@@ -202,6 +202,10 @@ button {
             color: var(--fn-button-link-fg-active);
         }
 
+code {
+    font-size: 90%;
+}
+
 input,
 textarea {
     background-color: var(--fn-input-bg);
@@ -250,6 +254,7 @@ ul {
     display: flex;
     flex-direction: column;
     gap: .5rem;
+    max-width: 30rem;
 }
 
     .form.loading .field-value {
@@ -272,7 +277,6 @@ ul {
     display: flex;
     flex-direction: column;
     gap: .25rem;
-    width: 30rem;
 }
 
     .field > label {
@@ -496,6 +500,13 @@ ul {
 
 .table-empty {
     font-size: 90%;
+}
+
+.demo-list {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    max-width: 65rem;
 }
 
 .valid.modified:not([type=checkbox]) {

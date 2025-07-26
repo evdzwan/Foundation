@@ -11,7 +11,7 @@ static class ResourceRepository
 
     static async Task<string?> LoadResource(string resource, CancellationToken cancellationToken)
     {
-        var streamName = $"Foundation.{resource}".Replace('\\', '.');
+        var streamName = $"Foundation.Resources.{resource}".Replace('\\', '.').Replace('/', '.');
         await using var stream = typeof(ResourceRepository).Assembly.GetManifestResourceStream(streamName);
         if (stream is { CanRead: true })
         {
