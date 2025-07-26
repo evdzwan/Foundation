@@ -1,0 +1,8 @@
+﻿.respond {
+    display: none;
+}
+
+    .respond.active {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
