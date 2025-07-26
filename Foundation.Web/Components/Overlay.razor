@@ -1,12 +1,9 @@
 ﻿@inherits Component
 
-<div @attributes="Attributes" class="overlay @OverlayClass">
+<div class="overlay">
     @ChildContent
 </div>
 
 @code {
-    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object?>? Attributes { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
-
-    ClassList OverlayClass => new ClassList().AddUnmatched(Attributes);
 }

@@ -1,7 +1,7 @@
 ﻿@inject RespondScript Script
 @inherits Component
 
-<div @attributes="Attributes" class="respond @RespondClass" @ref="RespondReference">
+<div class="respond @RespondClass" @ref="RespondReference">
     @if (Active)
     {
         @ChildContent
@@ -12,12 +12,10 @@
     bool Active;
     ElementReference RespondReference;
 
-    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object?>? Attributes { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public Predicate<(int Width, int Height)>? Condition { get; set; }
 
-    ClassList RespondClass => new ClassList().AddUnmatched(Attributes)
-                                             .Add("active", Active);
+    ClassList RespondClass => new ClassList().Add("active", Active);
 
     [JSInvokable]
     public async Task UpdateBounds(int width, int height)
