@@ -1,0 +1,20 @@
+﻿@attribute [StreamRendering]
+@inherits Component
+
+<div class="demo-segment">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Resource { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Resource is { Length: > 0 } resource)
+        {
+            var resourceValue = await ResourceRepository.GetResource(resource, CancellationToken);
+            ChildContent ??= @<pre><code>@resourceValue</code></pre>;
+        }
+    }
+}

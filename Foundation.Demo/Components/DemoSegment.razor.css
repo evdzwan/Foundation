@@ -1,0 +1,15 @@
+﻿.demo-segment > pre {
+    background-color: var(--fn-input-bg);
+    border-left: .25rem solid var(--fn-input-outline);
+    border-radius: .25rem;
+    color: var(--fn-input-fg);
+    margin: 0;
+    padding: .25rem .5rem;
+}
+
+    .demo-segment > pre > code {
+        background-color: unset;
+        border-radius: unset;
+        font-size: 80%;
+        padding: unset;
+    }
