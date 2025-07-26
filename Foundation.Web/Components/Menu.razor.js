@@ -19,17 +19,13 @@ async function toggle(invoker, args) {
     }
 }
 
-export function showPopover(elem, trigger) {
+export function showMenu(elem) {
     if (elem !== null) {
-        if (trigger !== null) {
-            elem.showPopover({ source: trigger });
-        } else {
-            elem.showPopover();
-        }
+        elem.showPopover();
     }
 }
 
-export function hidePopover(elem) {
+export function hideMenu(elem) {
     if (elem !== null) {
         elem.hidePopover();
     }

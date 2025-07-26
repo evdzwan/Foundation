@@ -36,7 +36,7 @@
     {
         if (MenuOpen)
         {
-            await Script.HidePopover(MenuReference, CancellationToken);
+            await Script.HideMenu(MenuReference, CancellationToken);
         }
     }
 
@@ -51,7 +51,7 @@
             StateHasChanged();
 
             await Task.Yield();
-            await Script.ShowPopover(MenuReference, trigger: null, CancellationToken);
+            await Script.ShowMenu(MenuReference, CancellationToken);
         }
     }
 
