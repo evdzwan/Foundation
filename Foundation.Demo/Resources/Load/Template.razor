@@ -1,0 +1,12 @@
+﻿<ul>
+    <Load Subject="Books" Context="books">
+        <Loaded>
+            <ForEach Items="books" Context="book">
+                <li @key="book">@book.Title</li>
+            </ForEach>
+        </Loaded>
+        <Loading>
+            <li>Loading...</li>
+        </Loading>
+    </Load>
+</ul>

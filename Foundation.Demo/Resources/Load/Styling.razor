@@ -1,0 +1,18 @@
+﻿<Load Subject="Books" Context="books">
+    <ul>
+        <ForEach Items="books" Context="book">
+            <li @key="book">@book.Title</li>
+        </ForEach>
+    </ul>
+</Load>
+
+@code {
+    readonly IAsyncValue<Book[]> Books = AsyncValue.Create(async () =>
+    {
+        await Task.Delay(2_000);
+
+        var books = BookRepository.CreateRange(1, 5);
+        Console.WriteLine($"Retrieved Book[{books.Length}]");
+        return books;
+    });
+}

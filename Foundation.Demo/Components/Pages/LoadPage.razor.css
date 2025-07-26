@@ -1,4 +1,4 @@
-﻿.example ::deep .loading-indicator {
+﻿article ::deep .loading-indicator {
     animation: rotation 1s ease infinite;
     aspect-ratio: 1;
     border: .2rem solid var(--fn-anchor-fg);
@@ -8,7 +8,10 @@
     display: block;
     height: 2rem;
     overflow: hidden;
-    margin-left: .5rem;
+}
+
+article ul {
+    padding-left: 1.25rem;
 }
 
 @keyframes rotation {
