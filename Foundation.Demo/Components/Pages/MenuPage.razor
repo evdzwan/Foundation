@@ -59,7 +59,10 @@
     readonly IAsyncValue<Book[]> Books = AsyncValue.Create(async () =>
     {
         await Task.Delay(1_000);
-        return BookRepository.CreateRange(1, 5);
+
+        var books = BookRepository.CreateRange(1, 5);
+        Console.WriteLine($"Retrieved Book[{books.Length}]");
+        return books;
     });
 
     Task OnMenuItemPressed(MenuItem item) => OnMenuItemPressed(item, custom: false);
