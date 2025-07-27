@@ -4,7 +4,14 @@
 <article class="demo-list">
     <Demo Title="AsyncCollection">
         <DemoSegment>
-            TBD
+            Use <code>AsyncCollection</code> to create a collection that has yet to be retrieved, asynchronously.
+            The collection implements <code>IAsyncEnumerable&lt;&gt;</code> and enables you to retrieve just a portion, ideal for page-based virtualization.
+            The type also uses early caching to prevent duplicate data retrieval calls.
+        </DemoSegment>
+        <DemoSegment Resource="AsyncCollection/Usage.cs" />
+        <DemoSegment>
+            Note that <code>&lt;Table /&gt;</code> requires an instance of <code>IAsyncCollection&lt;&gt;</code> as its datasource.
+            This component works in tandem with <code>&lt;Browse /&gt;</code> to call <code>GetView</code> for pagination.
         </DemoSegment>
     </Demo>
 </article>

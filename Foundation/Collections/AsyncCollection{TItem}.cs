@@ -3,10 +3,9 @@ using System.Collections.Concurrent;
 
 namespace Foundation.Collections;
 
-sealed class AsyncCollection<TItem>(Func<Page, CancellationToken, Task<TItem[]>> getView) : IAsyncCollection<TItem>
+sealed class AsyncCollection<TItem>(Func<Page, CancellationToken, Task<TItem[]>> getView, int windowSize) : IAsyncCollection<TItem>
 {
     readonly ConcurrentDictionary<int, Task<TItem[]>> Windows = [];
-    const int WindowSize = 50;
 
     public bool Complete { get; private set; }
 
@@ -20,7 +19,7 @@ sealed class AsyncCollection<TItem>(Func<Page, CancellationToken, Task<TItem[]>>
             }
 
             var maxWindowKey = Windows.Keys.Max();
-            return maxWindowKey * WindowSize + Windows[maxWindowKey].Result.Length + (Complete ? 0 : WindowSize);
+            return maxWindowKey * windowSize + Windows[maxWindowKey].Result.Length + (Complete ? 0 : windowSize);
         }
     }
 
@@ -28,7 +27,7 @@ sealed class AsyncCollection<TItem>(Func<Page, CancellationToken, Task<TItem[]>>
     {
         for (var i = 0; ; i++)
         {
-            var items = await GetView(new(Skip: i * WindowSize, Take: WindowSize), cancellationToken);
+            var items = await GetView(new(Skip: i * windowSize, Take: windowSize), cancellationToken);
             if (items.Length == 0)
             {
                 yield break;
@@ -49,23 +48,23 @@ sealed class AsyncCollection<TItem>(Func<Page, CancellationToken, Task<TItem[]>>
         var skip = page.Skip;
         var take = page.Take;
 
-        var windowStart = (int)Math.Floor(skip / (WindowSize * 1d));
-        var windowCount = (int)Math.Ceiling((skip + take) / (WindowSize * 1d)) - windowStart;
+        var windowStart = (int)Math.Floor(skip / (windowSize * 1d));
+        var windowCount = (int)Math.Ceiling((skip + take) / (windowSize * 1d)) - windowStart;
 
         var items = new List<TItem>();
         foreach (var i in Enumerable.Range(windowStart, windowCount))
         {
-            var viewItems = await Windows.GetOrAdd(i, j => getView(page with { Skip = j * WindowSize, Take = WindowSize }, cancellationToken));
+            var viewItems = await Windows.GetOrAdd(i, j => getView(page with { Skip = j * windowSize, Take = windowSize }, cancellationToken));
             items.AddRange(viewItems);
 
-            if (viewItems.Length < WindowSize)
+            if (viewItems.Length < windowSize)
             {
                 Complete = true;
                 break;
             }
         }
 
-        return [.. items.Skip(skip - windowStart * WindowSize).Take(take)];
+        return [.. items.Skip(skip - windowStart * windowSize).Take(take)];
     }
 
     public void Reset()
