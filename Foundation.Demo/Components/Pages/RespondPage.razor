@@ -1,0 +1,34 @@
+﻿@rendermode InteractiveServer
+@page "/components/respond"
+
+<PageTitle>Respond</PageTitle>
+<article class="demo-list">
+    <Demo Title="Respond">
+        <DemoSegment>
+            Surround your markup with <code>&lt;Defer /&gt;</code> to ensure that it's rendered after preceding Blazor routines.
+        </DemoSegment>
+        <DemoSegment>
+            <span>Active sizes</span>
+            <ul>
+                <Respond Condition="size => size.Width < 480">
+                    <li><code>Size &lt; Small (Phone &amp; Tablet)</code></li>
+                </Respond>
+                <Respond Condition="size => size.Width >= 480">
+                    <li><code>Size &ge; Small (Phone &amp; Tablet)</code></li>
+                </Respond>
+                <Respond Condition="size => size.Width >= 768">
+                    <li><code>Size &ge; Medium (Laptops)</code></li>
+                </Respond>
+                <Respond Condition="size => size.Width >= 1280">
+                    <li><code>Size &ge; Large (Desktops)</code></li>
+                </Respond>
+            </ul>
+        </DemoSegment>
+        <DemoSegment Resource="Respond/Usage.razor" />
+    </Demo>
+</article>
+
+@code {
+    ElementReference DivReference;
+    RenderFragment Render => @<div @ref="DivReference"></div>;
+}

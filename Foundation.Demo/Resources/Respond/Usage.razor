@@ -1,0 +1,15 @@
+﻿<span>Active sizes</span>
+<ul>
+    <Respond Condition="size => size.Width < 480">
+        <li><code>Size &lt; Small (Phone &amp; Tablet)</code></li>
+    </Respond>
+    <Respond Condition="size => size.Width >= 480">
+        <li><code>Size &ge; Small (Phone &amp; Tablet)</code></li>
+    </Respond>
+    <Respond Condition="size => size.Width >= 768">
+        <li><code>Size &ge; Medium (Laptops)</code></li>
+    </Respond>
+    <Respond Condition="size => size.Width >= 1280">
+        <li><code>Size &ge; Large (Desktops)</code></li>
+    </Respond>
+</ul>

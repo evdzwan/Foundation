@@ -11,6 +11,7 @@
 @code {
     bool Active;
     ElementReference RespondReference;
+    (int Width, int Height) Bounds = (0, 0);
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public Predicate<(int Width, int Height)>? Condition { get; set; }
@@ -21,8 +22,9 @@
     public async Task UpdateBounds(int width, int height)
     {
         var wasActive = Active;
+        Bounds = (width, height);
 
-        Active = Condition?.Invoke((width, height)) is not false;
+        Active = Condition?.Invoke(Bounds) is not false;
         if (Active != wasActive)
         {
             await InvokeAsync(StateHasChanged);
