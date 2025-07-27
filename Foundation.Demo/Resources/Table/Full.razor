@@ -1,0 +1,14 @@
+﻿<Browse PageSize="15" Persist>
+    <Select Selection="SelectedBooks">
+        <Table Items="Books">
+            <Column Expression="book => book.Id" AlignEnd />
+            <Column Expression="book => book.Title" Fill />
+            <Column Expression="book => book.PublicationDate" AlignEnd />
+        </Table>
+    </Select>
+</Browse>
+
+@code {
+    readonly IAsyncCollection<Book> Books = AsyncCollection.Create(...);
+    readonly ISelection<Book> SelectedBooks = Selection.Multiple<Book>();
+}

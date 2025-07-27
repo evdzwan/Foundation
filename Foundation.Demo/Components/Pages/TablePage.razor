@@ -2,22 +2,45 @@
 @page "/components/table"
 
 <PageTitle>Table</PageTitle>
+<article class="demo-list">
+    <Demo Title="Table">
+        <DemoSegment>
+            Use <code>&lt;Table /&gt;</code> to show tabular data, that can be asynchronously obtained.
+            It can automatically resolve its columns by checking the linked datatype for properties with an <code>DisplayAttribute</code>.
+            This component utilizes <a href="misc/asynccollection"><code>IAsyncCollection&lt;&gt;</code></a> to retrieve its data.
+            Because of that the table can automatically show skeletons while loading.
+        </DemoSegment>
+        <DemoSegment>
+            <Table Items="Authors" />
+        </DemoSegment>
+        <DemoSegment Resource="Table/Default.razor" />
+    </Demo>
 
-<h3>Persistent Browsing &amp; Selection</h3>
-<Browse PageSize="15" Persist>
-    <Select Selection="SelectedBooks">
-        <Table Items="Books">
-            <Column Expression="book => book.Id" AlignEnd />
-            <Column Expression="book => book.Title" Fill />
-            <Column Expression="book => book.PublicationDate" AlignEnd />
-        </Table>
-    </Select>
-</Browse>
+    <Demo Title="Persistent Browsing & Selection">
+        <DemoSegment>
+            The <code>&lt;Table /&gt;</code> component supports pagination by using the <a href="/components/browse"><code>&lt;Browse /&gt;</code></a> component.
+            Also it supports selection by working with the <a href="/components/select"><code>&lt;Select /&gt;</code></a> component.
+        </DemoSegment>
+        <DemoSegment>
+            <Browse PageSize="15" Persist>
+                <Select Selection="SelectedBooks">
+                    <Table Items="Books">
+                        <Column Expression="book => book.Id" AlignEnd />
+                        <Column Expression="book => book.Title" Fill />
+                        <Column Expression="book => book.PublicationDate" AlignEnd />
+                    </Table>
+                </Select>
+            </Browse>
+        </DemoSegment>
+        <DemoSegment Resource="Table/Full.razor" />
+    </Demo>
+</article>
 
 @code {
-    readonly ISelection<Book> SelectedBooks = Selection.Multiple<Book>();
-
     static readonly Book[] AllBooks = BookRepository.CreateRange(1, 100);
+    readonly ISelection<Book> SelectedBooks = Selection.Multiple<Book>(AllBooks.Skip(3).Take(1));
+
+    readonly IAsyncCollection<Author> Authors = AsyncCollection.Create(AuthorRepository.CreateRange(1, 3));
     readonly IAsyncCollection<Book> Books = AsyncCollection.Create(async page =>
     {
         await Task.Delay(1_000);
