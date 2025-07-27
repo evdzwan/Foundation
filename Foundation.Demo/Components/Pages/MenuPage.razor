@@ -5,55 +5,73 @@
 @inherits Component
 
 <PageTitle>Menu</PageTitle>
+<article class="demo-list">
+    <Demo Title="Menu">
+        <DemoSegment>
+            The <code>&lt;Menu /&gt;</code> component can help you to create context menus.
+            You can show (or hide) any menu by naming it with the <code>Name</code> parameter, and injecting <code>MenuController</code>.
+            Then you can trigger <code>MenuController.ShowMenu(MenuName, ...)</code> to show your menu.
+        </DemoSegment>
+        <DemoSegment>
+            <div class="trigger">
+                <button @onclick="@(e => MenuController.ShowMenu("ButtonMenu", e))">Demo Trigger</button>
+                <div @oncontextmenu="@(e => MenuController.ShowMenu("ContextMenu", e))" @oncontextmenu:preventDefault @oncontextmenu:stopPropagation>
+                    Context Area
+                    <div @oncontextmenu="@(e => MenuController.ShowMenu("ChildMenu", Enumerable.Range(1, Random.Shared.Next(1, 10)), e))" @oncontextmenu:preventDefault @oncontextmenu:stopPropagation>
+                        Child Area
+                    </div>
+                </div>
+            </div>
+        </DemoSegment>
+        <DemoSegment Resource="Menu/Default.razor" />
+    </Demo>
 
-<h3>Surface</h3>
-<div class="triggers">
-    <button @onclick="@(e => MenuController.ShowMenu("ButtonMenu", e))">Demo Trigger</button>
-    <div @oncontextmenu="@(e => MenuController.ShowMenu("ContextMenu", e))" @oncontextmenu:preventDefault @oncontextmenu:stopPropagation>
-        Context Area
-        <div @oncontextmenu="@(e => MenuController.ShowMenu("ChildMenu", Enumerable.Range(1, Random.Shared.Next(1, 10)), e))" @oncontextmenu:preventDefault @oncontextmenu:stopPropagation>
-            Child Area
-        </div>
-    </div>
-</div>
+    <Demo Title="Asynchronous Loading">
+        <DemoSegment>
+            Use <a href="/components/load"><code>&lt;Load /&gt;</code></a> if you want to delay loading certain menu items using <a href="/misc/asyncvalue"><code>IAsyncValue&lt;&gt;</code></a>.
+            Items will be loaded when they're about to be brought into view.
+        </DemoSegment>
+        <DemoSegment Resource="Menu/Async.razor" />
+    </Demo>
 
-<Menu Name="ButtonMenu" Title="Button Menu" OnItemPressed="OnMenuItemPressed">
-    <MenuItem Title="First MenuItem" />
-    <MenuItem Title="Second MenuItem">
-        <MenuItem Title="First MenuItem (Disabled)" Disabled />
+    <Menu Name="ButtonMenu" Title="Button Menu" OnItemPressed="OnMenuItemPressed">
+        <MenuItem Title="First MenuItem" />
         <MenuItem Title="Second MenuItem">
-            <MenuItem Title="First MenuItem" />
+            <MenuItem Title="First MenuItem (Disabled)" Disabled />
+            <MenuItem Title="Second MenuItem">
+                <MenuItem Title="First MenuItem" />
+            </MenuItem>
         </MenuItem>
-    </MenuItem>
-    <MenuItem Title="Third MenuItem (Custom Handler)" OnPressed="item => OnMenuItemPressed(item, custom: true)" />
-</Menu>
+        <MenuItem Title="Third MenuItem (Custom Handler)" OnPressed="item => OnMenuItemPressed(item, custom: true)" />
+    </Menu>
 
-<Menu Name="ContextMenu" Title="Context Menu" OnItemPressed="OnMenuItemPressed">
-    <MenuItem Title="First MenuItem" />
-    <MenuItem Title="Second MenuItem (Lazy Children)">
-        <Load Subject="Books">
-            <Loaded Context="books">
-                <ForEach Items="books" Context="book">
-                    <MenuItem Title="@book.Title" Context="@book" @key="book" />
+    <Menu Name="ContextMenu" Title="Context Menu" OnItemPressed="OnMenuItemPressed">
+        <MenuItem Title="First MenuItem" />
+        <MenuItem Title="Second MenuItem (Lazy Children)">
+            <Load Subject="Books">
+                <Loaded Context="books">
+                    <ForEach Items="books" Context="book">
+                        <MenuItem Title="@book.Title" Context="@book" @key="book" />
+                    </ForEach>
+                </Loaded>
+                <Loading>
+                    <MenuItem Title="Loading..." />
+                </Loading>
+            </Load>
+        </MenuItem>
+        <MenuItem Title="Third MenuItem (No Handler)" OnPressed="() => { }" />
+    </Menu>
+
+    <Menu Name="ChildMenu" Title="Child Menu" OnItemPressed="OnMenuItemPressed">
+        <ForEach Items="context as IEnumerable<int> ?? []" Context="itemId">
+            <MenuItem Title="@($"MenuItem {itemId}")" Disabled="Random.Shared.Next(4) == 0" @key="itemId">
+                <ForEach Items="Enumerable.Range(1, itemId)" Context="childItemId">
+                    <MenuItem Title="@($"MenuItem {childItemId}")" />
                 </ForEach>
-            </Loaded>
-            <Loading>
-                <MenuItem Title="Loading..." />
-            </Loading>
-        </Load>
-    </MenuItem>
-    <MenuItem Title="Third MenuItem (No Handler)" OnPressed="() => { }" />
-</Menu>
-
-<Menu Name="ChildMenu" Title="Child Menu" OnItemPressed="OnMenuItemPressed">
-    <ForEach Items="context as IEnumerable<int> ?? []" Context="itemId">
-        <MenuItem Title="@($"MenuItem {itemId}")" Disabled="Random.Shared.Next(4) == 0" @key="itemId">
-            <ForEach Items="Enumerable.Range(1, itemId)" Context="childItemId">
-                <MenuItem Title="@($"MenuItem {childItemId}")" />
-            </ForEach>
-        </MenuItem>
-    </ForEach>
-</Menu>
+            </MenuItem>
+        </ForEach>
+    </Menu>
+</article>
 
 @code {
     readonly IAsyncValue<Book[]> Books = AsyncValue.Create(async () =>

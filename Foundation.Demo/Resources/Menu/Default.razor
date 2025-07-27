@@ -1,0 +1,27 @@
+﻿@inject IJSRuntime JS
+@inject MenuController MenuController
+
+<button @onclick="@(e => MenuController.ShowMenu("ButtonMenu", e))">Demo Trigger</button>
+<div @oncontextmenu="@(e => MenuController.ShowMenu("ContextMenu", e))" @oncontextmenu:preventDefault @oncontextmenu:stopPropagation>
+    Context Area
+    <div @oncontextmenu="@(e => MenuController.ShowMenu("ChildMenu", Enumerable.Range(1, Random.Shared.Next(1, 10)), e))" @oncontextmenu:preventDefault @oncontextmenu:stopPropagation>
+        Child Area
+    </div>
+</div>
+
+<Menu Name="ButtonMenu" Title="Button Menu" OnItemPressed="OnMenuItemPressed">
+    <MenuItem Title="First MenuItem" />
+    <MenuItem Title="Second MenuItem">
+        <MenuItem Title="First MenuItem (Disabled)" Disabled />
+        <MenuItem Title="Second MenuItem">
+            <MenuItem Title="First MenuItem" />
+        </MenuItem>
+    </MenuItem>
+    <MenuItem Title="Third MenuItem (Custom Handler)" OnPressed="item => OnMenuItemPressed(item, custom: true)" />
+</Menu>
+
+@code {
+    Task OnMenuItemPressed(MenuItem item) => OnMenuItemPressed(item, custom: false);
+    async Task OnMenuItemPressed(MenuItem item, bool custom)
+        => await JS.InvokeVoidAsync("alert", $"MenuItemPressed: {item.Context ?? item.Title}, Custom={custom}");
+}

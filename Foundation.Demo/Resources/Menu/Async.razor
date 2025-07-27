@@ -1,0 +1,20 @@
+﻿<Menu Name="ContextMenu" Title="Context Menu" OnItemPressed="OnMenuItemPressed">
+    <MenuItem Title="First MenuItem" />
+    <MenuItem Title="Second MenuItem (Lazy Children)">
+        <Load Subject="Books">
+            <Loaded Context="books">
+                <ForEach Items="books" Context="book">
+                    <MenuItem Title="@book.Title" Context="@book" @key="book" />
+                </ForEach>
+            </Loaded>
+            <Loading>
+                <MenuItem Title="Loading..." />
+            </Loading>
+        </Load>
+    </MenuItem>
+    <MenuItem Title="Third MenuItem (No Handler)" OnPressed="() => { }" />
+</Menu>
+
+@code {
+    readonly IAsyncValue<Book[]> Books = AsyncValue.Create(...);
+}

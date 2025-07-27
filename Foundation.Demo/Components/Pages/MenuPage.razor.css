@@ -1,11 +1,16 @@
-﻿.triggers {
+﻿.demo-list ::deep .menu {
+    max-height: 16rem;
+    overflow: auto;
+}
+
+.demo-list ::deep .trigger {
     align-items: start;
     display: flex;
     flex-direction: column;
     gap: .25rem;
 }
 
-    .triggers > div {
+    .demo-list ::deep .trigger > div {
         align-items: center;
         background-color: var(--fn-button-bg);
         border-radius: .25rem;
@@ -19,7 +24,7 @@
         width: 32rem;
     }
 
-        .triggers > div > div {
+        .demo-list ::deep .trigger > div > div {
             align-items: center;
             background-color: var(--fn-button-bg-active);
             border-radius: .25rem;
