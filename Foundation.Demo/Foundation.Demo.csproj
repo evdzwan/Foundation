@@ -12,10 +12,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\**" />
-    <Compile Remove="Resources\**" />
-    <Content Remove="Resources\**" />
-    <None Remove="Resources\**" />
+    <EmbeddedResource Include="Resources\*\**" />
+    <Compile Remove="Resources\*\**" />
+    <Content Remove="Resources\*\**" />
+    <None Remove="Resources\*\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Members.Designer.cs">
+      <DependentUpon>Members.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Members.resx">
+      <LastGenOutput>Members.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

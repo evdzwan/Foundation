@@ -1,0 +1,68 @@
+﻿@using System.Text.RegularExpressions
+@using System.Globalization
+@using System.Collections
+@using System.Resources
+
+@attribute [StreamRendering]
+@inherits Component
+
+<h3>Members of <code>@GetTypeName(SubjectType)</code></h3>
+<ul>
+    @if (SubjectResources is { Length: > 0 } resources)
+    {
+        <ForEach Items="resources" Context="resource">
+            <li @key="resource"><code>@resource.Type</code> @resource.Key &equiv; @(new MarkupString(resource.Value ?? string.Empty))</li>
+        </ForEach>
+    }
+    else
+    {
+        <li>No members found</li>
+    }
+</ul>
+
+@code {
+    static IReadOnlyDictionary<string, (string Key, string Type, string? Value)[]>? AllResources;
+    (string Key, string Type, string? Value)[] SubjectResources = [];
+
+    [Parameter, EditorRequired] public required Type SubjectType { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var allResources = await GetCachedResources();
+        var strippedSubjectTypeName = GetStrippedTypeName(SubjectType);
+        SubjectResources = [.. allResources.GetValueOrDefault(strippedSubjectTypeName) ?? []];
+    }
+
+    static async Task<Dictionary<string, (string Key, string Type, string? Value)[]>> GetAllResources()
+    {
+        if (await GetResourceSetOrDefault() is { } resourceSet)
+        {
+            var resources = resourceSet.OfType<DictionaryEntry>().Select(e =>
+            {
+                var fullKey = e.Key.ToString()!.Split('.');
+
+                var subject = fullKey[0];
+                var key = string.Join('.', fullKey.Skip(1));
+                return (Subject: subject, Key: key, Type: key.EndsWith(')') ? "Method" : "Property", Value: e.Value?.ToString());
+            }).OrderBy(r => r.Type == "Method").ThenBy(r => r.Key).GroupBy(r => r.Subject, r => (r.Key, r.Type, r.Value));
+
+            return resources.ToDictionary(g => g.Key, g => g.ToArray(), StringComparer.OrdinalIgnoreCase);
+        }
+        else
+        {
+            return [];
+        }
+    }
+
+    static async Task<IReadOnlyDictionary<string, (string Key, string Type, string? Value)[]>> GetCachedResources()
+        => AllResources ??= await GetAllResources();
+
+    static Task<ResourceSet?> GetResourceSetOrDefault()
+        => Task.Run(() => Resources.Members.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, createIfNotExists: true, tryParents: true));
+
+    static string GetStrippedTypeName(Type type)
+        => Regex.Replace(type.Name, "`\\d+", "");
+
+    static string GetTypeName(Type type)
+        => type.IsGenericType ? $"{GetStrippedTypeName(type)}<>" : type.Name;
+}

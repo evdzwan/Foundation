@@ -1,0 +1,402 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AsyncCollection.Create&lt;&gt;()" xml:space="preserve">
+    <value>Creates a new instance that imlements &lt;code&gt;IAsyncCollection&amp;lt;&amp;gt;&lt;/code&gt;</value>
+  </data>
+  <data name="AsyncValue.Create&lt;&gt;()" xml:space="preserve">
+    <value>Creates a new instance that imlements &lt;code&gt;IAsyncValue&amp;lt;&amp;gt;&lt;/code&gt;</value>
+  </data>
+  <data name="Browse.ChildContent" xml:space="preserve">
+    <value>Content to be rendered</value>
+  </data>
+  <data name="Load.ChildContent" xml:space="preserve">
+    <value>Content to be rendered when loaded (equivalent of &lt;code&gt;Loaded&lt;/code&gt;)</value>
+  </data>
+  <data name="Load.Loaded" xml:space="preserve">
+    <value>Content to be rendered when loaded</value>
+  </data>
+  <data name="Load.Loading" xml:space="preserve">
+    <value>Content to be rendered when loading</value>
+  </data>
+  <data name="Browse.CurrentPage" xml:space="preserve">
+    <value>Current page</value>
+  </data>
+  <data name="Browse.CurrentPageChanged" xml:space="preserve">
+    <value>Invoked when &lt;code&gt;CurrentPage&lt;/code&gt; changes</value>
+  </data>
+  <data name="Browse.MoveToFirstPage()" xml:space="preserve">
+    <value>Sets &lt;code&gt;CurrentPage&lt;/code&gt; to &lt;code&gt;0&lt;/code&gt;</value>
+  </data>
+  <data name="Browse.MoveToNextPage()" xml:space="preserve">
+    <value>Increments &lt;code&gt;CurrentPage&lt;/code&gt; when possible</value>
+  </data>
+  <data name="Browse.MoveToPreviousPage()" xml:space="preserve">
+    <value>Decrements &lt;code&gt;CurrentPage&lt;/code&gt; when possible</value>
+  </data>
+  <data name="Browse.PageSize" xml:space="preserve">
+    <value>Page size</value>
+  </data>
+  <data name="Browse.Persist" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt;, persists page in the navigation query</value>
+  </data>
+  <data name="ClassList.Add()" xml:space="preserve">
+    <value>Adds a class (conditionally)</value>
+  </data>
+  <data name="StyleList.Add()" xml:space="preserve">
+    <value>Adds an attribute (conditionally)</value>
+  </data>
+  <data name="StyleList.Add()1" xml:space="preserve">
+    <value>Adds an attribute (conditionally)</value>
+  </data>
+  <data name="ClassList.Remove()" xml:space="preserve">
+    <value>Removes a class (conditionally)</value>
+  </data>
+  <data name="StyleList.Remove()" xml:space="preserve">
+    <value>Removes an attribute (conditionally)</value>
+  </data>
+  <data name="ClassList.AddRange()" xml:space="preserve">
+    <value>Adds classes (conditionally)</value>
+  </data>
+  <data name="StyleList.AddRange()" xml:space="preserve">
+    <value>Adds attributes (conditionally)</value>
+  </data>
+  <data name="ClassList.RemoveRange()" xml:space="preserve">
+    <value>Removes classes (conditionally)</value>
+  </data>
+  <data name="StyleList.RemoveRange()" xml:space="preserve">
+    <value>Removes attributes (conditionally)</value>
+  </data>
+  <data name="ClassList.AddUnmatched()" xml:space="preserve">
+    <value>Adds classes from unmatched attributes (conditionally)</value>
+  </data>
+  <data name="StyleList.AddUnmatched()" xml:space="preserve">
+    <value>Adds attributes from unmatched attributes (conditionally)</value>
+  </data>
+  <data name="ClassList.RemoveUnmatched()" xml:space="preserve">
+    <value>Removes classes from unmatched attributes (conditionally)</value>
+  </data>
+  <data name="StyleList.RemoveUnmatched()" xml:space="preserve">
+    <value>Removes attributes from unmatched attributes (conditionally)</value>
+  </data>
+  <data name="Defer.ChildContent" xml:space="preserve">
+    <value>Content to be rendered</value>
+  </data>
+  <data name="ForEach.ChildContent" xml:space="preserve">
+    <value>Content to be rendered</value>
+  </data>
+  <data name="Overlay.ChildContent" xml:space="preserve">
+    <value>Content to be rendered</value>
+  </data>
+  <data name="Scroll.ChildContent" xml:space="preserve">
+    <value>Content to be rendered</value>
+  </data>
+  <data name="Select.ChildContent" xml:space="preserve">
+    <value>Content to be rendered</value>
+  </data>
+  <data name="Respond.ChildContent" xml:space="preserve">
+    <value>Content to be rendered</value>
+  </data>
+  <data name="ForEach.Items" xml:space="preserve">
+    <value>Items to be enumerated</value>
+  </data>
+  <data name="IAsyncCollection.Complete" xml:space="preserve">
+    <value>Represents wether the collection has been fully retrieved</value>
+  </data>
+  <data name="IAsyncCollection.Count" xml:space="preserve">
+    <value>Retrieves the amount of items retrieved so far</value>
+  </data>
+  <data name="IAsyncCollection.GetView()" xml:space="preserve">
+    <value>Retrieves view for the provided page when needed and returns it</value>
+  </data>
+  <data name="IAsyncValue.GetValue()" xml:space="preserve">
+    <value>Retrieves value when needed and returns it</value>
+  </data>
+  <data name="IAsyncValue.Reset()" xml:space="preserve">
+    <value>Clears the cache so the next to &lt;code&gt;GetView()&lt;/code&gt; will retrieve data</value>
+  </data>
+  <data name="Field.AutoFocus" xml:space="preserve">
+    <value>Determines wether the field receives focus on page load</value>
+  </data>
+  <data name="Field.Expression" xml:space="preserve">
+    <value>Determines the field's value</value>
+  </data>
+  <data name="Field.ReadOnly" xml:space="preserve">
+    <value>Determines wether the field is read-only</value>
+  </data>
+  <data name="Field.Title" xml:space="preserve">
+    <value>The field's title</value>
+  </data>
+  <data name="Field.Visible" xml:space="preserve">
+    <value>When &lt;code&gt;false&lt;/code&gt; the field won't be rendered</value>
+  </data>
+  <data name="ChoiceField.ChildContent" xml:space="preserve">
+    <value>Content to be rendered inside nested &lt;code&gt;Table&amp;lt;&amp;gt;&lt;/code&gt;</value>
+  </data>
+  <data name="ChoiceField.Columns" xml:space="preserve">
+    <value>Columns to be rendered inside nested &lt;code&gt;Table&amp;lt;&amp;gt;&lt;/code&gt;</value>
+  </data>
+  <data name="ChoiceField.Items" xml:space="preserve">
+    <value>Items for nested &lt;code&gt;Table&amp;lt;&amp;gt;&lt;/code&gt; as an &lt;code&gt;IAsyncCollection&amp;lt;&amp;gt;&lt;/code&gt;</value>
+  </data>
+  <data name="ChoiceField.Empty" xml:space="preserve">
+    <value>Empty template for nested &lt;code&gt;Table&amp;lt;&amp;gt;&lt;/code&gt;</value>
+  </data>
+  <data name="ChoiceField.DisplayItem" xml:space="preserve">
+    <value>Delegate that determines value when this field is collapsed (defaults to &lt;code&gt;ToString()&lt;/code&gt;)</value>
+  </data>
+  <data name="TextField.MultiLine" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; renders as a &lt;code&gt;textarea&lt;/code&gt;, otherwise as a &lt;code&gt;input&lt;/code&gt;</value>
+  </data>
+  <data name="TextField.MultiLine2" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; renders as a &lt;code&gt;textarea&lt;/code&gt;, otherwise as a &lt;code&gt;input&lt;/code&gt;</value>
+  </data>
+  <data name="TextField.MultiLine1" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; renders as a &lt;code&gt;textarea&lt;/code&gt;, otherwise as a &lt;code&gt;input&lt;/code&gt;</value>
+  </data>
+  <data name="DateTimeField.Date" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; renders as &lt;code&gt;date-only&lt;/code&gt;</value>
+  </data>
+  <data name="DateTimeField.Time" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; renders as &lt;code&gt;time-only&lt;/code&gt;</value>
+  </data>
+  <data name="Form.ChildContent" xml:space="preserve">
+    <value>Content to be rendered</value>
+  </data>
+  <data name="Menu.ChildContent" xml:space="preserve">
+    <value>Content to be rendered, used for &lt;code&gt;MenuItem&lt;/code&gt; instances</value>
+  </data>
+  <data name="MenuItem.ChildContent" xml:space="preserve">
+    <value>Content to be rendered, used for &lt;code&gt;MenuItem&lt;/code&gt; instances</value>
+  </data>
+  <data name="Form.Subject" xml:space="preserve">
+    <value>Component's subject as an &lt;code&gt;IAsyncValue&amp;lt;&amp;gt;&lt;/code&gt;</value>
+  </data>
+  <data name="Load.Subject" xml:space="preserve">
+    <value>Component's subject as an &lt;code&gt;IAsyncValue&amp;lt;&amp;gt;&lt;/code&gt;</value>
+  </data>
+  <data name="Menu.Name" xml:space="preserve">
+    <value>Unique name of the menu, for use by &lt;code&gt;MenuController&lt;/code&gt;</value>
+  </data>
+  <data name="Menu.OnItemPressed" xml:space="preserve">
+    <value>Called whenever a menu item is pressed that doesn't have an &lt;code&gt;OnPressed&lt;/code&gt; handler itself</value>
+  </data>
+  <data name="Menu.Title" xml:space="preserve">
+    <value>Title of the menu</value>
+  </data>
+  <data name="MenuItem.Title" xml:space="preserve">
+    <value>Title of the menu item</value>
+  </data>
+  <data name="MenuItem.OnPressed" xml:space="preserve">
+    <value>Called whenever the menu item is pressed</value>
+  </data>
+  <data name="MenuItem.Disabled" xml:space="preserve">
+    <value>Determines wether the menu item is disabled</value>
+  </data>
+  <data name="MenuItem.Context" xml:space="preserve">
+    <value>The menu item's (optional) context, which can be queried in the &lt;code&gt;OnPressed&lt;/code&gt; handler</value>
+  </data>
+  <data name="Menu.Show()" xml:space="preserve">
+    <value>Shows the menu</value>
+  </data>
+  <data name="Menu.Hide()" xml:space="preserve">
+    <value>Hides the menu</value>
+  </data>
+  <data name="Select.Selection" xml:space="preserve">
+    <value>Instance of &lt;code&gt;ISelection&amp;lt;&amp;gt;&lt;/code&gt;</value>
+  </data>
+  <data name="Scroll.Horizontal" xml:space="preserve">
+    <value>Only scrolls horizontally when &lt;code&gt;true&lt;/code&gt;</value>
+  </data>
+  <data name="Scroll.Vertical" xml:space="preserve">
+    <value>Only scrolls vertically when &lt;code&gt;true&lt;/code&gt;</value>
+  </data>
+  <data name="Respond.Condition" xml:space="preserve">
+    <value>Delegate that determines wether &lt;code&gt;ChildContent&lt;/code&gt; should be visible</value>
+  </data>
+  <data name="Selection.Single()" xml:space="preserve">
+    <value>Creates a new instance of &lt;code&gt;ISelection&amp;lt;&amp;gt;&lt;/code&gt; that functions as a single-selection</value>
+  </data>
+  <data name="Selection.Multiple" xml:space="preserve">
+    <value>Creates a new instance of &lt;code&gt;ISelection&amp;lt;&amp;gt;&lt;/code&gt; that functions as a multi-selection</value>
+  </data>
+  <data name="ISelection.Cursor" xml:space="preserve">
+    <value>Last-selected or active item</value>
+  </data>
+  <data name="ISelection.Multiple" xml:space="preserve">
+    <value>Represents wether the multiple selection is allowed</value>
+  </data>
+  <data name="ISelection.Multiple1" xml:space="preserve">
+    <value>Represents wether the multiple selection is allowed</value>
+  </data>
+  <data name="ISelection.Subscribe()" xml:space="preserve">
+    <value>Lets the subscriber add a handler that is invoked whenever the selection changes</value>
+  </data>
+  <data name="ISelection.Activate()" xml:space="preserve">
+    <value>Selects the provided item</value>
+  </data>
+  <data name="ISelection.IsActive()" xml:space="preserve">
+    <value>Represents wether the provided item is selected</value>
+  </data>
+  <data name="ISelection.Toggle()" xml:space="preserve">
+    <value>Selects or deselects the provided item, depending on wether it was already selected</value>
+  </data>
+  <data name="ISelection.Deactivate()" xml:space="preserve">
+    <value>Deselects the provided item</value>
+  </data>
+  <data name="Table.Columns" xml:space="preserve">
+    <value>Columns to be rendered</value>
+  </data>
+  <data name="Table.ChildContent" xml:space="preserve">
+    <value>Columns to be rendered (equivalent of &lt;code&gt;Columns&lt;/code&gt;)</value>
+  </data>
+  <data name="Table.Items" xml:space="preserve">
+    <value>Items that make up the rows as an &lt;code&gt;IAsyncCollection&amp;lt;&amp;gt;&lt;/code&gt;</value>
+  </data>
+  <data name="Table.Empty" xml:space="preserve">
+    <value>Empty template</value>
+  </data>
+  <data name="Column.AlignCenter" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; the cell's content is center-aligned</value>
+  </data>
+  <data name="Column.AlignEnd" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; the cell's content is right-aligned</value>
+  </data>
+  <data name="Column.AlignStart" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; the cell's content is left-aligned</value>
+  </data>
+  <data name="Column.Cell" xml:space="preserve">
+    <value>Cell content to be rendered</value>
+  </data>
+  <data name="Column.Header" xml:space="preserve">
+    <value>Header content to be rendered</value>
+  </data>
+  <data name="Column.ChildContent" xml:space="preserve">
+    <value>Cell content to be rendered (equivalent of &lt;code&gt;Cell&lt;/code&gt;)</value>
+  </data>
+  <data name="Column.Title" xml:space="preserve">
+    <value>Column's title, that when set is used as the default value for &lt;code&gt;Header&lt;/code&gt;</value>
+  </data>
+  <data name="Column.Fill" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; the column uses the available width</value>
+  </data>
+  <data name="Column.Expression" xml:space="preserve">
+    <value>Expression that makes up the column's default &lt;code&gt;Cell&lt;/code&gt; value</value>
+  </data>
+</root>
