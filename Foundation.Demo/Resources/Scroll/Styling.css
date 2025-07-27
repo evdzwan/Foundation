@@ -1,0 +1,8 @@
+﻿::deep .scroll {
+    max-height: 8em;
+    max-width: 16em;
+}
+
+    ::deep .scroll > div {
+        width: 24em;
+    }

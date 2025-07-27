@@ -1,0 +1,27 @@
+﻿@rendermode InteractiveServer
+@page "/components/scroll"
+
+<PageTitle>Defer</PageTitle>
+<article class="demo-list">
+    <Demo Title="Scroll">
+        <DemoSegment>
+            Use <code>&lt;Scroll /&gt;</code> to add a scrollable region to your markup.
+            You can control the scroll direction with the <code>Horizontal</code> and <code>Vertical</code> parameters (default scrolls in both directions).
+        </DemoSegment>
+        <DemoSegment>
+            <Scroll>
+                <div>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </div>
+            </Scroll>
+        </DemoSegment>
+        <DemoSegment Resource="Scroll/Usage.razor" />
+        <DemoSegment>
+            Note that we've added an extra <code>&lt;div /&gt;</code> to make sure that the contents are larger, in both directions, than the <code>&lt;Scroll /&gt;</code> component.
+        </DemoSegment>
+        <DemoSegment Resource="Scroll/Styling.css" />
+    </Demo>
+</article>
