@@ -7,6 +7,6 @@
 </Select>
 
 @code {
-    readonly ISelection<Book> SingleSelection = Selection.Single();
-    readonly ISelection<Book> MultipleSelection = Selection.Multiple();
+    readonly ISelection<Book> SingleSelection = Selection.Single<Book>();
+    readonly ISelection<Book> MultipleSelection = Selection.Multiple<Book>();
 }
