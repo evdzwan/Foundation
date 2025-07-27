@@ -5,10 +5,10 @@
 <article class="demo-list">
     <Demo Title="Respond">
         <DemoSegment>
-            Surround your markup with <code>&lt;Defer /&gt;</code> to ensure that it's rendered after preceding Blazor routines.
+            Show content dependent on available size with the <code>&lt;Respond /&gt;</code> component.
         </DemoSegment>
         <DemoSegment>
-            <span>Active sizes</span>
+            <h5>Active sizes</h5>
             <ul>
                 <Respond Condition="size => size.Width < 480">
                     <li><code>Size &lt; Small (Phone &amp; Tablet)</code></li>
