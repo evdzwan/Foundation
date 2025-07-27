@@ -1,0 +1,16 @@
+﻿<Form Subject="Book">
+    <TextField Expression="book => book.Id" ReadOnly />
+    <TextField Expression="book => book.Title" AutoFocus />
+    <TextField Expression="book => book.Summary" MultiLine />
+    <ChoiceField Expression="book => book.Author" Items="Authors" />
+    <DateTimeField Expression="book => book.PublicationDate" Date />
+    <SwitchField Expression="book => book.Illustrated" />
+</Form>
+
+@code {
+    // lookup for choicefield
+    readonly IAsyncCollection<Author> Authors = AsyncCollection.Create(...);
+
+    // form subject
+    readonly IAsyncValue<Book> Book = AsyncValue.Create(...);
+}

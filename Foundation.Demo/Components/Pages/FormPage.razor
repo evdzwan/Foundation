@@ -2,16 +2,31 @@
 @page "/components/form"
 
 <PageTitle>Form</PageTitle>
-
-<h3>Fields</h3>
-<Form Subject="Book">
-    <TextField Expression="book => book.Id" ReadOnly />
-    <TextField Expression="book => book.Title" AutoFocus />
-    <TextField Expression="book => book.Summary" MultiLine />
-    <ChoiceField Expression="book => book.Author" Items="Authors" />
-    <DateTimeField Expression="book => book.PublicationDate" Date />
-    <SwitchField Expression="book => book.Illustrated" />
-</Form>
+<article class="demo-list">
+    <Demo Title="Form">
+        <DemoSegment>
+            The <code>&lt;Form /&gt;</code> component can be used to display a form.
+            The contents of the form are made up out of Fields, and the form accepts an instance of <a href="/misc/asyncvalue"><code>IAsyncValue&lt;&gt;</code></a> for its <code>Subject</code> parameter.
+            Because of that the form can automatically show skeletons while loading.
+        </DemoSegment>
+        <DemoSegment>
+            <Form Subject="Book">
+                <TextField Expression="book => book.Id" ReadOnly />
+                <TextField Expression="book => book.Title" AutoFocus />
+                <TextField Expression="book => book.Summary" MultiLine />
+                <ChoiceField Expression="book => book.Author" Items="Authors" />
+                <DateTimeField Expression="book => book.PublicationDate" Date />
+                <SwitchField Expression="book => book.Illustrated" />
+            </Form>
+        </DemoSegment>
+        <DemoSegment Resource="Form/Usage.razor" />
+        <DemoSegment>
+            Note that every field type can have its own parameters, and most do.
+            All available field types are listed below, but it's also possible to make your own by inheriting from <code>Field&lt;&gt;</code>.
+            The form itself will be cascaded down to all Field instances.
+        </DemoSegment>
+    </Demo>
+</article>
 
 @code {
     static readonly Author[] AllAuthors = AuthorRepository.CreateRange(1, 100);
