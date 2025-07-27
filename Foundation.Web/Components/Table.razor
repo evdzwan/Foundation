@@ -20,12 +20,7 @@
                         @if (Browse is not null && column.Equals(RegisteredColumns.First()))
                         {
                             <div class="pagination">
-                                @* <button class="link" type="button" @onclick="Browse.MoveToFirstPage">
-                                    <svg fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z" />
-                                    </svg>
-                                </button> *@
-                                <button class="link" type="button" @onclick="Browse.MoveToPreviousPage">
+                                <button class="link" type="button" disabled="@(!CanMoveToPreviousPage)" @onclick="Browse.MoveToPreviousPage">
                                     <svg fill="currentColor" viewBox="0 0 24 24">
                                         <path d="m4.431 12.822 13 9A1 1 0 0 0 19 21V3a1 1 0 0 0-1.569-.823l-13 9a1.003 1.003 0 0 0 0 1.645z" />
                                     </svg>
@@ -37,7 +32,7 @@
                         @if (Browse is not null && column.Equals(RegisteredColumns.Last()))
                         {
                             <div class="pagination">
-                                <button class="link" type="button" @onclick="Browse.MoveToNextPage">
+                                <button class="link" type="button" disabled="@(!CanMoveToNextPage)" @onclick="Browse.MoveToNextPage">
                                     <svg fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M5.536 21.886a1.004 1.004 0 0 0 1.033-.064l13-9a1 1 0 0 0 0-1.644l-13-9A1 1 0 0 0 5 3v18a1 1 0 0 0 .536.886z" />
                                     </svg>
@@ -92,23 +87,27 @@
     TItem[]? ItemsInView;
     bool HasBeenRendered;
 
-    [CascadingParameter(Name = nameof(CurrentPage))] int CurrentPage { get; set; }
     [CascadingParameter] Browse? Browse { get; set; }
+    [CascadingParameter(Name = nameof(CurrentPage))] int CurrentPage { get; set; }
 
-    [CascadingParameter] ISelection<TItem>? Selection { get; set; }
     [CascadingParameter] Select<TItem>? Select { get; set; }
+    [CascadingParameter] ISelection<TItem>? Selection { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public RenderFragment? Columns { get; set; }
     [Parameter] public RenderFragment? Empty { get; set; }
     [Parameter, EditorRequired] public required IAsyncCollection<TItem> Items { get; set; }
 
+    bool CanMoveToPreviousPage { get; set; }
+    bool CanMoveToNextPage { get; set; }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            ItemsInView = await GetItemsInView();
+            UpdateItemsInView(await GetItemsInView());
             TableClass -= "loading";
+
             StateHasChanged();
         }
 
@@ -127,11 +126,12 @@
         await base.SetParametersAsync(parameters);
         if (CurrentPage != currentPage && HasBeenRendered)
         {
-            ItemsInView = null;
+            UpdateItemsInView(items: null);
             TableClass += "loading";
 
-            ItemsInView = await GetItemsInView();
+            UpdateItemsInView(await GetItemsInView());
             TableClass -= "loading";
+
             StateHasChanged();
         }
     }
@@ -152,6 +152,30 @@
 
     internal void RemoveColumn(Column<TItem> column)
         => RegisteredColumns.Remove(column);
+
+    void UpdateItemsInView(TItem[]? items)
+    {
+        ItemsInView = items;
+        UpdatePaginationState();
+    }
+
+    void UpdatePaginationState()
+    {
+        if (ItemsInView is null)
+        {
+            CanMoveToPreviousPage = false;
+            CanMoveToNextPage = false;
+        }
+        else
+        {
+            var maxPage = Browse is { } browse && Items.Complete
+                ? ((int)Math.Ceiling(Items.Count / (browse.PageSize * 1d)) - 1)
+                : (int?)null;
+
+            CanMoveToPreviousPage = CurrentPage > 0;
+            CanMoveToNextPage = !maxPage.HasValue || CurrentPage < maxPage.Value;
+        }
+    }
 
     static RenderFragment CreateDefaultColumns() => builder =>
     {
