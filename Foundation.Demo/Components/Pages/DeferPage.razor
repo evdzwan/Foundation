@@ -1,0 +1,23 @@
+﻿@rendermode InteractiveServer
+@page "/components/defer"
+
+<PageTitle>Defer</PageTitle>
+<article class="demo-list">
+    <Demo Title="Styling">
+        <DemoSegment>
+            Surround your markup with <code>&lt;Defer /&gt;</code> to ensure that it's rendered after preceding Blazor routines.
+        </DemoSegment>
+        <DemoSegment>
+            @Render
+            <Defer>
+                Reference is <strong>@DivReference</strong>.
+            </Defer>
+        </DemoSegment>
+        <DemoSegment Resource="Defer/Usage.razor" />
+    </Demo>
+</article>
+
+@code {
+    ElementReference DivReference;
+    RenderFragment Render => @<div @ref="DivReference"></div>;
+}

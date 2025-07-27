@@ -1,0 +1,9 @@
+﻿@Render
+<Defer>
+    Reference is <strong>@DivReference</strong>.
+</Defer>
+
+@code {
+    ElementReference DivReference;
+    RenderFragment Render => @<div @ref="DivReference"></div>;
+}
