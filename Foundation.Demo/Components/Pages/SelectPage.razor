@@ -1,0 +1,27 @@
+﻿@page "/components/select"
+
+<PageTitle>Select</PageTitle>
+<article class="demo-list">
+    <Demo Title="Select">
+        <DemoSegment>
+            Enable selection by surrounding your code with the <code>&lt;Select /&gt;</code> component.
+            This provides you with two cascading values; the component itself and the provided <a href="/misc/selection"><code>Selection</code></a>.
+        </DemoSegment>
+        <DemoSegment Resource="Select/Usage.razor" />
+        <DemoSegment>
+            Note that the <code>Selection</code> parameter determines wether the selection is single or multiple.
+            Look at the <a href="/components/table"><code>Table</code></a> example for how this can be combined with a <code>Table</code> component.
+        </DemoSegment>
+    </Demo>
+</article>
+
+@code {
+    readonly IAsyncValue<Book[]> Books = AsyncValue.Create(async () =>
+    {
+        await Task.Delay(2_000);
+
+        var books = BookRepository.CreateRange(1, 5);
+        Console.WriteLine($"Retrieved Book[{books.Length}]");
+        return books;
+    });
+}

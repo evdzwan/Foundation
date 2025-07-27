@@ -1,0 +1,27 @@
+﻿@page "/components/browse"
+
+<PageTitle>Browse</PageTitle>
+<article class="demo-list">
+    <Demo Title="Browse">
+        <DemoSegment>
+            Enable page-based browsing by surrounding your code with the <code>&lt;Browse /&gt;</code> component.
+            This provides you with two cascading values; the component itself and the <code>CurrentPage</code> as a named integer.
+        </DemoSegment>
+        <DemoSegment Resource="Browse/Usage.razor" />
+        <DemoSegment>
+            Note that the <code>Persist</code> parameter allows you to use the <code>page</code> query argument.
+            Look at the <a href="/components/table"><code>Table</code></a> example for how this can be combined with a <code>Table</code> component.
+        </DemoSegment>
+    </Demo>
+</article>
+
+@code {
+    readonly IAsyncValue<Book[]> Books = AsyncValue.Create(async () =>
+    {
+        await Task.Delay(2_000);
+
+        var books = BookRepository.CreateRange(1, 5);
+        Console.WriteLine($"Retrieved Book[{books.Length}]");
+        return books;
+    });
+}

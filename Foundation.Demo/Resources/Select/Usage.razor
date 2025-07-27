@@ -1,0 +1,12 @@
+﻿<Select Selection="SingleSelection">
+    <!-- contents omitted -->
+</Select>
+
+<Select Selection="MultipleSelection">
+    <!-- contents omitted -->
+</Select>
+
+@code {
+    readonly ISelection<Book> SingleSelection = Selection.Single();
+    readonly ISelection<Book> MultipleSelection = Selection.Multiple();
+}
