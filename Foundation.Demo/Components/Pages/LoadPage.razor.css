@@ -1,4 +1,4 @@
-﻿article ::deep .loading-indicator {
+﻿.demo-list ::deep .loading-indicator {
     animation: rotation 1s ease infinite;
     aspect-ratio: 1;
     border: .2rem solid var(--fn-anchor-fg);
@@ -10,7 +10,7 @@
     overflow: hidden;
 }
 
-article ul {
+.demo-list ul {
     padding-left: 1.25rem;
 }
 

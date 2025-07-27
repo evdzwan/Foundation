@@ -1,8 +1,8 @@
-﻿article ::deep .scroll {
+﻿.demo-list ::deep .scroll {
     max-height: 8em;
     max-width: 16em;
 }
 
-    article ::deep .scroll > div {
+    .demo-list ::deep .scroll > div {
         width: 24em;
     }

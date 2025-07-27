@@ -1,4 +1,4 @@
-﻿article ::deep .overlay {
+﻿.demo-list ::deep .overlay {
     aspect-ratio: 1;
     background-color: var(--fn-input-bg);
     border-radius: .25rem;
@@ -6,7 +6,7 @@
     overflow: hidden;
 }
 
-    article ::deep .overlay > * {
+    .demo-list ::deep .overlay > * {
         animation: rotation 1s ease infinite;
     }
 
