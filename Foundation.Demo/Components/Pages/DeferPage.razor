@@ -3,14 +3,14 @@
 
 <PageTitle>Defer</PageTitle>
 <article class="demo-list">
-    <Demo Title="Styling">
+    <Demo Title="Defer">
         <DemoSegment>
             Surround your markup with <code>&lt;Defer /&gt;</code> to ensure that it's rendered after preceding Blazor routines.
         </DemoSegment>
         <DemoSegment>
             @Render
             <Defer>
-                Reference is <strong>@DivReference</strong>.
+                Reference is <code>@DivReference</code>.
             </Defer>
         </DemoSegment>
         <DemoSegment Resource="Defer/Usage.razor" />
