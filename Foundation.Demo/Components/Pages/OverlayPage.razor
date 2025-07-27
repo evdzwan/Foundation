@@ -1,0 +1,34 @@
+﻿@page "/components/overlay"
+
+<PageTitle>Overlay</PageTitle>
+<article class="demo-list">
+    <Demo Title="Overlay">
+        <DemoSegment>
+            Stack children on top of each other by using the <code>&lt;Overlay /&gt;</code> component.
+        </DemoSegment>
+        <DemoSegment>
+            <Overlay>
+                <div class="circle" />
+                <div class="vertical-line" />
+                <div class="horizontal-line" />
+            </Overlay>
+        </DemoSegment>
+        <DemoSegment Resource="Overlay/Usage.razor" />
+        <DemoSegment>
+            The styling below is just to make this demo look nice.
+            Note that it's also possible to style the container itself using the <code>overlay</code> class.
+        </DemoSegment>
+        <DemoSegment Resource="Overlay/Styling.css" />
+    </Demo>
+</article>
+
+@code {
+    readonly IAsyncValue<Book[]> Books = AsyncValue.Create(async () =>
+    {
+        await Task.Delay(2_000);
+
+        var books = BookRepository.CreateRange(1, 5);
+        Console.WriteLine($"Retrieved Book[{books.Length}]");
+        return books;
+    });
+}
