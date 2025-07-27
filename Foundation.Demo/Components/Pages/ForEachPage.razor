@@ -1,0 +1,22 @@
+﻿@rendermode InteractiveServer
+@page "/components/foreach"
+
+<PageTitle>ForEach</PageTitle>
+<article class="demo-list">
+    <Demo Title="ForEach">
+        <DemoSegment>
+            Without <code>&lt;ForEach /&gt;</code> you write foreach-loops like this.
+        </DemoSegment>
+        <DemoSegment Resource="ForEach/Default.razor" />
+        <DemoSegment>
+            By using <code>&lt;ForEach /&gt;</code> you can save yourself some lines of inline C# code. Functionally there's no difference.
+            Use the <code>Context</code> parameter to name the iterator variable (default is <code>context</code>).
+        </DemoSegment>
+        <DemoSegment Resource="ForEach/Usage.razor" />
+    </Demo>
+</article>
+
+@code {
+    ElementReference DivReference;
+    RenderFragment Render => @<div @ref="DivReference"></div>;
+}
