@@ -1,7 +1,62 @@
-﻿h3 {
-    margin-bottom: 0;
+﻿h5 {
+    margin-bottom: -.5em;
 }
+
+    h5 > ::deep code {
+        font-weight: 500;
+        font-variant: normal;
+    }
+
+    h5 > ::deep sup {
+        color: var(--fn-muted);
+    }
 
 ul {
     padding-left: 1.25rem;
 }
+
+.members {
+}
+
+    .members table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        table-layout: fixed;
+    }
+
+    .members tr {
+        font-size: 90%;
+    }
+
+        .members tr > td {
+            padding: .1rem .25rem;
+            vertical-align: top;
+        }
+
+            .members tr > td:first-child {
+                width: 12em;
+            }
+
+        .members tr:nth-child(odd) > td {
+            background-color: var(--fn-input-bg);
+            color: var(--fn-input-fg);
+        }
+
+            .members tr:nth-child(odd) > td:first-child {
+                border-top-left-radius: .25rem;
+                border-bottom-left-radius: .25rem;
+            }
+
+            .members tr:nth-child(odd) > td:last-child {
+                border-top-right-radius: .25rem;
+                border-bottom-right-radius: .25rem;
+            }
+
+    .members .empty {
+        background-color: var(--fn-input-bg);
+        border-radius: .25rem;
+        color: var(--fn-input-fg);
+        display: inline-block;
+        font-size: 90%;
+        padding: .1rem .25rem;
+    }

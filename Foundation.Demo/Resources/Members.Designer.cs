@@ -63,18 +63,18 @@ namespace Foundation.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Creates a new instance that imlements &lt;code&gt;IAsyncCollection&amp;lt;&amp;gt;&lt;/code&gt;.
         /// </summary>
-        internal static string AsyncCollection_Create____ {
+        internal static string AsyncCollection_Create_TItem___ {
             get {
-                return ResourceManager.GetString("AsyncCollection.Create<>()", resourceCulture);
+                return ResourceManager.GetString("AsyncCollection.Create<TItem>()", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Creates a new instance that imlements &lt;code&gt;IAsyncValue&amp;lt;&amp;gt;&lt;/code&gt;.
         /// </summary>
-        internal static string AsyncValue_Create____ {
+        internal static string AsyncValue_Create_TValue___ {
             get {
-                return ResourceManager.GetString("AsyncValue.Create<>()", resourceCulture);
+                return ResourceManager.GetString("AsyncValue.Create<TValue>()", resourceCulture);
             }
         }
         
@@ -529,15 +529,6 @@ namespace Foundation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Represents wether the multiple selection is allowed.
-        /// </summary>
-        internal static string ISelection_Multiple1 {
-            get {
-                return ResourceManager.GetString("ISelection.Multiple1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Lets the subscriber add a handler that is invoked whenever the selection changes.
         /// </summary>
         internal static string ISelection_Subscribe__ {
@@ -765,18 +756,18 @@ namespace Foundation.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Creates a new instance of &lt;code&gt;ISelection&amp;lt;&amp;gt;&lt;/code&gt; that functions as a multi-selection.
         /// </summary>
-        internal static string Selection_Multiple {
+        internal static string Selection_Multiple_TItem___ {
             get {
-                return ResourceManager.GetString("Selection.Multiple", resourceCulture);
+                return ResourceManager.GetString("Selection.Multiple<TItem>()", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Creates a new instance of &lt;code&gt;ISelection&amp;lt;&amp;gt;&lt;/code&gt; that functions as a single-selection.
         /// </summary>
-        internal static string Selection_Single__ {
+        internal static string Selection_Single_TItem___ {
             get {
-                return ResourceManager.GetString("Selection.Single()", resourceCulture);
+                return ResourceManager.GetString("Selection.Single<TItem>()", resourceCulture);
             }
         }
         
@@ -786,15 +777,6 @@ namespace Foundation.Resources {
         internal static string StyleList_Add__ {
             get {
                 return ResourceManager.GetString("StyleList.Add()", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Adds an attribute (conditionally).
-        /// </summary>
-        internal static string StyleList_Add__1 {
-            get {
-                return ResourceManager.GetString("StyleList.Add()1", resourceCulture);
             }
         }
         
@@ -885,24 +867,6 @@ namespace Foundation.Resources {
         internal static string TextField_MultiLine {
             get {
                 return ResourceManager.GetString("TextField.MultiLine", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to When &lt;code&gt;true&lt;/code&gt; renders as a &lt;code&gt;textarea&lt;/code&gt;, otherwise as a &lt;code&gt;input&lt;/code&gt;.
-        /// </summary>
-        internal static string TextField_MultiLine1 {
-            get {
-                return ResourceManager.GetString("TextField.MultiLine1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to When &lt;code&gt;true&lt;/code&gt; renders as a &lt;code&gt;textarea&lt;/code&gt;, otherwise as a &lt;code&gt;input&lt;/code&gt;.
-        /// </summary>
-        internal static string TextField_MultiLine2 {
-            get {
-                return ResourceManager.GetString("TextField.MultiLine2", resourceCulture);
             }
         }
     }

@@ -6,63 +6,97 @@
 @attribute [StreamRendering]
 @inherits Component
 
-<h3>Members of <code>@GetTypeName(SubjectType)</code></h3>
-<ul>
+<h5>Members of @CreateMarkupString(GetTypeDeclaration(SubjectType))</h5>
+<div class="members">
     @if (SubjectResources is { Length: > 0 } resources)
     {
-        <ForEach Items="resources" Context="resource">
-            <li @key="resource"><code>@resource.Type</code> @resource.Key &equiv; @(new MarkupString(resource.Value ?? string.Empty))</li>
-        </ForEach>
+        <table>
+            <ForEach Items="resources" Context="resource">
+                <tr @key="resource">
+                    <td><code>@resource.Name</code></td>
+                    <td>@CreateMarkupString(resource.Value)</td>
+                </tr>
+            </ForEach>
+        </table>
     }
     else
     {
-        <li>No members found</li>
+        <div class="empty">Type does not contain any members</div>
     }
-</ul>
+</div>
 
 @code {
-    static IReadOnlyDictionary<string, (string Key, string Type, string? Value)[]>? AllResources;
-    (string Key, string Type, string? Value)[] SubjectResources = [];
+    static IReadOnlyDictionary<string, MemberResource[]>? MemberResources;
+    MemberResource[]? SubjectResources;
 
     [Parameter, EditorRequired] public required Type SubjectType { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var allResources = await GetCachedResources();
-        var strippedSubjectTypeName = GetStrippedTypeName(SubjectType);
-        SubjectResources = [.. allResources.GetValueOrDefault(strippedSubjectTypeName) ?? []];
+        var resources = await GetMemberResources();
+        SubjectResources = resources.GetValueOrDefault(GetTypeName(SubjectType)) ?? [];
     }
 
-    static async Task<Dictionary<string, (string Key, string Type, string? Value)[]>> GetAllResources()
+    static string CreateDataString(string content) => content.Replace("<", "&lt;").Replace(">", "&gt;");
+    static MarkupString? CreateMarkupString(string? content) => content is { Length: > 0 } ? new MarkupString(content) : null;
+
+    static async Task<IReadOnlyDictionary<string, MemberResource[]>> GetMemberResources()
     {
-        if (await GetResourceSetOrDefault() is { } resourceSet)
+        if (MemberResources is null && await GetMembersResourceSetOrDefault() is { } resourceSet)
         {
-            var resources = resourceSet.OfType<DictionaryEntry>().Select(e =>
-            {
-                var fullKey = e.Key.ToString()!.Split('.');
-
-                var subject = fullKey[0];
-                var key = string.Join('.', fullKey.Skip(1));
-                return (Subject: subject, Key: key, Type: key.EndsWith(')') ? "Method" : "Property", Value: e.Value?.ToString());
-            }).OrderBy(r => r.Type == "Method").ThenBy(r => r.Key).GroupBy(r => r.Subject, r => (r.Key, r.Type, r.Value));
-
-            return resources.ToDictionary(g => g.Key, g => g.ToArray(), StringComparer.OrdinalIgnoreCase);
+            MemberResources = resourceSet.OfType<DictionaryEntry>()
+                                         .Select(MemberResource.Create)
+                                         .OrderBy(r => r.Subject)
+                                         .ThenBy(r => r.Type == MemberResourceType.Method)
+                                         .ThenBy(r => r.Name)
+                                         .GroupBy(r => r.Subject)
+                                         .ToDictionary(g => g.Key, g => g.ToArray());
         }
-        else
-        {
-            return [];
-        }
+
+        return MemberResources ??= new Dictionary<string, MemberResource[]>();
     }
 
-    static async Task<IReadOnlyDictionary<string, (string Key, string Type, string? Value)[]>> GetCachedResources()
-        => AllResources ??= await GetAllResources();
-
-    static Task<ResourceSet?> GetResourceSetOrDefault()
+    static Task<ResourceSet?> GetMembersResourceSetOrDefault()
         => Task.Run(() => Resources.Members.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, createIfNotExists: true, tryParents: true));
 
-    static string GetStrippedTypeName(Type type)
-        => Regex.Replace(type.Name, "`\\d+", "");
+    static string GetTypeDeclaration(Type type)
+    {
+        var typeName = GetTypeNameWithGenerics(type);
 
-    static string GetTypeName(Type type)
-        => type.IsGenericType ? $"{GetStrippedTypeName(type)}<>" : type.Name;
+        var isAbstract = type is { IsAbstract: true, IsInterface: false, IsSealed: false };
+        var baseTypeName = type.BaseType is { } baseType && baseType.Assembly == type.Assembly && baseType != typeof(Component) ? GetTypeNameWithGenerics(baseType) : null;
+        var interfaceNames = type.GetInterfaces().Where(i => i.Assembly == type.Assembly).Select(GetTypeNameWithGenerics);
+        var baseNames = interfaceNames.Prepend(baseTypeName).OfType<string>().ToArray();
+
+        var abstractText = isAbstract ? " <sup>abstract</sup>" : null;
+        var baseText = baseNames.Length > 0 ? $" : {string.Join(", ", baseNames)}" : null;
+        return $"<code>{typeName}{baseText}</code>{abstractText}";
+    }
+
+    static string GetTypeName(Type type) => Regex.Replace(type.Name, "`\\d+", "");
+    static string GetTypeNameWithGenerics(Type type) => type switch
+    {
+        { IsGenericType: true } => CreateDataString($"{GetTypeName(type)}<{string.Join(", ", type.GetGenericArguments().Select(arg => arg.Name))}>"),
+        _ => GetTypeName(type)
+    };
+
+    sealed record MemberResource(string Name, string Subject, MemberResourceType Type, string? Value)
+    {
+        public static MemberResource Create(DictionaryEntry entry)
+        {
+            var fullKey = entry.Key.ToString()!.Split('.');
+            var subject = fullKey[0];
+            var name = string.Join('.', fullKey.Skip(1));
+            var type = name.EndsWith(')') ? MemberResourceType.Method : MemberResourceType.Property;
+            var value = entry.Value?.ToString();
+
+            return new(name, subject, type, value);
+        }
+    }
+
+    enum MemberResourceType
+    {
+        Method,
+        Property
+    }
 }

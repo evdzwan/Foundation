@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AsyncCollection.Create&lt;&gt;()" xml:space="preserve">
+  <data name="AsyncCollection.Create&lt;TItem&gt;()" xml:space="preserve">
     <value>Creates a new instance that imlements &lt;code&gt;IAsyncCollection&amp;lt;&amp;gt;&lt;/code&gt;</value>
   </data>
-  <data name="AsyncValue.Create&lt;&gt;()" xml:space="preserve">
+  <data name="AsyncValue.Create&lt;TValue&gt;()" xml:space="preserve">
     <value>Creates a new instance that imlements &lt;code&gt;IAsyncValue&amp;lt;&amp;gt;&lt;/code&gt;</value>
   </data>
   <data name="Browse.ChildContent" xml:space="preserve">
@@ -160,9 +160,6 @@
     <value>Adds a class (conditionally)</value>
   </data>
   <data name="StyleList.Add()" xml:space="preserve">
-    <value>Adds an attribute (conditionally)</value>
-  </data>
-  <data name="StyleList.Add()1" xml:space="preserve">
     <value>Adds an attribute (conditionally)</value>
   </data>
   <data name="ClassList.Remove()" xml:space="preserve">
@@ -264,12 +261,6 @@
   <data name="TextField.MultiLine" xml:space="preserve">
     <value>When &lt;code&gt;true&lt;/code&gt; renders as a &lt;code&gt;textarea&lt;/code&gt;, otherwise as a &lt;code&gt;input&lt;/code&gt;</value>
   </data>
-  <data name="TextField.MultiLine2" xml:space="preserve">
-    <value>When &lt;code&gt;true&lt;/code&gt; renders as a &lt;code&gt;textarea&lt;/code&gt;, otherwise as a &lt;code&gt;input&lt;/code&gt;</value>
-  </data>
-  <data name="TextField.MultiLine1" xml:space="preserve">
-    <value>When &lt;code&gt;true&lt;/code&gt; renders as a &lt;code&gt;textarea&lt;/code&gt;, otherwise as a &lt;code&gt;input&lt;/code&gt;</value>
-  </data>
   <data name="DateTimeField.Date" xml:space="preserve">
     <value>When &lt;code&gt;true&lt;/code&gt; renders as &lt;code&gt;date-only&lt;/code&gt;</value>
   </data>
@@ -330,19 +321,16 @@
   <data name="Respond.Condition" xml:space="preserve">
     <value>Delegate that determines wether &lt;code&gt;ChildContent&lt;/code&gt; should be visible</value>
   </data>
-  <data name="Selection.Single()" xml:space="preserve">
+  <data name="Selection.Single&lt;TItem&gt;()" xml:space="preserve">
     <value>Creates a new instance of &lt;code&gt;ISelection&amp;lt;&amp;gt;&lt;/code&gt; that functions as a single-selection</value>
   </data>
-  <data name="Selection.Multiple" xml:space="preserve">
+  <data name="Selection.Multiple&lt;TItem&gt;()" xml:space="preserve">
     <value>Creates a new instance of &lt;code&gt;ISelection&amp;lt;&amp;gt;&lt;/code&gt; that functions as a multi-selection</value>
   </data>
   <data name="ISelection.Cursor" xml:space="preserve">
     <value>Last-selected or active item</value>
   </data>
   <data name="ISelection.Multiple" xml:space="preserve">
-    <value>Represents wether the multiple selection is allowed</value>
-  </data>
-  <data name="ISelection.Multiple1" xml:space="preserve">
     <value>Represents wether the multiple selection is allowed</value>
   </data>
   <data name="ISelection.Subscribe()" xml:space="preserve">
