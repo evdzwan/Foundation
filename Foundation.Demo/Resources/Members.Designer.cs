@@ -151,6 +151,33 @@ namespace Foundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Items that make up the entities as an &lt;code&gt;IAsyncValue&amp;lt;&amp;gt;&lt;/code&gt;.
+        /// </summary>
+        internal static string Chart_Items {
+            get {
+                return ResourceManager.GetString("Chart.Items", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum value (default is &lt;code&gt;auto&lt;/code&gt;).
+        /// </summary>
+        internal static string Chart_Maximum {
+            get {
+                return ResourceManager.GetString("Chart.Maximum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numerical value for each entity.
+        /// </summary>
+        internal static string Chart_Value {
+            get {
+                return ResourceManager.GetString("Chart.Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Content to be rendered inside nested &lt;code&gt;Table&amp;lt;&amp;gt;&lt;/code&gt;.
         /// </summary>
         internal static string ChoiceField_ChildContent {

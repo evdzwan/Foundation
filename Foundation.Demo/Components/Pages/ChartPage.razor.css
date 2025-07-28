@@ -1,0 +1,30 @@
+﻿.demo-list ::deep .chart {
+    aspect-ratio: 2;
+    background-color: var(--fn-input-bg);
+    border-radius: .25rem;
+    color: var(--fn-input-fg);
+    height: 16rem;
+    padding: .5rem;
+    transition: .25s ease;
+}
+
+    .demo-list ::deep .chart.bar {
+        gap: .5rem;
+    }
+
+        .demo-list ::deep .chart.bar .entity {
+            padding-top: .25rem;
+        }
+
+    .demo-list ::deep .chart .entity {
+        animation: appear .5s ease-in-out forwards;
+        background-color: var(--fn-input-bg-focus);
+        border-radius: .25rem;
+        color: var(--fn-input-fg-focus);
+    }
+
+@keyframes appear {
+    from {
+        --value: 0;
+    }
+}

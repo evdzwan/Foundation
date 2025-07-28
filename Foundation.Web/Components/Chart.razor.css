@@ -1,0 +1,29 @@
+﻿@property --value {
+    inherits: false;
+    initial-value: 0;
+    syntax: "<number>";
+}
+
+.chart {
+    --max-value: 1;
+    overflow: hidden;
+    user-select: none;
+}
+
+    .chart.bar {
+        align-items: end;
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+        .chart.bar .entity {
+            display: flex;
+            justify-content: center;
+        }
+
+    .chart .entity {
+        --value: 0;
+        height: calc((var(--value) / var(--max-value)) * 100%);
+        overflow: hidden;
+        width: 100%;
+    }

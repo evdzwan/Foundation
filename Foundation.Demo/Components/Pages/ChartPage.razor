@@ -1,0 +1,30 @@
+﻿@rendermode InteractiveServer
+@page "/components/chart"
+
+<PageTitle>Chart</PageTitle>
+<article class="demo-list">
+    <Demo Title="Bar chart" New WorkInProgress>
+        <DemoSegment>
+            Blabla verhaaltje.
+        </DemoSegment>
+        <DemoSegment>
+            <Chart Items="Items" Maximum="100" Value="item => item.Value" />
+        </DemoSegment>
+        <DemoSegment Resource="Chart/Bar.razor" />
+    </Demo>
+
+    <Members SubjectType="typeof(Chart<,>)" />
+</article>
+
+@code {
+    readonly IAsyncValue<ChartItem[]> Items = AsyncValue.Create(async () =>
+    {
+        await Task.Delay(500);
+
+        var items = Enumerable.Range(1, 10).Select(id => new ChartItem($"Item {id}", Random.Shared.Next(100))).ToArray();
+        Console.WriteLine($"Retrieved ChartItem[{items.Length}]");
+        return items;
+    });
+
+    sealed record ChartItem(string Name, int Value);
+}

@@ -357,6 +357,9 @@
   <data name="Table.Items" xml:space="preserve">
     <value>Items that make up the rows as an &lt;code&gt;IAsyncCollection&amp;lt;&amp;gt;&lt;/code&gt;</value>
   </data>
+  <data name="Chart.Items" xml:space="preserve">
+    <value>Items that make up the entities as an &lt;code&gt;IAsyncValue&amp;lt;&amp;gt;&lt;/code&gt;</value>
+  </data>
   <data name="Table.Empty" xml:space="preserve">
     <value>Empty template</value>
   </data>
@@ -386,5 +389,11 @@
   </data>
   <data name="Column.Expression" xml:space="preserve">
     <value>Expression that makes up the column's default &lt;code&gt;Cell&lt;/code&gt; value</value>
+  </data>
+  <data name="Chart.Maximum" xml:space="preserve">
+    <value>Maximum value (default is &lt;code&gt;auto&lt;/code&gt;)</value>
+  </data>
+  <data name="Chart.Value" xml:space="preserve">
+    <value>Numerical value for each entity</value>
   </data>
 </root>

@@ -1,0 +1,47 @@
+﻿@typeparam TItem
+@typeparam TValue where TValue : INumber<TValue>
+@inherits Component
+
+<div class="chart bar" style="@ChartStyle">
+    @if (Entities is { Length: > 0 } entities)
+    {
+        <ForEach Items="entities" Context="entity">
+            <div class="entity" style="@entity.Style" @key="entity">@entity.Value</div>
+        </ForEach>
+    }
+    else
+    {
+        <span>Loading...</span>
+    }
+</div>
+
+@code {
+    readonly StyleList ChartStyle = new();
+    ChartEntity[]? Entities;
+
+    [Parameter, EditorRequired] public required IAsyncValue<TItem[]> Items { get; set; }
+    [Parameter, EditorRequired] public required Func<TItem, TValue> Value { get; set; }
+    [Parameter] public TValue Maximum { get; set; } = TValue.Zero;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Entities = await GetEntities();
+            ChartStyle.Remove("--max-value");
+            ChartStyle.Add("--max-value", Maximum > TValue.Zero ? Maximum : Entities.Select(e => e.Value).Max());
+            StateHasChanged();
+        }
+    }
+
+    async Task<ChartEntity[]> GetEntities()
+    {
+        var items = await Items.GetValue(CancellationToken);
+        return [.. items.Select(item => new ChartEntity(item, Value(item)))];
+    }
+
+    sealed record ChartEntity(TItem Item, TValue Value)
+    {
+        public StyleList Style { get; } = new StyleList().Add("--value", Value);
+    }
+}
