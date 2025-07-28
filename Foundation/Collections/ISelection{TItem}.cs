@@ -10,5 +10,5 @@ public interface ISelection<TItem> : IList<TItem>
     bool IsActive(TItem item) => Contains(item);
     void Toggle(TItem item);
 
-    IDisposable Subscribe(Action<ISelection<TItem>> handler);
+    IDisposable Subscribe(Action<ISelection<TItem>> changedHandler);
 }

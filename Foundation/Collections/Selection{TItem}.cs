@@ -2,7 +2,7 @@
 
 abstract class Selection<TItem>(IEnumerable<TItem> activeItems) : List<TItem>(activeItems), ISelection<TItem>
 {
-    readonly List<Action<ISelection<TItem>>> Handlers = [];
+    readonly List<Action<ISelection<TItem>>> ChangedHandlers = [];
     readonly Lock UpdateHandlersLock = new();
 
     public abstract bool Multiple { get; }
@@ -11,7 +11,7 @@ abstract class Selection<TItem>(IEnumerable<TItem> activeItems) : List<TItem>(ac
     public void Activate(TItem item)
     {
         ActivateItem(item);
-        NotifyHandlers();
+        NotifyChangedHandlers();
     }
 
     protected virtual bool DeactivateItem(TItem item) => Remove(item);
@@ -19,25 +19,25 @@ abstract class Selection<TItem>(IEnumerable<TItem> activeItems) : List<TItem>(ac
     {
         if (DeactivateItem(item))
         {
-            NotifyHandlers();
+            NotifyChangedHandlers();
             return true;
         }
 
         return false;
     }
 
-    public IDisposable Subscribe(Action<ISelection<TItem>> handler)
+    public IDisposable Subscribe(Action<ISelection<TItem>> changedHandler)
     {
         using (UpdateHandlersLock.EnterScope())
         {
-            Handlers.Add(handler);
+            ChangedHandlers.Add(changedHandler);
         }
 
         return new Disposable(() =>
         {
             using (UpdateHandlersLock.EnterScope())
             {
-                Handlers.Remove(handler);
+                ChangedHandlers.Remove(changedHandler);
             }
         });
     }
@@ -49,14 +49,14 @@ abstract class Selection<TItem>(IEnumerable<TItem> activeItems) : List<TItem>(ac
             ActivateItem(item);
         }
 
-        NotifyHandlers();
+        NotifyChangedHandlers();
     }
 
-    void NotifyHandlers()
+    void NotifyChangedHandlers()
     {
         using (UpdateHandlersLock.EnterScope())
         {
-            Handlers.ForEach(handler => handler(this));
+            ChangedHandlers.ForEach(handler => handler(this));
         }
     }
 }
