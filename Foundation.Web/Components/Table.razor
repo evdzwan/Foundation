@@ -84,6 +84,7 @@
     const int DefaultPageSize = 10;
 
     ClassList TableClass = new("table loading");
+    IDisposable? ItemsSubscription;
     TItem[]? ItemsInView;
     bool HasBeenRendered;
 
@@ -100,6 +101,14 @@
 
     bool CanMoveToPreviousPage { get; set; }
     bool CanMoveToNextPage { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            ItemsSubscription = Items.Subscribe(OnResetItems);
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -134,6 +143,21 @@
 
             StateHasChanged();
         }
+    }
+
+    async void OnResetItems(IAsyncValue<TItem[]> items)
+    {
+        try
+        {
+            UpdateItemsInView(items: null);
+            TableClass += "loading";
+            await InvokeAsync(StateHasChanged);
+
+            UpdateItemsInView(await GetItemsInView());
+            TableClass -= "loading";
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex) { await DispatchExceptionAsync(ex); }
     }
 
     Task<TItem[]> GetItemsInView() => Browse is { PageSize: > 0 } browse
@@ -176,6 +200,9 @@
             CanMoveToNextPage = !maxPage.HasValue || CurrentPage < maxPage.Value;
         }
     }
+
+    protected override void OnDisposing()
+        => ItemsSubscription?.Dispose();
 
     static RenderFragment CreateDefaultColumns() => builder =>
     {

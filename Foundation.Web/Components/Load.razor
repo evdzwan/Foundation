@@ -13,6 +13,7 @@ else
 }
 
 @code {
+    IDisposable? SubjectSubscription;
     TModel? Model;
 
     [Parameter] public RenderFragment<TModel>? ChildContent { get; set; }
@@ -20,15 +21,12 @@ else
     [Parameter] public RenderFragment Loading { get; set; } = @<div class="loading-indicator" />;
     [Parameter, EditorRequired] public required IAsyncValue<TModel> Subject { get; set; }
 
-    public async Task Refresh()
+    protected override void OnInitialized()
     {
-        Subject.Reset();
-     
-        Model = default;
-        StateHasChanged();
-
-        Model = await GetModel();
-        StateHasChanged();
+        if (RendererInfo.IsInteractive)
+        {
+            SubjectSubscription = Subject.Subscribe(OnResetSubject);
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -43,6 +41,22 @@ else
     protected override void OnParametersSet()
         => Loaded ??= ChildContent;
 
+    async void OnResetSubject(IAsyncValue<TModel> subject)
+    {
+        try
+        {
+            Model = default;
+            await InvokeAsync(StateHasChanged);
+
+            Model = await GetModel();
+            await InvokeAsync(StateHasChanged);
+        }
+        catch(Exception ex) { await DispatchExceptionAsync(ex); }
+    }
+
     Task<TModel> GetModel()
         => Subject.GetValue(CancellationToken);
+
+    protected override void OnDisposing()
+        => SubjectSubscription?.Dispose();
 }

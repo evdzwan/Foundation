@@ -12,9 +12,11 @@
 
 @code {
     readonly StyleList ChartStyle = new();
+    readonly IAsyncValue<ChartEntity[]> Entities;
+
+    IDisposable? ItemsSubscription;
     Load<ChartEntity[]>? Load;
 
-    readonly IAsyncValue<ChartEntity[]> Entities;
     public Chart() => Entities = AsyncValue.Create(async () =>
     {
         var items = await Items!.GetValue(CancellationToken);
@@ -28,10 +30,12 @@
 
     ClassList ChartClass => new ClassList().Add("bar", Type == ChartType.Bar);
 
-    public Task Refresh()
+    protected override void OnInitialized()
     {
-        Items.Reset();
-        return Load?.Refresh() ?? Task.CompletedTask;
+        if (RendererInfo.IsInteractive)
+        {
+            ItemsSubscription = Items.Subscribe(_ => Entities.Reset());
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -45,6 +49,9 @@
             StateHasChanged();
         }
     }
+
+    protected override void OnDisposing()
+        => ItemsSubscription?.Dispose();
 
     sealed record ChartEntity(TItem Item, TValue Value)
     {

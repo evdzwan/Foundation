@@ -9,8 +9,8 @@
         </DemoSegment>
         <DemoSegment>
             <div class="chart-area">
-                <Chart Items="Ratings" Maximum="100" Value="item => item.Rating" @ref="BarChart" />
-                <button @onclick="Randomize">Randomize values</button>
+                <Chart Items="Ratings" Maximum="100" Value="item => item.Rating" />
+                <button @onclick="RandomizeRatings">Randomize values</button>
             </div>
         </DemoSegment>
         <DemoSegment Resource="Chart/Bar.razor" />
@@ -20,8 +20,6 @@
 </article>
 
 @code {
-    Chart<BookRating, int>? BarChart;
-
     readonly IAsyncValue<BookRating[]> Ratings = AsyncValue.Create(async () =>
     {
         await Task.Delay(500);
@@ -31,6 +29,6 @@
         return items;
     });
 
-    Task Randomize()
-        => BarChart?.Refresh() ?? Task.CompletedTask;
+    void RandomizeRatings()
+        => Ratings.Reset();
 }
