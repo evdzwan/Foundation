@@ -23,8 +23,30 @@
         color: var(--fn-input-fg-focus);
     }
 
+    .demo-list ::deep .chart .loading-indicator {
+        animation: rotation 1s ease infinite;
+        aspect-ratio: 1;
+        border: .4rem solid var(--fn-anchor-fg);
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        border-top-color: transparent;
+        display: block;
+        height: 5rem;
+        overflow: hidden;
+    }
+
 @keyframes appear {
     from {
         --value: 0;
+    }
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(1turn);
     }
 }
