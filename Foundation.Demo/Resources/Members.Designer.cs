@@ -169,6 +169,15 @@ namespace Foundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resets &lt;code&gt;Items&lt;/code&gt; and invokes a reload.
+        /// </summary>
+        internal static string Chart_Refresh__ {
+            get {
+                return ResourceManager.GetString("Chart.Refresh()", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Numerical value for each entity.
         /// </summary>
         internal static string Chart_Value {
@@ -597,6 +606,15 @@ namespace Foundation.Resources {
         internal static string Load_Loading {
             get {
                 return ResourceManager.GetString("Load.Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resets &lt;code&gt;Subject&lt;/code&gt; and invokes a reload.
+        /// </summary>
+        internal static string Load_Refresh__ {
+            get {
+                return ResourceManager.GetString("Load.Refresh()", resourceCulture);
             }
         }
         
