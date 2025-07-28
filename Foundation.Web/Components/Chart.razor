@@ -3,21 +3,22 @@
 @inherits Component
 
 <div class="chart @ChartClass" style="@ChartStyle">
-    @if (Entities is { Length: > 0 } entities)
-    {
+    <Load Subject="Entities" Context="entities">
         <ForEach Items="entities" Context="entity">
             <div class="entity" style="@entity.Style" @key="entity">@entity.Value</div>
         </ForEach>
-    }
-    else
-    {
-        <div class="loading-indicator" />
-    }
+    </Load>
 </div>
 
 @code {
     readonly StyleList ChartStyle = new();
-    ChartEntity[]? Entities;
+
+    readonly IAsyncValue<ChartEntity[]> Entities;
+    public Chart() => Entities = AsyncValue.Create(async () =>
+    {
+        var items = await Items!.GetValue(CancellationToken);
+        return items.Select(item => new ChartEntity(item, Value!(item))).ToArray();
+    });
 
     [Parameter, EditorRequired] public required IAsyncValue<TItem[]> Items { get; set; }
     [Parameter, EditorRequired] public required Func<TItem, TValue> Value { get; set; }
@@ -30,17 +31,12 @@
     {
         if (firstRender)
         {
-            Entities = await GetEntities();
+            var entities = await Entities.GetValue();
+
             ChartStyle.Remove("--max-value");
-            ChartStyle.Add("--max-value", Maximum > TValue.Zero ? Maximum : Entities.Select(e => e.Value).Max());
+            ChartStyle.Add("--max-value", Maximum > TValue.Zero ? Maximum : entities.Select(e => e.Value).Max());
             StateHasChanged();
         }
-    }
-
-    async Task<ChartEntity[]> GetEntities()
-    {
-        var items = await Items.GetValue(CancellationToken);
-        return [.. items.Select(item => new ChartEntity(item, Value(item)))];
     }
 
     sealed record ChartEntity(TItem Item, TValue Value)
