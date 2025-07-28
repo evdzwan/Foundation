@@ -2,7 +2,7 @@
 @typeparam TValue where TValue : INumber<TValue>
 @inherits Component
 
-<div class="chart bar" style="@ChartStyle">
+<div class="chart @ChartClass" style="@ChartStyle">
     @if (Entities is { Length: > 0 } entities)
     {
         <ForEach Items="entities" Context="entity">
@@ -11,7 +11,7 @@
     }
     else
     {
-        <span>Loading...</span>
+        <div class="loading-indicator" />
     }
 </div>
 
@@ -21,7 +21,10 @@
 
     [Parameter, EditorRequired] public required IAsyncValue<TItem[]> Items { get; set; }
     [Parameter, EditorRequired] public required Func<TItem, TValue> Value { get; set; }
+    [Parameter] public ChartType Type { get; set; } = ChartType.Bar;
     [Parameter] public TValue Maximum { get; set; } = TValue.Zero;
+
+    ClassList ChartClass => new ClassList().Add("bar", Type == ChartType.Bar);
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

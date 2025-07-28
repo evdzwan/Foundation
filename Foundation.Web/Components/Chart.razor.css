@@ -21,6 +21,11 @@
             justify-content: center;
         }
 
+        .chart.bar:has(> .loading-indicator) {
+            align-items: center;
+            justify-content: center;
+        }
+
     .chart .entity {
         --value: 0;
         height: calc((var(--value) / var(--max-value)) * 100%);
