@@ -1,11 +1,18 @@
-﻿.demo-list ::deep .chart {
+﻿.chart-area {
     aspect-ratio: 2;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    height: 16rem;
+}
+
+.demo-list ::deep .chart {
     background-color: var(--fn-input-bg);
     border-radius: .25rem;
     color: var(--fn-input-fg);
-    height: 16rem;
     padding: .5rem;
     transition: .25s ease;
+    flex-grow: 1;
 }
 
     .demo-list ::deep .chart.bar {

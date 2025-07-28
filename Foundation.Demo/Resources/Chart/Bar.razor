@@ -1,6 +1,5 @@
-﻿<Chart Items="Items" Maximum="100" Value="item => item.Value" />
+﻿<Chart Items="Ratings" Maximum="100" Value="item => item.Rating" />
 
 @code {
-    sealed record ChartItem(string Name, int Value);
-    readonly IAsyncValue<ChartItem[]> Items = AsyncValue.Create(...);
+    readonly IAsyncValue<BookRating[]> Ratings = AsyncValue.Create(...);
 }

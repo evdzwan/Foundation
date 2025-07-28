@@ -8,7 +8,10 @@
             Show charts of various types with the <code>&lt;Chart /&gt;</code> component. The default type is <code>ChartType.Bar</code>.
         </DemoSegment>
         <DemoSegment>
-            <Chart Items="Items" Maximum="100" Value="item => item.Value" />
+            <div class="chart-area">
+                <Chart Items="Ratings" Maximum="100" Value="item => item.Rating" @ref="BarChart" />
+                <button @onclick="Randomize">Randomize values</button>
+            </div>
         </DemoSegment>
         <DemoSegment Resource="Chart/Bar.razor" />
     </Demo>
@@ -17,14 +20,17 @@
 </article>
 
 @code {
-    readonly IAsyncValue<ChartItem[]> Items = AsyncValue.Create(async () =>
+    Chart<BookRating, int>? BarChart;
+
+    readonly IAsyncValue<BookRating[]> Ratings = AsyncValue.Create(async () =>
     {
         await Task.Delay(500);
 
-        var items = Enumerable.Range(1, 10).Select(id => new ChartItem($"Item {id}", Random.Shared.Next(100))).ToArray();
-        Console.WriteLine($"Retrieved ChartItem[{items.Length}]");
+        var items = BookRatingRepository.CreateRange(1, 10);
+        Console.WriteLine($"Retrieved BookRating[{items.Length}]");
         return items;
     });
 
-    sealed record ChartItem(string Name, int Value);
+    Task Randomize()
+        => BarChart?.Refresh() ?? Task.CompletedTask;
 }

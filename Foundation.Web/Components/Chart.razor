@@ -3,7 +3,7 @@
 @inherits Component
 
 <div class="chart @ChartClass" style="@ChartStyle">
-    <Load Subject="Entities" Context="entities">
+    <Load Subject="Entities" Context="entities" @ref="Load">
         <ForEach Items="entities" Context="entity">
             <div class="entity" style="@entity.Style" @key="entity">@entity.Value</div>
         </ForEach>
@@ -12,6 +12,7 @@
 
 @code {
     readonly StyleList ChartStyle = new();
+    Load<ChartEntity[]>? Load;
 
     readonly IAsyncValue<ChartEntity[]> Entities;
     public Chart() => Entities = AsyncValue.Create(async () =>
@@ -26,6 +27,12 @@
     [Parameter] public TValue Maximum { get; set; } = TValue.Zero;
 
     ClassList ChartClass => new ClassList().Add("bar", Type == ChartType.Bar);
+
+    public Task Refresh()
+    {
+        Items.Reset();
+        return Load?.Refresh() ?? Task.CompletedTask;
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

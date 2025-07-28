@@ -20,6 +20,17 @@ else
     [Parameter] public RenderFragment Loading { get; set; } = @<div class="loading-indicator" />;
     [Parameter, EditorRequired] public required IAsyncValue<TModel> Subject { get; set; }
 
+    public async Task Refresh()
+    {
+        Subject.Reset();
+     
+        Model = default;
+        StateHasChanged();
+
+        Model = await GetModel();
+        StateHasChanged();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
