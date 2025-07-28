@@ -396,10 +396,7 @@
   <data name="Chart.Value" xml:space="preserve">
     <value>Numerical value for each entity</value>
   </data>
-  <data name="Chart.Refresh()" xml:space="preserve">
-    <value>Resets &lt;code&gt;Items&lt;/code&gt; and invokes a reload</value>
-  </data>
-  <data name="Load.Refresh()" xml:space="preserve">
-    <value>Resets &lt;code&gt;Subject&lt;/code&gt; and invokes a reload</value>
+  <data name="IAsyncValue.Subscribe()" xml:space="preserve">
+    <value>Lets the subscriber add a handler that is invoked whenever the value is reset</value>
   </data>
 </root>

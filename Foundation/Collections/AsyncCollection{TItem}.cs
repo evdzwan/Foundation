@@ -6,6 +6,8 @@ namespace Foundation.Collections;
 sealed class AsyncCollection<TItem>(Func<Page, CancellationToken, Task<TItem[]>> getView, int windowSize) : IAsyncCollection<TItem>
 {
     readonly ConcurrentDictionary<int, Task<TItem[]>> Windows = [];
+    readonly List<Action<IAsyncValue<TItem[]>>> ResetHandlers = [];
+    readonly Lock UpdateHandlersLock = new();
 
     public bool Complete { get; private set; }
 
@@ -71,5 +73,30 @@ sealed class AsyncCollection<TItem>(Func<Page, CancellationToken, Task<TItem[]>>
     {
         Complete = false;
         Windows.Clear();
+        NotifyResetHandlers();
+    }
+
+    public IDisposable Subscribe(Action<IAsyncValue<TItem[]>> resetHandler)
+    {
+        using (UpdateHandlersLock.EnterScope())
+        {
+            ResetHandlers.Add(resetHandler);
+        }
+
+        return new Disposable(() =>
+        {
+            using (UpdateHandlersLock.EnterScope())
+            {
+                ResetHandlers.Remove(resetHandler);
+            }
+        });
+    }
+
+    void NotifyResetHandlers()
+    {
+        using (UpdateHandlersLock.EnterScope())
+        {
+            ResetHandlers.ForEach(handler => handler(this));
+        }
     }
 }
