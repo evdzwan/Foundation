@@ -75,10 +75,13 @@
     {
         base.OnParametersSet();
         Columns ??= ChildContent;
-
-        TableSelectionChangedSubscription?.Dispose();
-        TableSelection = CreateSelection(ValueProperty?.PropertyType, Value);
-        TableSelectionChangedSubscription = TableSelection?.Subscribe(OnTableSelectionChanged);
+        
+        if (RendererInfo.IsInteractive)
+        {
+            TableSelectionChangedSubscription?.Dispose();
+            TableSelection = CreateSelection(ValueProperty?.PropertyType, Value);
+            TableSelectionChangedSubscription = TableSelection?.Subscribe(OnTableSelectionChanged);
+        }
     }
 
     [JSInvokable]
