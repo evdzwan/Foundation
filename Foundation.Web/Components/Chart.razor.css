@@ -1,11 +1,18 @@
-﻿@property --value {
+﻿@property --offset {
+    inherits: false;
+    initial-value: 0;
+    syntax: "<number>";
+}
+
+@property --value {
     inherits: false;
     initial-value: 0;
     syntax: "<number>";
 }
 
 .chart {
-    --max-value: 1;
+    --value-max: 1;
+    --value-sum: 1;
     overflow: hidden;
     user-select: none;
 }
@@ -21,14 +28,37 @@
             justify-content: center;
         }
 
-        .chart.bar:has(> .loading-indicator) {
+    .chart.waterfall {
+        align-items: start;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+
+        .chart.waterfall .entity {
+            align-items: center;
+            display: flex;
+        }
+
+        .chart.bar:has(> .loading-indicator),
+        .chart.waterfall:has(> .loading-indicator) {
             align-items: center;
             justify-content: center;
         }
 
     .chart .entity {
+        --offset: 0;
         --value: 0;
-        height: calc((var(--value) / var(--max-value)) * 100%);
         overflow: hidden;
+    }
+
+    .chart.bar .entity {
+        height: calc((var(--value) / var(--value-max)) * 100%);
         width: 100%;
+    }
+
+    .chart.waterfall .entity {
+        height: 100%;
+        margin-left: calc((var(--offset) / var(--value-sum)) * 100%);
+        width: calc((var(--value) / var(--value-sum)) * 100%);
     }

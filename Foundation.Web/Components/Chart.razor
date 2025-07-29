@@ -3,38 +3,39 @@
 @inherits Component
 
 <div class="chart @ChartClass" style="@ChartStyle">
-    <Load Subject="Entities" Context="entities" @ref="Load">
+    @if (Entities is { } entities)
+    {
         <ForEach Items="entities" Context="entity">
-            <div class="entity" style="@entity.Style" @key="entity">@entity.Value</div>
+            <div class="entity" style="@entity.Style" @key="entity.Item" />
         </ForEach>
-    </Load>
+    }
+    else
+    {
+        <div class="loading-indicator" />
+    }
 </div>
 
 @code {
-    readonly StyleList ChartStyle = new();
-    readonly IAsyncValue<ChartEntity[]> Entities;
-
+    ChartEntity[]? Entities;
     IDisposable? ItemsSubscription;
-    Load<ChartEntity[]>? Load;
-
-    public Chart() => Entities = AsyncValue.Create(async () =>
-    {
-        var items = await Items!.GetValue(CancellationToken);
-        return items.Select(item => new ChartEntity(item, Value!(item))).ToArray();
-    });
 
     [Parameter, EditorRequired] public required IAsyncValue<TItem[]> Items { get; set; }
     [Parameter, EditorRequired] public required Func<TItem, TValue> Value { get; set; }
     [Parameter] public ChartType Type { get; set; } = ChartType.Bar;
     [Parameter] public TValue Maximum { get; set; } = TValue.Zero;
+    [Parameter] public bool Live { get; set; }
 
-    ClassList ChartClass => new ClassList().Add("bar", Type == ChartType.Bar);
+    ClassList ChartClass => new ClassList().Add("bar", Type == ChartType.Bar)
+                                           .Add("waterfall", Type == ChartType.Waterfall);
+
+    StyleList ChartStyle => new StyleList().Add("--value-max", () => Maximum > TValue.Zero ? Maximum : Entities!.Select(e => e.Value).Max(), Entities is not null)
+                                           .Add("--value-sum", () => Entities!.Select(e => e.Value).Sum(), Entities is not null);
 
     protected override void OnInitialized()
     {
         if (RendererInfo.IsInteractive)
         {
-            ItemsSubscription = Items.Subscribe(_ => Entities.Reset());
+            ItemsSubscription = Items.Subscribe(OnResetItems);
         }
     }
 
@@ -42,19 +43,50 @@
     {
         if (firstRender)
         {
-            var entities = await Entities.GetValue();
-
-            ChartStyle.Remove("--max-value");
-            ChartStyle.Add("--max-value", Maximum > TValue.Zero ? Maximum : entities.Select(e => e.Value).Max());
+            var items = await Items.GetValue(CancellationToken);
+            Entities = CreateEntities(items);
             StateHasChanged();
         }
+    }
+
+    async void OnResetItems(IAsyncValue<TItem[]> items)
+    {
+        try
+        {
+            if (!Live)
+            {
+                Entities = null;
+                await InvokeAsync(StateHasChanged);
+            }
+
+            Entities = CreateEntities(await Items.GetValue(CancellationToken));
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex) { await DispatchExceptionAsync(ex); }
     }
 
     protected override void OnDisposing()
         => ItemsSubscription?.Dispose();
 
-    sealed record ChartEntity(TItem Item, TValue Value)
+    ChartEntity[] CreateEntities(TItem[] items)
     {
-        public StyleList Style { get; } = new StyleList().Add("--value", Value);
+        var offset = TValue.Zero;
+        var entities = new List<ChartEntity>();
+
+        var index = 0;
+        foreach (var item in items)
+        {
+            var value = Value(item);
+            entities.Add(new(index++, item, value, offset));
+            offset += value;
+        }
+
+        return [.. entities];
+    }
+
+    sealed record ChartEntity(int index, TItem Item, TValue Value, TValue Offset)
+    {
+        public StyleList Style { get; } = new StyleList().Add("--offset", Offset)
+                                                         .Add("--value", Value);
     }
 }

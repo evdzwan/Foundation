@@ -2,5 +2,6 @@
 
 public enum ChartType
 {
-    Bar
+    Bar,
+    Waterfall
 }
