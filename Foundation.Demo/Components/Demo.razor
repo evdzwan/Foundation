@@ -3,13 +3,9 @@
 <div class="demo">
     <h3>
         @Title
-        @if (New)
+        @if (Note is { Length: > 0 } note)
         {
-            <sup>new</sup>
-        }
-        @if (WorkInProgress)
-        {
-            <sup>work in progress</sup>
+            <sup>@note</sup>
         }
     </h3>
     <div class="demo-segments">
@@ -23,4 +19,10 @@
 
     [Parameter] public bool New { get; set; }
     [Parameter] public bool WorkInProgress { get; set; }
+
+    string Note => string.Join(", ", new[]
+    {
+        New ? "new" : null,
+        WorkInProgress ? "work in progress" : null
+    }.OfType<string>());
 }
