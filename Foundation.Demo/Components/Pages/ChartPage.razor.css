@@ -1,46 +1,61 @@
-﻿.chart-area {
-    aspect-ratio: 2;
+﻿.controls {
     display: flex;
     flex-direction: column;
     gap: .25rem;
-    height: 16rem;
 }
 
-.demo-list ::deep .chart {
-    background-color: var(--fn-input-bg);
-    border-radius: .25rem;
-    color: var(--fn-input-fg);
-    padding: .5rem;
-    transition: .25s ease;
-    flex-grow: 1;
-}
-
-    .demo-list ::deep .chart.bar {
-        gap: .5rem;
+    .controls > div {
+        display: flex;
+        gap: .25rem;
     }
 
-        .demo-list ::deep .chart.bar .entity {
-            padding-top: .25rem;
+        .controls > div > *:first-child {
+            flex-grow: 1;
         }
 
-    .demo-list ::deep .chart .entity {
-        animation: appear .5s ease-in-out forwards;
-        background-color: var(--fn-input-bg-focus);
+.charts {
+    display: grid;
+    gap: .5rem;
+    grid-template-columns: 1fr 1fr;
+}
+
+    .charts ::deep .chart {
+        aspect-ratio: 2;
+        background-color: var(--fn-input-bg);
         border-radius: .25rem;
-        color: var(--fn-input-fg-focus);
+        color: var(--fn-input-fg);
+        flex-grow: 1;
+        padding: .5rem;
+        transition: .25s ease;
     }
 
-    .demo-list ::deep .chart .loading-indicator {
-        animation: rotation 1s ease infinite;
-        aspect-ratio: 1;
-        border: .4rem solid var(--fn-anchor-fg);
-        border-bottom-color: transparent;
-        border-radius: 50%;
-        border-top-color: transparent;
-        display: block;
-        height: 5rem;
-        overflow: hidden;
-    }
+        .charts ::deep .chart.bar {
+            gap: .5rem;
+        }
+
+        .charts ::deep .chart.waterfall {
+            gap: .25rem;
+        }
+
+        .charts ::deep .chart .entity {
+            animation: appear .5s ease-in-out forwards;
+            background-color: var(--fn-input-bg-focus);
+            border-radius: .25rem;
+            color: var(--fn-input-fg-focus);
+            transition: .25s ease;
+        }
+
+        .charts ::deep .chart .loading-indicator {
+            animation: rotation 1s ease infinite;
+            aspect-ratio: 1;
+            border: .3rem solid var(--fn-anchor-fg);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            border-top-color: transparent;
+            display: block;
+            height: 4rem;
+            overflow: hidden;
+        }
 
 @keyframes appear {
     from {

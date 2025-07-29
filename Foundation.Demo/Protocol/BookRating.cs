@@ -1,3 +1,6 @@
 ﻿namespace Foundation.Protocol;
 
-sealed record BookRating(int BookId, int Rating);
+sealed record BookRating(int BookId)
+{
+    public int Rating { get; set; }
+}

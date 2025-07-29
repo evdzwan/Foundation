@@ -3,32 +3,80 @@
 
 <PageTitle>Chart</PageTitle>
 <article class="demo-list">
-    <Demo Title="Bar chart" New WorkInProgress>
+    <Demo Title="Chart" New WorkInProgress>
         <DemoSegment>
-            Show charts of various types with the <code>&lt;Chart /&gt;</code> component. The default type is <code>ChartType.Bar</code>.
+            Show charts of various types with the <code>&lt;Chart /&gt;</code> component.
+            The default type is <code>ChartType.Bar</code>.
+            All available types are showcased below.
+            Use these controls to manipulate the datasource and see how the charts respond.
         </DemoSegment>
         <DemoSegment>
-            <div class="chart-area">
-                <Chart Items="Ratings" Maximum="100" Value="item => item.Rating" />
-                <button @onclick="RandomizeRatings">Randomize values</button>
+            <div class="controls">
+                <div>
+                    <button disabled="@LiveUpdates" @onclick="RandomizeRatings">Randomize values</button>
+                    <button @onclick="ToggleLiveUpdates">@(LiveUpdates ? "Disable" : "Enable") live updates</button>
+                </div>
+                <div>
+                    <button disabled>Randomize items</button>
+                    <button disabled>Add</button>
+                    <button disabled>Remove</button>
+                </div>
             </div>
         </DemoSegment>
-        <DemoSegment Resource="Chart/Bar.razor" />
+        <DemoSegment>
+            <div class="charts">
+                <div>
+                    <h5>
+                        Bar
+                        @if (LiveUpdates)
+                        {
+                            <sup>live</sup>
+                        }
+                    </h5>
+                    <Chart Items="Ratings" Maximum="100" Value="item => item.Rating" Live="LiveUpdates" />
+                </div>
+                <div>
+                    <h5>
+                        Waterfall
+                        @if (LiveUpdates)
+                        {
+                            <sup>live</sup>
+                        }
+                    </h5>
+                    <Chart Items="Ratings" Maximum="100" Value="item => item.Rating" Live="LiveUpdates" Type="ChartType.Waterfall" />
+                </div>
+            </div>
+        </DemoSegment>
+        <DemoSegment Resource="Chart/Charts.razor" />
     </Demo>
 
     <Members SubjectType="typeof(Chart<,>)" />
 </article>
 
 @code {
+    static readonly BookRating[] AllRatings = BookRatingRepository.CreateRange(1, 10);
+    readonly PeriodicTimer UpdateTimer = new(TimeSpan.FromSeconds(1));
+    bool LiveUpdates = false;
+
     readonly IAsyncValue<BookRating[]> Ratings = AsyncValue.Create(async () =>
     {
         await Task.Delay(500);
-
-        var items = BookRatingRepository.CreateRange(1, 10);
-        Console.WriteLine($"Retrieved BookRating[{items.Length}]");
-        return items;
+        AllRatings.ForEach(r => r.Rating = Random.Shared.Next(100));
+        return AllRatings;
     });
 
     void RandomizeRatings()
         => Ratings.Reset();
+
+    async Task ToggleLiveUpdates()
+    {
+        LiveUpdates = !LiveUpdates;
+        if (LiveUpdates)
+        {
+            while (LiveUpdates && await UpdateTimer.WaitForNextTickAsync())
+            {
+                RandomizeRatings();
+            }
+        }
+    }
 }

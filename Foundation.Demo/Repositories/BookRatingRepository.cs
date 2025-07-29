@@ -5,7 +5,7 @@ namespace Foundation.Repositories;
 static class BookRatingRepository
 {
     public static BookRating Create(int id)
-        => new(id, Rating: Random.Shared.Next(100));
+        => new(id);
 
     public static BookRating[] CreateRange(int start, int count)
         => [.. Enumerable.Range(start, count).Select(Create)];
