@@ -399,4 +399,7 @@
   <data name="IAsyncValue.Subscribe()" xml:space="preserve">
     <value>Lets the subscriber add a handler that is invoked whenever the value is reset</value>
   </data>
+  <data name="Chart.Live" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; new items will be adopted without a full reload</value>
+  </data>
 </root>

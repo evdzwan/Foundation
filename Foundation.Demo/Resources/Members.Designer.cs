@@ -160,6 +160,15 @@ namespace Foundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When &lt;code&gt;true&lt;/code&gt; new items will be adopted without a full reload.
+        /// </summary>
+        internal static string Chart_Live {
+            get {
+                return ResourceManager.GetString("Chart.Live", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum value (default is &lt;code&gt;auto&lt;/code&gt;).
         /// </summary>
         internal static string Chart_Maximum {
