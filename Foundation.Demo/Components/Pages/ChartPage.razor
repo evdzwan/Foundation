@@ -1,5 +1,6 @@
 ﻿@rendermode InteractiveServer
 @page "/components/chart"
+@implements IDisposable
 
 <PageTitle>Chart</PageTitle>
 <article class="demo-list">
@@ -79,4 +80,7 @@
             }
         }
     }
+
+    void IDisposable.Dispose()
+        => UpdateTimer.Dispose();
 }

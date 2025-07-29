@@ -48,7 +48,7 @@
         .charts ::deep .chart .loading-indicator {
             animation: rotation 1s ease infinite;
             aspect-ratio: 1;
-            border: .3rem solid var(--fn-anchor-fg);
+            border: .25rem solid var(--fn-anchor-fg);
             border-bottom-color: transparent;
             border-radius: 50%;
             border-top-color: transparent;
