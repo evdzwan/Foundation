@@ -29,6 +29,9 @@ public sealed class StyleList() : IReadOnlyDictionary<string, object?>
         return this;
     }
 
+    public StyleList Add(string key, Func<object?> value, bool condition = true)
+        => Add(key, condition ? value() : default, condition);
+
     public StyleList AddRange(IEnumerable<KeyValuePair<string, object?>> attributes, bool condition = true)
     {
         if (condition)
