@@ -20,25 +20,21 @@
 }
 
     .charts ::deep .chart {
+        --gap: .25rem;
+        --padding: .5rem;
         aspect-ratio: 2;
         background-color: var(--fn-input-bg);
         border-radius: .25rem;
         color: var(--fn-input-fg);
-        flex-grow: 1;
-        padding: .5rem;
         transition: .25s ease;
     }
 
         .charts ::deep .chart.bar {
-            gap: .5rem;
-        }
-
-        .charts ::deep .chart.waterfall {
-            gap: .25rem;
+            --gap: .5rem;
         }
 
         .charts ::deep .chart .entity {
-            animation: appear .5s ease-in-out forwards;
+            animation: appear .5s ease forwards;
             background-color: var(--fn-input-bg-focus);
             border-radius: .25rem;
             color: var(--fn-input-fg-focus);
@@ -46,24 +42,28 @@
         }
 
         .charts ::deep .chart .loading-indicator {
-            animation: rotation 1s ease infinite;
+            --size: 4rem;
+            animation: rotate 1s ease infinite;
             aspect-ratio: 1;
             border: .25rem solid var(--fn-anchor-fg);
             border-bottom-color: transparent;
             border-radius: 50%;
             border-top-color: transparent;
-            display: block;
-            height: 4rem;
+            height: var(--size);
+            left: calc(50% - var(--size) / 2);
             overflow: hidden;
+            position: absolute;
+            top: calc(50% - var(--size) / 2);
         }
 
 @keyframes appear {
     from {
+        --offset: 0;
         --value: 0;
     }
 }
 
-@keyframes rotation {
+@keyframes rotate {
     0% {
         transform: rotate(0);
     }

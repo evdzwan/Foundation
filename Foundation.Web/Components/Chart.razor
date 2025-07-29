@@ -1,5 +1,6 @@
 ﻿@typeparam TItem
 @typeparam TValue where TValue : INumber<TValue>
+@inject IJSRuntime JS
 @inherits Component
 
 <div class="chart @ChartClass" style="@ChartStyle">
@@ -15,6 +16,14 @@
     }
 </div>
 
+<script>
+    function printValues() {
+        const el = document.querySelectorAll(".entity")[0];
+        const st = getComputedStyle(el);
+        console.log(`Angle: ${st.getPropertyValue("transform")}`);
+    }
+</script>
+
 @code {
     ChartEntity[]? Entities;
     IDisposable? ItemsSubscription;
@@ -25,10 +34,9 @@
     [Parameter] public TValue Maximum { get; set; } = TValue.Zero;
     [Parameter] public bool Live { get; set; }
 
-    ClassList ChartClass => new ClassList().Add("bar", Type == ChartType.Bar)
-                                           .Add("waterfall", Type == ChartType.Waterfall);
-
-    StyleList ChartStyle => new StyleList().Add("--value-max", () => Maximum > TValue.Zero ? Maximum : Entities!.Select(e => e.Value).Max(), Entities is not null)
+    ClassList ChartClass => new ClassList().Add(Type.ToString().ToLowerInvariant());
+    StyleList ChartStyle => new StyleList().Add("--items-count", () => Entities!.Length, Entities is not null)
+                                           .Add("--value-max", () => Maximum > TValue.Zero ? Maximum : Entities!.Select(e => e.Value).Max(), Entities is not null)
                                            .Add("--value-sum", () => Entities!.Select(e => e.Value).Sum(), Entities is not null);
 
     protected override void OnInitialized()
@@ -46,6 +54,11 @@
             var items = await Items.GetValue(CancellationToken);
             Entities = CreateEntities(items);
             StateHasChanged();
+
+            if (Type is ChartType.Pie)
+            {
+                await JS.InvokeVoidAsync("printValues");
+            }
         }
     }
 
@@ -84,9 +97,10 @@
         return [.. entities];
     }
 
-    sealed record ChartEntity(int index, TItem Item, TValue Value, TValue Offset)
+    sealed record ChartEntity(int Index, TItem Item, TValue Value, TValue Offset)
     {
-        public StyleList Style { get; } = new StyleList().Add("--offset", Offset)
+        public StyleList Style { get; } = new StyleList().Add("--index", Index)
+                                                         .Add("--offset", Offset)
                                                          .Add("--value", Value);
     }
 }

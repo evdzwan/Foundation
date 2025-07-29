@@ -27,24 +27,20 @@
         <DemoSegment>
             <div class="charts">
                 <div>
-                    <h5>
-                        Bar
-                        @if (LiveUpdates)
-                        {
-                            <sup>live</sup>
-                        }
-                    </h5>
-                    <Chart Items="Ratings" Maximum="100" Value="item => item.Rating" Live="LiveUpdates" />
+                    @RenderChartHeader("Bar")
+                    <Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Maximum="100" />
                 </div>
                 <div>
-                    <h5>
-                        Waterfall
-                        @if (LiveUpdates)
-                        {
-                            <sup>live</sup>
-                        }
-                    </h5>
-                    <Chart Items="Ratings" Maximum="100" Value="item => item.Rating" Live="LiveUpdates" Type="ChartType.Waterfall" />
+                    @RenderChartHeader("Donut")
+                    <Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Type="ChartType.Donut" />
+                </div>
+                <div>
+                    @RenderChartHeader("Pie")
+                    <Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Type="ChartType.Pie" />
+                </div>
+                <div>
+                    @RenderChartHeader("Waterfall")
+                    <Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Type="ChartType.Waterfall" />
                 </div>
             </div>
         </DemoSegment>
@@ -80,6 +76,17 @@
             }
         }
     }
+
+    RenderFragment RenderChartHeader(string title) => __builder =>
+    {
+        <h5>
+            @($"{title} ")
+            @if (LiveUpdates)
+            {
+                <sup>live</sup>
+            }
+        </h5>
+    };
 
     void IDisposable.Dispose()
         => UpdateTimer.Dispose();

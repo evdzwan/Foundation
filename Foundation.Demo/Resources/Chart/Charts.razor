@@ -1,5 +1,7 @@
-﻿<Chart Items="Ratings" Maximum="100" Value="item => item.Rating" />
-<Chart Items="Ratings" Maximum="100" Value="item => item.Rating" Type="ChartType.Waterfall" />
+﻿<Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Maximum="100" />
+<Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Type="ChartType.Donut" />
+<Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Type="ChartType.Pie" />
+<Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Type="ChartType.Waterfall" />
 
 @code {
     readonly IAsyncValue<BookRating[]> Ratings = AsyncValue.Create(...);
