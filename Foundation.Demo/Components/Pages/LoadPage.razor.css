@@ -1,5 +1,5 @@
 ﻿.demo-list ::deep .loading-indicator {
-    animation: rotation 1s ease infinite;
+    animation: rotate 1s ease infinite;
     aspect-ratio: 1;
     border: .2rem solid var(--fn-anchor-fg);
     border-bottom-color: transparent;
@@ -14,7 +14,7 @@
     padding-left: 1.25rem;
 }
 
-@keyframes rotation {
+@keyframes rotate {
     0% {
         transform: rotate(0);
     }
