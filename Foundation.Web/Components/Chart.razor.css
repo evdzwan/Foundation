@@ -55,6 +55,7 @@
             --value-prev-factor: var(--value-prev) / var(--value-max);
             background-color: transparent !important;
             inset: 0;
+            pointer-events: none;
         }
 
             .chart.area > .entity:not(:first-child)::before {
@@ -64,6 +65,7 @@
                 clip-path: polygon(0 100%, 0 calc(100% - var(--value-prev-factor) * 100%), 100% calc(100% - var(--value-factor) * 100%), 100% 100%);
                 content: '';
                 left: calc(var(--dot-cx) - var(--segment-size) + var(--gap) / 2);
+                pointer-events: auto;
                 position: absolute;
                 top: var(--padding);
                 width: calc(var(--segment-size) - var(--gap));
@@ -74,8 +76,8 @@
                 background-color: var(--entity-bg-contrast);
                 border-radius: 50% !important;
                 bottom: calc(var(--dot-cy) - var(--dot-size) / 2);
-                height: var(--dot-size);
                 content: '';
+                height: var(--dot-size);
                 left: calc(var(--dot-cx) - var(--dot-size) / 2);
                 position: absolute;
                 z-index: 1;

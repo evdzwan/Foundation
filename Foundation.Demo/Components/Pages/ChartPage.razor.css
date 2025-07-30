@@ -49,7 +49,12 @@
         .charts ::deep .chart .entity {
             animation: appear .5s ease forwards;
             border-radius: .25rem;
+            cursor: pointer;
         }
+
+            .charts ::deep .chart .entity:hover {
+                --entity-bg: var(--fn-anchor-fg);
+            }
 
             .charts ::deep .chart .entity,
             .charts ::deep .chart .entity::before,
