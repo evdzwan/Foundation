@@ -91,7 +91,8 @@
     }
 
     .chart.donut {
-        --ring-size: 1rem;
+        --ring-gap: 0deg;
+        --ring-size: 25%;
     }
 
         .chart.donut::after {
@@ -118,6 +119,16 @@
             top: 50%;
             transform: translate(-50%, -50%);
         }
+
+            .chart.donut > .entity::after {
+                --edge-start: calc(var(--angle-end) - var(--ring-gap));
+                --edge-end: var(--angle-end);
+                background-color: var(--chart-bg);
+                clip-path: polygon(50% 50%, calc(50% + sin(var(--edge-start)) * 100%) calc(50% - cos(var(--edge-start)) * 100%), calc(50% + sin(var(--edge-end)) * 100%) calc(50% - cos(var(--edge-end)) * 100%));
+                content: '';
+                inset: 0;
+                position: absolute;
+            }
 
     .chart.dot {
         --dot-size: 1rem;

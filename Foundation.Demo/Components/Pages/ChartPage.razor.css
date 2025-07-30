@@ -39,7 +39,8 @@
         }
 
         .charts ::deep .chart.donut {
-            --ring-size: 4rem;
+            --ring-gap: 1deg;
+            --ring-size: 25%;
         }
 
         .charts ::deep .chart.dot {
