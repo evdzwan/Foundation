@@ -18,9 +18,9 @@
                     <button @onclick="ToggleLiveUpdates">@(LiveUpdates ? "Disable" : "Enable") live updates</button>
                 </div>
                 <div>
-                    <button disabled>Randomize items</button>
-                    <button disabled>Add</button>
-                    <button disabled>Remove</button>
+                    <button @onclick="RandomizeItems">Randomize items</button>
+                    <button @onclick="AddItem">Add</button>
+                    <button @onclick="RemoveItem">Remove</button>
                 </div>
             </div>
         </DemoSegment>
@@ -51,7 +51,7 @@
 </article>
 
 @code {
-    static readonly BookRating[] AllRatings = BookRatingRepository.CreateRange(1, 10);
+    static List<BookRating> AllRatings = [.. BookRatingRepository.CreateRange(1, 10)];
     readonly PeriodicTimer UpdateTimer = new(TimeSpan.FromSeconds(1));
     bool LiveUpdates = false;
 
@@ -59,8 +59,38 @@
     {
         await Task.Delay(500);
         AllRatings.ForEach(r => r.Rating = Random.Shared.Next(100));
-        return AllRatings;
+        return AllRatings.ToArray();
     });
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ToggleLiveUpdates();
+            StateHasChanged();
+        }
+    }
+
+    void AddItem()
+    {
+        AllRatings.Add(BookRatingRepository.Create(id: AllRatings.Count + 1));
+        Ratings.Reset();
+    }
+
+    void RemoveItem()
+    {
+        if (AllRatings.Count > 0)
+        {
+            AllRatings.RemoveAt(AllRatings.Count - 1);
+            Ratings.Reset();
+        }
+    }
+
+    void RandomizeItems()
+    {
+        AllRatings = [.. BookRatingRepository.CreateRange(1, 10)];
+        Ratings.Reset();
+    }
 
     void RandomizeRatings()
         => Ratings.Reset();
@@ -68,6 +98,8 @@
     async Task ToggleLiveUpdates()
     {
         LiveUpdates = !LiveUpdates;
+        StateHasChanged();
+
         if (LiveUpdates)
         {
             while (LiveUpdates && await UpdateTimer.WaitForNextTickAsync())
