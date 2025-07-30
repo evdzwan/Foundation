@@ -81,7 +81,10 @@
     void AddItem()
     {
         AllRatings.Add(BookRatingRepository.Create(id: AllRatings.Count + 1));
-        Ratings.Reset();
+        if (!LiveUpdates)
+        {
+            Ratings.Reset();
+        }
     }
 
     void RemoveItem()
@@ -89,7 +92,10 @@
         if (AllRatings.Count > 0)
         {
             AllRatings.RemoveAt(AllRatings.Count - 1);
-            Ratings.Reset();
+            if (!LiveUpdates)
+            {
+                Ratings.Reset();
+            }
         }
     }
 
