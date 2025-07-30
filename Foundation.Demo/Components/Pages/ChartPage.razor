@@ -18,14 +18,17 @@
                     <button @onclick="ToggleLiveUpdates">@(LiveUpdates ? "Disable" : "Enable") live updates</button>
                 </div>
                 <div>
-                    <button @onclick="RandomizeItems">Randomize items</button>
-                    <button @onclick="AddItem">Add</button>
-                    <button @onclick="RemoveItem">Remove</button>
+                    <button @onclick="AddItem">Add item</button>
+                    <button @onclick="RemoveItem">Remove item</button>
                 </div>
             </div>
         </DemoSegment>
         <DemoSegment>
             <div class="charts">
+                <div>
+                    @RenderChartHeader("Area")
+                    <Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Maximum="100" Type="ChartType.Area" />
+                </div>
                 <div>
                     @RenderChartHeader("Bar")
                     <Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Maximum="100" />
@@ -33,6 +36,10 @@
                 <div>
                     @RenderChartHeader("Donut")
                     <Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Type="ChartType.Donut" />
+                </div>
+                <div>
+                    @RenderChartHeader("Dot")
+                    <Chart Items="Ratings" Value="item => item.Rating" Live="LiveUpdates" Maximum="100" Type="ChartType.Dot" />
                 </div>
                 <div>
                     @RenderChartHeader("Pie")
@@ -84,12 +91,6 @@
             AllRatings.RemoveAt(AllRatings.Count - 1);
             Ratings.Reset();
         }
-    }
-
-    void RandomizeItems()
-    {
-        AllRatings = [.. BookRatingRepository.CreateRange(1, 10)];
-        Ratings.Reset();
     }
 
     void RandomizeRatings()

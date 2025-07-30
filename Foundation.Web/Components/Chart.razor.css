@@ -10,13 +10,18 @@
     syntax: "<number>";
 }
 
+@property --value-prev {
+    inherits: false;
+    initial-value: 0;
+    syntax: "<number>";
+}
+
 .chart {
     --chart-bg: inherit;
     --chart-fg: inherit;
     --gap: 0;
     --padding: 0;
     --items-count: 1;
-    --ring-size: 1rem;
     --value-max: 1;
     --value-sum: 1;
     background-color: var(--chart-bg);
@@ -29,13 +34,53 @@
 
     .chart > .entity {
         --entity-bg: hsl(calc(var(--index) / var(--items-count) * 360deg), 70%, 60%);
+        --entity-bg-contrast: hsl(calc(var(--index) / var(--items-count) * 360deg + 180deg), 70%, 60%);
         --index: 0;
         --offset: 0;
         --value: 0;
+        --value-prev: 0;
         background-color: var(--entity-bg);
-        overflow: hidden;
         position: absolute;
     }
+
+    .chart.area {
+        --dot-size: 1rem;
+        --line-size: .5rem;
+    }
+
+        .chart.area > .entity {
+            --dot-cx: calc(var(--padding) + var(--index) / (var(--items-count) - 1) * (100% - var(--padding) * 2));
+            --dot-cy: calc(var(--padding) + var(--value-factor) * (100% - var(--padding) * 2));
+            --segment-size: calc((100% - var(--padding) * 2) / (var(--items-count) - 1));
+            --value-factor: var(--value) / var(--value-max);
+            --value-prev-factor: var(--value-prev) / var(--value-max);
+            background-color: transparent !important;
+            inset: 0;
+        }
+
+            .chart.area > .entity:not(:first-child)::before {
+                background-color: var(--entity-bg);
+                border-radius: 0 !important;
+                bottom: var(--padding);
+                clip-path: polygon(0 100%, 0 calc(100% - var(--value-prev-factor) * 100%), 100% calc(100% - var(--value-factor) * 100%), 100% 100%);
+                content: '';
+                left: calc(var(--dot-cx) - var(--segment-size));
+                position: absolute;
+                top: var(--padding);
+                width: var(--segment-size);
+            }
+
+            .chart.area > .entity::after {
+                aspect-ratio: 1;
+                background-color: var(--entity-bg-contrast);
+                border-radius: 50% !important;
+                bottom: calc(var(--dot-cy) - var(--dot-size) / 2);
+                height: var(--dot-size);
+                content: '';
+                left: calc(var(--dot-cx) - var(--dot-size) / 2);
+                position: absolute;
+                z-index: 1;
+            }
 
     .chart.bar > .entity {
         bottom: var(--padding);
@@ -44,41 +89,50 @@
         width: calc((100% - var(--padding) * 2 - var(--gap) * var(--items-count)) / var(--items-count));
     }
 
-    .chart.donut::after {
-        aspect-ratio: 1;
-        background-color: var(--chart-bg);
-        border-radius: 50%;
-        content: '';
-        height: min(calc(100% - var(--padding) * 2 - var(--ring-size)), calc(100% - var(--padding) * 2 - var(--ring-size)));
-        left: 50%;
-        top: 50%;
-        position: absolute;
-        transform: translate(-50%, -50%);
+    .chart.donut {
+        --ring-size: 1rem;
     }
 
-    .chart.donut > .entity {
-        --angle-start: calc((var(--offset) / var(--value-sum)) * 360deg);
-        --angle-end: calc(((var(--offset) + var(--value)) / var(--value-sum)) * 360deg);
-        aspect-ratio: 1;
-        border-radius: 50% !important;
-        clip-path: polygon(50% 50%, calc(50% + sin(var(--angle-start)) * 100%) calc(50% - cos(var(--angle-start)) * 100%), calc(50% + sin(var(--angle-end)) * 100%) calc(50% - cos(var(--angle-end)) * 100%));
-        height: min(calc(100% - var(--padding) * 2), calc(100% - var(--padding) * 2));
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        .chart.donut::after {
+            aspect-ratio: 1;
+            background-color: var(--chart-bg);
+            border-radius: 50%;
+            content: '';
+            height: min(calc(100% - var(--padding) * 2 - var(--ring-size)), calc(100% - var(--padding) * 2 - var(--ring-size)));
+            left: 50%;
+            top: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+        }
+
+        .chart.donut > .entity,
+        .chart.pie > .entity {
+            --angle-start: calc((var(--offset) / var(--value-sum)) * 360deg);
+            --angle-end: calc(((var(--offset) + var(--value)) / var(--value-sum)) * 360deg);
+            aspect-ratio: 1;
+            border-radius: 50% !important;
+            clip-path: polygon(50% 50%, calc(50% + sin(var(--angle-start)) * 100%) calc(50% - cos(var(--angle-start)) * 100%), calc(50% + sin(var(--angle-end)) * 100%) calc(50% - cos(var(--angle-end)) * 100%));
+            height: min(calc(100% - var(--padding) * 2), calc(100% - var(--padding) * 2));
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+    .chart.dot {
+        --dot-size: 1rem;
     }
 
-    .chart.pie > .entity {
-        --angle-start: calc((var(--offset) / var(--value-sum)) * 360deg);
-        --angle-end: calc(((var(--offset) + var(--value)) / var(--value-sum)) * 360deg);
-        aspect-ratio: 1;
-        border-radius: 50% !important;
-        clip-path: polygon(50% 50%, calc(50% + sin(var(--angle-start)) * 100%) calc(50% - cos(var(--angle-start)) * 100%), calc(50% + sin(var(--angle-end)) * 100%) calc(50% - cos(var(--angle-end)) * 100%));
-        height: min(calc(100% - var(--padding) * 2), calc(100% - var(--padding) * 2));
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-    }
+        .chart.dot > .entity {
+            --dot-cx: calc(var(--dot-padding) + var(--index) / var(--items-count) * (100% - var(--dot-padding) * 2));
+            --dot-cy: calc(var(--dot-padding) + var(--value) / var(--value-max) * (100% - var(--dot-padding) * 2));
+            --dot-padding: calc(var(--padding) + var(--dot-size) / 2);
+            --segment-size: calc((100% - var(--dot-padding) * 2 - var(--gap) * var(--items-count)) / var(--items-count));
+            border-radius: 50% !important;
+            bottom: calc(var(--dot-cy) - var(--dot-size) / 2);
+            height: var(--dot-size);
+            left: calc(var(--dot-cx) + (var(--segment-size) - var(--dot-size)) / 2);
+            width: var(--dot-size);
+        }
 
     .chart.waterfall > .entity {
         height: calc((100% - var(--padding) * 2 - var(--gap) * var(--items-count)) / var(--items-count));

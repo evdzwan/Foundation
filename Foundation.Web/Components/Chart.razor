@@ -70,23 +70,26 @@
     ChartEntity[] CreateEntities(TItem[] items)
     {
         var offset = TValue.Zero;
+        var prevValue = TValue.Zero;
         var entities = new List<ChartEntity>();
 
         var index = 0;
         foreach (var item in items)
         {
             var value = Value(item);
-            entities.Add(new(index++, item, value, offset));
+            entities.Add(new(index++, item, prevValue, value, offset));
+            prevValue = value;
             offset += value;
         }
 
         return [.. entities];
     }
 
-    sealed record ChartEntity(int Index, TItem Item, TValue Value, TValue Offset)
+    sealed record ChartEntity(int Index, TItem Item, TValue PrevValue, TValue Value, TValue Offset)
     {
         public StyleList Style { get; } = new StyleList().Add("--index", Index)
                                                          .Add("--offset", Offset)
-                                                         .Add("--value", Value);
+                                                         .Add("--value", Value)
+                                                         .Add("--value-prev", PrevValue);
     }
 }

@@ -24,21 +24,38 @@
         --chart-fg: var(--fn-input-fg);
         --gap: .25rem;
         --padding: .5rem;
-        --ring-size: 4rem;
         aspect-ratio: 2;
         border-radius: .25rem;
         transition: .25s ease;
     }
 
+        .charts ::deep .chart.area {
+            --dot-size: .5rem;
+            --line-size: .25rem;
+        }
+
         .charts ::deep .chart.bar {
             --gap: .5rem;
+        }
+
+        .charts ::deep .chart.donut {
+            --ring-size: 4rem;
+        }
+
+        .charts ::deep .chart.dot {
+            --dot-size: 1rem;
         }
 
         .charts ::deep .chart .entity {
             animation: appear .5s ease forwards;
             border-radius: .25rem;
-            transition: .25s ease;
         }
+
+            .charts ::deep .chart .entity,
+            .charts ::deep .chart .entity::before,
+            .charts ::deep .chart .entity::after {
+                transition: .25s ease;
+            }
 
         .charts ::deep .chart .loading-indicator {
             --size: 4rem;
@@ -60,6 +77,7 @@
     from {
         --offset: 0;
         --value: 0;
+        --value-prev: 0;
     }
 }
 
