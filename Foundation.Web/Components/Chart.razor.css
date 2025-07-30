@@ -11,11 +11,16 @@
 }
 
 .chart {
+    --chart-bg: inherit;
+    --chart-fg: inherit;
     --gap: 0;
     --padding: 0;
     --items-count: 1;
+    --ring-size: 1rem;
     --value-max: 1;
     --value-sum: 1;
+    background-color: var(--chart-bg);
+    color: var(--chart-fg);
     display: block;
     overflow: hidden;
     position: relative;
@@ -23,9 +28,11 @@
 }
 
     .chart > .entity {
+        --entity-bg: hsl(calc(var(--index) / var(--items-count) * 360deg), 70%, 60%);
         --index: 0;
         --offset: 0;
         --value: 0;
+        background-color: var(--entity-bg);
         overflow: hidden;
         position: absolute;
     }
@@ -37,31 +44,36 @@
         width: calc((100% - var(--padding) * 2 - var(--gap) * var(--items-count)) / var(--items-count));
     }
 
-    .chart.donut > .entity {
+    .chart.donut::after {
+        aspect-ratio: 1;
+        background-color: var(--chart-bg);
+        border-radius: 50%;
+        content: '';
+        height: min(calc(100% - var(--padding) * 2 - var(--ring-size)), calc(100% - var(--padding) * 2 - var(--ring-size)));
+        left: 50%;
+        top: 50%;
+        position: absolute;
+        transform: translate(-50%, -50%);
     }
 
-    .chart.pie > .entity:first-child {
-        --lt-125: calc(round(up, .125 - var(--angle-perc)));
-        --ge-125: calc(1 - var(--lt-125));
-        --lt-250: calc(round(up, .250 - var(--angle-perc)));
-        --ge-250: calc(1 - var(--lt-250));
-        --lt-375: calc(round(up, .375 - var(--angle-perc)));
-        --ge-375: calc(1 - var(--lt-375));
-        --angle: calc(var(--angle-perc) * 2 * pi);
-        --angle-deg: calc(var(--angle) * 1rad);
-        /*--angle-perc: .3;*/
-        --angle-perc: calc(var(--value) / var(--value-max));
-        --side-alpha: calc(sin(var(--angle)) * 50%);
-        --side-beta: calc(sin(.5 * pi - var(--angle)) * 50%);
-        --p1-x: max(50% + var(--side-alpha), var(--ge-125) * 100%);
-        --p1-y: 0;
-        --p2-x: max(50% + var(--side-alpha), var(--ge-125) * 100%);
-        --p2-y: max(var(--ge-125) * var(--side-beta), var(--ge-250) * 50%);
-        --p3-x: max(50% + var(--side-alpha), var(--ge-125) * 100%);
-        --p3-y: max(var(--ge-125) * var(--side-beta), max(var(--ge-250) * 50% - var(--ge-250) * var(--side-beta), var(--ge-375) * 100%));
+    .chart.donut > .entity {
+        --angle-start: calc((var(--offset) / var(--value-sum)) * 360deg);
+        --angle-end: calc(((var(--offset) + var(--value)) / var(--value-sum)) * 360deg);
         aspect-ratio: 1;
-        border-radius: 50%;
-        clip-path: polygon(50% 50%, 50% 0, var(--p1-x) var(--p1-y), var(--p2-x) var(--p2-y), var(--p3-x) var(--p3-y));
+        border-radius: 50% !important;
+        clip-path: polygon(50% 50%, calc(50% + sin(var(--angle-start)) * 100%) calc(50% - cos(var(--angle-start)) * 100%), calc(50% + sin(var(--angle-end)) * 100%) calc(50% - cos(var(--angle-end)) * 100%));
+        height: min(calc(100% - var(--padding) * 2), calc(100% - var(--padding) * 2));
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .chart.pie > .entity {
+        --angle-start: calc((var(--offset) / var(--value-sum)) * 360deg);
+        --angle-end: calc(((var(--offset) + var(--value)) / var(--value-sum)) * 360deg);
+        aspect-ratio: 1;
+        border-radius: 50% !important;
+        clip-path: polygon(50% 50%, calc(50% + sin(var(--angle-start)) * 100%) calc(50% - cos(var(--angle-start)) * 100%), calc(50% + sin(var(--angle-end)) * 100%) calc(50% - cos(var(--angle-end)) * 100%));
         height: min(calc(100% - var(--padding) * 2), calc(100% - var(--padding) * 2));
         left: 50%;
         top: 50%;

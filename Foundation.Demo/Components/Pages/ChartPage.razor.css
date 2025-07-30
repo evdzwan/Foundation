@@ -20,12 +20,13 @@
 }
 
     .charts ::deep .chart {
+        --chart-bg: var(--fn-input-bg);
+        --chart-fg: var(--fn-input-fg);
         --gap: .25rem;
         --padding: .5rem;
+        --ring-size: 4rem;
         aspect-ratio: 2;
-        background-color: var(--fn-input-bg);
         border-radius: .25rem;
-        color: var(--fn-input-fg);
         transition: .25s ease;
     }
 
@@ -35,9 +36,7 @@
 
         .charts ::deep .chart .entity {
             animation: appear .5s ease forwards;
-            background-color: var(--fn-input-bg-focus);
             border-radius: .25rem;
-            color: var(--fn-input-fg-focus);
             transition: .25s ease;
         }
 
@@ -54,6 +53,7 @@
             overflow: hidden;
             position: absolute;
             top: calc(50% - var(--size) / 2);
+            z-index: 1;
         }
 
 @keyframes appear {

@@ -1,6 +1,5 @@
 ﻿@typeparam TItem
 @typeparam TValue where TValue : INumber<TValue>
-@inject IJSRuntime JS
 @inherits Component
 
 <div class="chart @ChartClass" style="@ChartStyle">
@@ -15,14 +14,6 @@
         <div class="loading-indicator" />
     }
 </div>
-
-<script>
-    function printValues() {
-        const el = document.querySelectorAll(".entity")[0];
-        const st = getComputedStyle(el);
-        console.log(`Angle: ${st.getPropertyValue("transform")}`);
-    }
-</script>
 
 @code {
     ChartEntity[]? Entities;
@@ -54,11 +45,6 @@
             var items = await Items.GetValue(CancellationToken);
             Entities = CreateEntities(items);
             StateHasChanged();
-
-            if (Type is ChartType.Pie)
-            {
-                await JS.InvokeVoidAsync("printValues");
-            }
         }
     }
 
