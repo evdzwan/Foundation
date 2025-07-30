@@ -45,7 +45,6 @@
 
     .chart.area {
         --dot-size: 1rem;
-        --line-size: .5rem;
     }
 
         .chart.area > .entity {
@@ -64,10 +63,10 @@
                 bottom: var(--padding);
                 clip-path: polygon(0 100%, 0 calc(100% - var(--value-prev-factor) * 100%), 100% calc(100% - var(--value-factor) * 100%), 100% 100%);
                 content: '';
-                left: calc(var(--dot-cx) - var(--segment-size));
+                left: calc(var(--dot-cx) - var(--segment-size) + var(--gap) / 2);
                 position: absolute;
                 top: var(--padding);
-                width: var(--segment-size);
+                width: calc(var(--segment-size) - var(--gap));
             }
 
             .chart.area > .entity::after {

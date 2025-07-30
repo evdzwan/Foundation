@@ -30,8 +30,8 @@
     }
 
         .charts ::deep .chart.area {
-            --dot-size: .5rem;
-            --line-size: .25rem;
+            --dot-size: .6rem;
+            --gap: .1rem;
         }
 
         .charts ::deep .chart.bar {
