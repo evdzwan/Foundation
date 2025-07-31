@@ -9,9 +9,18 @@
         --gap: .1rem;
     }
 
+    ::deep .chart.donut {
+        --gap: 2%;
+        --ring-size: 12.5%;
+    }
+
     ::deep .chart.dot {
         --dot-size: 1rem;
         --padding: 1rem;
+    }
+
+    ::deep .chart.pie {
+        --gap: 2%;
     }
 
     ::deep .chart > .entity {
