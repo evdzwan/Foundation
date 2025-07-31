@@ -72,6 +72,7 @@
         }
 
     .chart.donut {
+        --gap: 0%;
         --ring-size: 10%;
         --space: calc(100% - var(--padding) * 2);
     }
@@ -90,6 +91,7 @@
         }
 
         .chart.donut > .entity {
+            --angle-avg: calc((var(--angle-start) + var(--angle-end)) / 2);
             --angle-start: calc((var(--value-offset) / var(--value-sum)) * 360deg);
             --angle-end: calc(((var(--value-offset) + var(--value)) / var(--value-sum)) * 360deg);
             --slice-p-center: 50% 50%;
@@ -101,7 +103,8 @@
             height: min(var(--space), var(--space));
             left: 50%;
             top: 50%;
-            transform: translate(-50%, -50%);
+            transform-origin: calc(50% + sin(var(--angle-avg)) * 50%) calc(50% - cos(var(--angle-avg)) * 50%);
+            transform: translate(-50%, -50%) scale(calc(100% - var(--gap)));
         }
 
     .chart.dot {
@@ -115,22 +118,25 @@
         }
 
     .chart.pie {
+        --gap: 0%;
         --space: calc(100% - var(--padding) * 2);
     }
 
         .chart.pie > .entity {
+            --angle-avg: calc((var(--angle-start) + var(--angle-end)) / 2);
             --angle-start: calc((var(--value-offset) / var(--value-sum)) * 360deg);
             --angle-end: calc(((var(--value-offset) + var(--value)) / var(--value-sum)) * 360deg);
-            --slice-p-center: 50% 50%;
+            --slice-p-root: 50% 50%;
             --slice-p-start: calc(50% + sin(var(--angle-start)) * 100%) calc(50% - cos(var(--angle-start)) * 100%);
             --slice-p-end: calc(50% + sin(var(--angle-end)) * 100%) calc(50% - cos(var(--angle-end)) * 100%);
             aspect-ratio: 1;
             border-radius: 50%;
-            clip-path: polygon(var(--slice-p-center), var(--slice-p-start), var(--slice-p-end));
+            clip-path: polygon(var(--slice-p-root), var(--slice-p-start), var(--slice-p-end));
             height: min(var(--space), var(--space));
             left: 50%;
             top: 50%;
-            transform: translate(-50%, -50%);
+            transform-origin: calc(50% + sin(var(--angle-avg)) * 50%) calc(50% - cos(var(--angle-avg)) * 50%);
+            transform: translate(-50%, -50%) scale(calc(100% - var(--gap)));
         }
 
     .chart.waterfall {
