@@ -1,8 +1,10 @@
 using Foundation;
 using Foundation.Components;
+using Foundation.Scripts;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddFoundation()
+                .AddScripts([typeof(CanvasPageScript).Assembly])
                 .AddRazorComponents()
                 .AddInteractiveServerComponents();
 

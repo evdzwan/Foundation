@@ -1,0 +1,18 @@
+﻿@inject CanvasPageScript Script
+@rendermode InteractiveServer
+@page "/components/canvas"
+
+<PageTitle>Canvas</PageTitle>
+<article class="demo-list">
+    <Demo Title="Canvas" New UnderConstruction>
+        <DemoSegment>
+            Demo for <code>&lt;Canvas /&gt;</code> component.
+        </DemoSegment>
+        <DemoSegment>
+            <Canvas Script="Script" />
+        </DemoSegment>
+        <DemoSegment Resource="Canvas/Usage.razor" />
+    </Demo>
+
+    <Members SubjectType="typeof(Canvas)" />
+</article>

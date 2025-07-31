@@ -17,4 +17,10 @@
     <ProjectReference Include="..\Foundation.Analyzers\Foundation.Analyzers.csproj" OutputItemType="Analyzer" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Components\Canvas.razor.js">
+      <SubType>Code</SubType>
+    </None>
+  </ItemGroup>
+
 </Project>

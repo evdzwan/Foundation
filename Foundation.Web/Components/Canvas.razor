@@ -1,0 +1,23 @@
+﻿@inherits Component
+@inject CanvasScript CanvasScript
+
+<canvas class="canvas" @ref="CanvasReference" />
+
+@code {
+    ElementReference CanvasReference;
+    public ElementReference Element => CanvasReference;
+
+    [Parameter] public Scripting.Script? Script { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var scriptModule = Script is { } script ? await script.GetModuleOrDefault() : null;
+            await CanvasScript.Attach(CanvasReference, scriptModule, CancellationToken);
+        }
+    }
+
+    protected override async Task OnDisposingAsync()
+        => await CanvasScript.Detach(CanvasReference);
+}

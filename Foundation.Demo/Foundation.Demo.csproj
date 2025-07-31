@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Foundation.Analyzers\Foundation.Analyzers.csproj" OutputItemType="Analyzer" />
     <ProjectReference Include="..\Foundation.Web\Foundation.Web.csproj" />
   </ItemGroup>
 

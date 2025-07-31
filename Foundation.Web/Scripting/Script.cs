@@ -6,6 +6,16 @@ public abstract class Script(string path, IJSRuntime jsRuntime) : IAsyncDisposab
 {
     IJSObjectReference? Module;
 
+    internal async ValueTask<IJSObjectReference?> GetModuleOrDefault()
+    {
+        try
+        {
+            await LoadScript();
+            return Module;
+        }
+        catch (JSException) { return null; }
+    }
+
     protected async ValueTask Invoke(string identifier, object?[] args, CancellationToken cancellationToken = default)
     {
         await LoadScript(cancellationToken);

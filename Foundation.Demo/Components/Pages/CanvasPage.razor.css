@@ -1,0 +1,7 @@
+﻿.demo-list ::deep .canvas {
+    aspect-ratio: 2;
+    background-color: var(--fn-input-bg);
+    border-radius: .25rem;
+    color: var(--fn-input-fg);
+    width: 100%;
+}
