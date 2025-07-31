@@ -18,11 +18,11 @@
     [Parameter] public string? Title { get; set; }
 
     [Parameter] public bool New { get; set; }
-    [Parameter] public bool WorkInProgress { get; set; }
+    [Parameter] public bool UnderConstruction { get; set; }
 
     string Note => string.Join(", ", new[]
     {
         New ? "new" : null,
-        WorkInProgress ? "work in progress" : null
+        UnderConstruction ? "under construction" : null
     }.OfType<string>());
 }
