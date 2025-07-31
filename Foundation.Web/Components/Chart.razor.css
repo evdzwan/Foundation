@@ -51,11 +51,11 @@
 
         .chart.area > .entity {
             --gap-offset: calc(var(--gap) * var(--index));
-            --bar-p-lt: calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--horizontal-space)) calc(100% - (var(--padding) + var(--value-prev) / var(--value-max) * (100% - var(--padding) * 2)));
-            --bar-p-rt: calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--horizontal-space)) calc(100% - (var(--padding) + var(--value) / var(--value-max) * (100% - var(--padding) * 2)));
-            --bar-p-rb: calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--horizontal-space)) calc(100% - var(--padding));
-            --bar-p-lb: calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--horizontal-space)) calc(100% - var(--padding));
-            clip-path: polygon(var(--bar-p-lt), var(--bar-p-rt), var(--bar-p-rb), var(--bar-p-lb));
+            --bar-lt: calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--horizontal-space)) calc(100% - (var(--padding) + var(--value-prev) / var(--value-max) * (100% - var(--padding) * 2)));
+            --bar-rt: calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--horizontal-space)) calc(100% - (var(--padding) + var(--value) / var(--value-max) * (100% - var(--padding) * 2)));
+            --bar-rb: calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--horizontal-space)) calc(100% - var(--padding));
+            --bar-lb: calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--horizontal-space)) calc(100% - var(--padding));
+            clip-path: polygon(var(--bar-lt), var(--bar-rt), var(--bar-rb), var(--bar-lb));
         }
 
     .chart.bar {
@@ -64,11 +64,11 @@
 
         .chart.bar > .entity {
             --gap-offset: calc(var(--gap) * var(--index));
-            --bar-p-lt: calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--horizontal-space)) calc(100% - (var(--padding) + var(--value) / var(--value-max) * (100% - var(--padding) * 2)));
-            --bar-p-rt: calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--horizontal-space)) calc(100% - (var(--padding) + var(--value) / var(--value-max) * (100% - var(--padding) * 2)));
-            --bar-p-rb: calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--horizontal-space)) calc(100% - var(--padding));
-            --bar-p-lb: calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--horizontal-space)) calc(100% - var(--padding));
-            clip-path: polygon(var(--bar-p-lt), var(--bar-p-rt), var(--bar-p-rb), var(--bar-p-lb));
+            --bar-lt: calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--horizontal-space)) calc(100% - (var(--padding) + var(--value) / var(--value-max) * (100% - var(--padding) * 2)));
+            --bar-rt: calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--horizontal-space)) calc(100% - (var(--padding) + var(--value) / var(--value-max) * (100% - var(--padding) * 2)));
+            --bar-rb: calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--horizontal-space)) calc(100% - var(--padding));
+            --bar-lb: calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--horizontal-space)) calc(100% - var(--padding));
+            clip-path: polygon(var(--bar-lt), var(--bar-rt), var(--bar-rb), var(--bar-lb));
         }
 
     .chart.donut {
@@ -94,12 +94,12 @@
             --angle-avg: calc((var(--angle-start) + var(--angle-end)) / 2);
             --angle-start: calc((var(--value-offset) / var(--value-sum)) * 360deg);
             --angle-end: calc(((var(--value-offset) + var(--value)) / var(--value-sum)) * 360deg);
-            --slice-p-center: 50% 50%;
-            --slice-p-start: calc(50% + sin(var(--angle-start)) * 100%) calc(50% - cos(var(--angle-start)) * 100%);
-            --slice-p-end: calc(50% + sin(var(--angle-end)) * 100%) calc(50% - cos(var(--angle-end)) * 100%);
+            --slice-center: 50% 50%;
+            --slice-start: calc(50% + sin(var(--angle-start)) * 100%) calc(50% - cos(var(--angle-start)) * 100%);
+            --slice-end: calc(50% + sin(var(--angle-end)) * 100%) calc(50% - cos(var(--angle-end)) * 100%);
             aspect-ratio: 1;
             border-radius: 50%;
-            clip-path: polygon(var(--slice-p-center), var(--slice-p-start), var(--slice-p-end));
+            clip-path: polygon(var(--slice-center), var(--slice-start), var(--slice-end));
             height: min(var(--space), var(--space));
             left: 50%;
             top: 50%;
@@ -113,8 +113,8 @@
     }
 
         .chart.dot > .entity {
-            --dot-p-center: calc(var(--padding) + var(--index) / (var(--count) - 1) * var(--horizontal-space)) calc(100% - (var(--padding) + var(--value) / var(--value-max) * (100% - var(--padding) * 2)));
-            clip-path: circle(calc(var(--dot-size) / 2) at var(--dot-p-center));
+            --dot-center: calc(var(--padding) + var(--index) / (var(--count) - 1) * var(--horizontal-space)) calc(100% - (var(--padding) + var(--value) / var(--value-max) * (100% - var(--padding) * 2)));
+            clip-path: circle(calc(var(--dot-size) / 2) at var(--dot-center));
         }
 
     .chart.pie {
@@ -126,12 +126,12 @@
             --angle-avg: calc((var(--angle-start) + var(--angle-end)) / 2);
             --angle-start: calc((var(--value-offset) / var(--value-sum)) * 360deg);
             --angle-end: calc(((var(--value-offset) + var(--value)) / var(--value-sum)) * 360deg);
-            --slice-p-root: 50% 50%;
-            --slice-p-start: calc(50% + sin(var(--angle-start)) * 100%) calc(50% - cos(var(--angle-start)) * 100%);
-            --slice-p-end: calc(50% + sin(var(--angle-end)) * 100%) calc(50% - cos(var(--angle-end)) * 100%);
+            --slice-root: 50% 50%;
+            --slice-start: calc(50% + sin(var(--angle-start)) * 100%) calc(50% - cos(var(--angle-start)) * 100%);
+            --slice-end: calc(50% + sin(var(--angle-end)) * 100%) calc(50% - cos(var(--angle-end)) * 100%);
             aspect-ratio: 1;
             border-radius: 50%;
-            clip-path: polygon(var(--slice-p-root), var(--slice-p-start), var(--slice-p-end));
+            clip-path: polygon(var(--slice-root), var(--slice-start), var(--slice-end));
             height: min(var(--space), var(--space));
             left: 50%;
             top: 50%;
@@ -145,9 +145,9 @@
 
         .chart.waterfall > .entity {
             --gap-offset: calc(var(--gap) * var(--index));
-            --bar-p-lt: calc(var(--padding) + var(--value-offset) / var(--value-sum) * (100% - var(--padding) * 2)) calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--vertical-space));
-            --bar-p-rt: calc(var(--padding) + (var(--value) + var(--value-offset)) / var(--value-sum) * (100% - var(--padding) * 2)) calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--vertical-space));
-            --bar-p-rb: calc(var(--padding) + (var(--value) + var(--value-offset)) / var(--value-sum) * (100% - var(--padding) * 2)) calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--vertical-space));
-            --bar-p-lb: calc(var(--padding) + var(--value-offset) / var(--value-sum) * (100% - var(--padding) * 2)) calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--vertical-space));
-            clip-path: polygon(var(--bar-p-lt), var(--bar-p-rt), var(--bar-p-rb), var(--bar-p-lb));
+            --bar-lt: calc(var(--padding) + var(--value-offset) / var(--value-sum) * (100% - var(--padding) * 2)) calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--vertical-space));
+            --bar-rt: calc(var(--padding) + (var(--value) + var(--value-offset)) / var(--value-sum) * (100% - var(--padding) * 2)) calc(var(--padding) + var(--gap-offset) + var(--index) / var(--count) * var(--vertical-space));
+            --bar-rb: calc(var(--padding) + (var(--value) + var(--value-offset)) / var(--value-sum) * (100% - var(--padding) * 2)) calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--vertical-space));
+            --bar-lb: calc(var(--padding) + var(--value-offset) / var(--value-sum) * (100% - var(--padding) * 2)) calc(var(--padding) + var(--gap-offset) + (var(--index) + 1) / var(--count) * var(--vertical-space));
+            clip-path: polygon(var(--bar-lt), var(--bar-rt), var(--bar-rb), var(--bar-lb));
         }
