@@ -402,4 +402,7 @@
   <data name="Chart.Live" xml:space="preserve">
     <value>When &lt;code&gt;true&lt;/code&gt; new items will be adopted without a full reload</value>
   </data>
+  <data name="Chart.Type" xml:space="preserve">
+    <value>The type of chart, defined by the &lt;code&gt;ChartType&lt;/code&gt; enum</value>
+  </data>
 </root>

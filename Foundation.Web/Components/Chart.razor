@@ -26,7 +26,7 @@
     [Parameter] public bool Live { get; set; }
 
     ClassList ChartClass => new ClassList().Add(Type.ToString().ToLowerInvariant());
-    StyleList ChartStyle => new StyleList().Add("--items-count", () => Entities!.Length, Entities is not null)
+    StyleList ChartStyle => new StyleList().Add("--count", () => Entities!.Length, Entities is not null)
                                            .Add("--value-max", () => Maximum > TValue.Zero ? Maximum : Entities!.Select(e => e.Value).Max(), Entities is not null)
                                            .Add("--value-sum", () => Entities!.Select(e => e.Value).Sum(), Entities is not null);
 
@@ -77,7 +77,7 @@
         foreach (var item in items)
         {
             var value = Value(item);
-            entities.Add(new(index++, item, prevValue, value, offset));
+            entities.Add(new(item, index++, value, offset, prevValue));
             prevValue = value;
             offset += value;
         }
@@ -85,11 +85,11 @@
         return [.. entities];
     }
 
-    sealed record ChartEntity(int Index, TItem Item, TValue PrevValue, TValue Value, TValue Offset)
+    sealed record ChartEntity(TItem Item, int Index, TValue Value, TValue ValueOffset, TValue ValuePrev)
     {
         public StyleList Style { get; } = new StyleList().Add("--index", Index)
-                                                         .Add("--offset", Offset)
                                                          .Add("--value", Value)
-                                                         .Add("--value-prev", PrevValue);
+                                                         .Add("--value-offset", ValueOffset)
+                                                         .Add("--value-prev", ValuePrev);
     }
 }

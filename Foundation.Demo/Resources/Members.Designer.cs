@@ -178,6 +178,15 @@ namespace Foundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The type of chart, defined by the &lt;code&gt;ChartType&lt;/code&gt; enum.
+        /// </summary>
+        internal static string Chart_Type {
+            get {
+                return ResourceManager.GetString("Chart.Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Numerical value for each entity.
         /// </summary>
         internal static string Chart_Value {

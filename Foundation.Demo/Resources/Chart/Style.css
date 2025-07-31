@@ -1,0 +1,25 @@
+﻿.charts ::deep .chart {
+    --chart-bg: ...;
+    --chart-fg: ...;
+    --gap: .25rem;
+    --padding: .5rem;
+}
+
+    ::deep .chart.area {
+        --gap: .1rem;
+    }
+
+    ::deep .chart.dot {
+        --dot-size: 1rem;
+        --padding: 1rem;
+    }
+
+    ::deep .chart > .entity {
+        animation: ...;
+        cursor: pointer;
+        transition: ...;
+    }
+
+        ::deep .chart > .entity:hover {
+            --entity-bg: ...;
+        }

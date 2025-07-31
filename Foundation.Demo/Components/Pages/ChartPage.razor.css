@@ -30,37 +30,26 @@
     }
 
         .charts ::deep .chart.area {
-            --dot-size: .6rem;
             --gap: .1rem;
         }
 
-        .charts ::deep .chart.bar {
-            --gap: .5rem;
-        }
-
         .charts ::deep .chart.donut {
-            --ring-gap: 1deg;
-            --ring-size: 25%;
+            --ring-size: 12.5%;
         }
 
         .charts ::deep .chart.dot {
             --dot-size: 1rem;
+            --padding: 1rem;
         }
 
-        .charts ::deep .chart .entity {
+        .charts ::deep .chart > .entity {
             animation: appear .5s ease forwards;
-            border-radius: .25rem;
             cursor: pointer;
+            transition: .25s ease;
         }
 
-            .charts ::deep .chart .entity:hover {
+            .charts ::deep .chart > .entity:hover {
                 --entity-bg: var(--fn-anchor-fg);
-            }
-
-            .charts ::deep .chart .entity,
-            .charts ::deep .chart .entity::before,
-            .charts ::deep .chart .entity::after {
-                transition: .25s ease;
             }
 
         .charts ::deep .chart .loading-indicator {
@@ -81,8 +70,8 @@
 
 @keyframes appear {
     from {
-        --offset: 0;
         --value: 0;
+        --value-offset: 0;
         --value-prev: 0;
     }
 }
