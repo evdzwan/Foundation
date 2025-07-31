@@ -73,14 +73,16 @@
 
     .chart.donut {
         --ring-size: 10%;
+        --space: calc(100% - var(--padding) * 2);
     }
 
         .chart.donut::after {
+            --inset-space: calc(var(--space) - var(--ring-size) * 2);
             aspect-ratio: 1;
             background-color: var(--chart-bg);
             border-radius: 50%;
             content: '';
-            height: min(calc(100% - (var(--padding) + var(--ring-size)) * 2), calc(100% - (var(--padding) + var(--ring-size)) * 2));
+            height: min(var(--inset-space), var(--inset-space));
             left: 50%;
             position: absolute;
             top: 50%;
@@ -96,7 +98,7 @@
             aspect-ratio: 1;
             border-radius: 50%;
             clip-path: polygon(var(--slice-p-center), var(--slice-p-start), var(--slice-p-end));
-            height: min(calc(100% - var(--padding) * 2), calc(100% - var(--padding) * 2));
+            height: min(var(--space), var(--space));
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
@@ -113,6 +115,7 @@
         }
 
     .chart.pie {
+        --space: calc(100% - var(--padding) * 2);
     }
 
         .chart.pie > .entity {
@@ -124,7 +127,7 @@
             aspect-ratio: 1;
             border-radius: 50%;
             clip-path: polygon(var(--slice-p-center), var(--slice-p-start), var(--slice-p-end));
-            height: min(calc(100% - var(--padding) * 2), calc(100% - var(--padding) * 2));
+            height: min(var(--space), var(--space));
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
