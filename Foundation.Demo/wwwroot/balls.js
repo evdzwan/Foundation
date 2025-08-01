@@ -1,17 +1,31 @@
 ﻿export function initialize(canvas, invoker) {
-    render(canvas);
+    if (canvas != null) {
+        const context = canvas.getContext("2d");
+        canvas.context = context;
+        loop(canvas);
+    }
 }
 
 export function resize(canvas) {
-    render(canvas);
+    if (canvas != null) {
+        render(canvas);
+    }
 }
 
 export function cleanup(canvas) {
+    if (canvas != null) {
+        canvas.context = undefined;
+    }
+}
+
+function loop(canvas) {
+    render(canvas);
+    if (canvas.context != undefined) {
+        requestAnimationFrame(() => loop(canvas));
+    }
 }
 
 function render(canvas) {
-    const ctx = canvas.getContext("2d");
-
-    ctx.fillStyle = "green";
-    ctx.fillRect(10, 10, 150, 100);
+    const ctx = canvas.context;
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
