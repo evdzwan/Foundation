@@ -1,4 +1,4 @@
-﻿@inject CanvasPageScript Script
+﻿@inject BallsScript Script
 @rendermode InteractiveServer
 @page "/components/canvas"
 
@@ -16,3 +16,13 @@
 
     <Members SubjectType="typeof(Canvas)" />
 </article>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Script.Cleanup(new ElementReference());
+        }
+    }
+}

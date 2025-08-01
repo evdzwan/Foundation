@@ -4,8 +4,8 @@ using Microsoft.JSInterop;
 
 namespace Foundation.Scripts;
 
-[Script("./_content/Foundation.Demo/Components/Pages/CanvasPage.razor.js")]
-sealed partial class CanvasPageScript
+[Script("./balls.js")]
+sealed partial class BallsScript
 {
     public partial ValueTask Cleanup(ElementReference canvas, CancellationToken cancellationToken = default);
     public partial ValueTask Initialize<TValue>(ElementReference canvas, DotNetObjectReference<TValue> invoker, CancellationToken cancellationToken = default) where TValue : class;

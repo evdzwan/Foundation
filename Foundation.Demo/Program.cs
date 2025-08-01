@@ -4,7 +4,7 @@ using Foundation.Scripts;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddFoundation()
-                .AddScripts([typeof(CanvasPageScript).Assembly])
+                .AddScript<BallsScript>()
                 .AddRazorComponents()
                 .AddInteractiveServerComponents();
 
