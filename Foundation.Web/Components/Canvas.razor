@@ -1,13 +1,15 @@
-﻿@inherits Component
+﻿@using Foundation.Scripting
+
+@typeparam TScript where TScript : Script, ICanvasScript
 @inject CanvasScript CanvasScript
+@inherits Component
 
 <canvas class="canvas" @ref="CanvasReference" />
 
 @code {
     ElementReference CanvasReference;
-    public ElementReference Element => CanvasReference;
 
-    [Parameter] public Scripting.Script? Script { get; set; }
+    [Parameter] public TScript? Script { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
