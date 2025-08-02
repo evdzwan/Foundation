@@ -53,9 +53,7 @@ ul {
             }
 
     .members .empty {
-        background-color: var(--fn-input-bg);
         border-radius: .25rem;
-        color: var(--fn-input-fg);
         display: inline-block;
         font-size: 90%;
         padding: .1rem .25rem;
