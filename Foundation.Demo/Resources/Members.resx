@@ -414,4 +414,16 @@
   <data name="ScriptAttribute.ScriptPath" xml:space="preserve">
     <value>Path to the JS file</value>
   </data>
+  <data name="Component.CancellationToken" xml:space="preserve">
+    <value>Instance of &lt;code&gt;CancellationToken&lt;/code&gt; that describes the component's lifetime (protected)</value>
+  </data>
+  <data name="Component.OnDisposing()" xml:space="preserve">
+    <value>Called just before component is disposed (protected)</value>
+  </data>
+  <data name="Component.OnDisposingAsync()" xml:space="preserve">
+    <value>Called just before component is disposed (protected)</value>
+  </data>
+  <data name="Component.ComponentReference" xml:space="preserve">
+    <value>Reference to component, for JS interop purposes (protected)</value>
+  </data>
 </root>

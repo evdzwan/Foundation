@@ -385,6 +385,42 @@ namespace Foundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Instance of &lt;code&gt;CancellationToken&lt;/code&gt; that describes the component&apos;s lifetime (protected).
+        /// </summary>
+        internal static string Component_CancellationToken {
+            get {
+                return ResourceManager.GetString("Component.CancellationToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reference to component, for JS interop purposes (protected).
+        /// </summary>
+        internal static string Component_ComponentReference {
+            get {
+                return ResourceManager.GetString("Component.ComponentReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Called just before component is disposed (protected).
+        /// </summary>
+        internal static string Component_OnDisposing__ {
+            get {
+                return ResourceManager.GetString("Component.OnDisposing()", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Called just before component is disposed (protected).
+        /// </summary>
+        internal static string Component_OnDisposingAsync__ {
+            get {
+                return ResourceManager.GetString("Component.OnDisposingAsync()", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When &lt;code&gt;true&lt;/code&gt; renders as &lt;code&gt;date-only&lt;/code&gt;.
         /// </summary>
         internal static string DateTimeField_Date {
