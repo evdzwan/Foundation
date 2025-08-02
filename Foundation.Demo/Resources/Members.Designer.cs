@@ -772,6 +772,24 @@ namespace Foundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When &lt;code&gt;true&lt;/code&gt; the script has been loaded.
+        /// </summary>
+        internal static string Script_Loaded {
+            get {
+                return ResourceManager.GetString("Script.Loaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path to the JS file.
+        /// </summary>
+        internal static string ScriptAttribute_ScriptPath {
+            get {
+                return ResourceManager.GetString("ScriptAttribute.ScriptPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Content to be rendered.
         /// </summary>
         internal static string Scroll_ChildContent {

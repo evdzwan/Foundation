@@ -408,4 +408,10 @@
   <data name="Canvas.Script" xml:space="preserve">
     <value>Script used to display canvas contents</value>
   </data>
+  <data name="Script.Loaded" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; the script has been loaded</value>
+  </data>
+  <data name="ScriptAttribute.ScriptPath" xml:space="preserve">
+    <value>Path to the JS file</value>
+  </data>
 </root>

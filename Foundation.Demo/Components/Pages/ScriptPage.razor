@@ -4,18 +4,21 @@
 <article class="demo-list">
     <Demo Title="Script" New UnderConstruction>
         <DemoSegment>
-            TBD
+            Use <code>ScriptAttribute</code> to create analogues of JS files that will be loaded lazily.
+            This will generate your class that extends <code>Script</code>.
         </DemoSegment>
         <DemoSegment Resource="Script/Definition.cs" />
         <DemoSegment>
-            TBD
+            Register you scripts like this.
         </DemoSegment>
         <DemoSegment Resource="Script/Registration.cs" />
         <DemoSegment>
-            TBD
+            Simply inject your script and use it like this. Note that rendering has to be complete,
+            so don't use your script before <code>OnAfterRender</code> is invoked.
         </DemoSegment>
         <DemoSegment Resource="Script/Usage.cs" />
     </Demo>
 
     <Members SubjectType="typeof(Script)" />
+    <Members SubjectType="typeof(ScriptAttribute)" />
 </article>
