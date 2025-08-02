@@ -63,7 +63,7 @@
     {
         if (firstRender)
         {
-            await Script.Attach(PopoverReference, ComponentReference, CancellationToken);
+            await Script.Attach(ComponentReference, PopoverReference, CancellationToken);
             if (AutoFocus)
             {
                 await EditorReference.FocusAsync();
@@ -75,7 +75,7 @@
     {
         base.OnParametersSet();
         Columns ??= ChildContent;
-        
+
         if (RendererInfo.IsInteractive)
         {
             TableSelectionChangedSubscription?.Dispose();
@@ -126,7 +126,10 @@
     protected override async Task OnDisposingAsync()
     {
         TableSelectionChangedSubscription?.Dispose();
-        await Script.Detach(PopoverReference);
+        if (Script.Loaded)
+        {
+            await Script.Detach(ComponentReference);
+        }
     }
 
     static Func<TItem, string?> CreateDefaultDisplayItem()

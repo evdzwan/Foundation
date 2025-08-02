@@ -16,10 +16,15 @@
         if (firstRender)
         {
             var scriptModule = Script is { } script ? await script.GetModuleOrDefault() : null;
-            await CanvasScript.Attach(CanvasReference, scriptModule, CancellationToken);
+            await CanvasScript.Attach(ComponentReference, CanvasReference, scriptModule, CancellationToken);
         }
     }
 
     protected override async Task OnDisposingAsync()
-        => await CanvasScript.Detach(CanvasReference);
+    {
+        if (CanvasScript.Loaded)
+        {
+            await CanvasScript.Detach(ComponentReference);
+        }
+    }
 }

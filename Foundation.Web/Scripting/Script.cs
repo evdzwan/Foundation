@@ -6,6 +6,8 @@ public abstract class Script(string path, IJSRuntime jsRuntime) : IAsyncDisposab
 {
     IJSObjectReference? Module;
 
+    public bool Loaded => Module is not null;
+
     internal async ValueTask<IJSObjectReference?> GetModuleOrDefault()
     {
         try

@@ -59,7 +59,7 @@
     {
         if (firstRender)
         {
-            await Script.Attach(MenuReference, ComponentReference, CancellationToken);
+            await Script.Attach(ComponentReference, MenuReference, CancellationToken);
         }
     }
 
@@ -81,7 +81,11 @@
     protected override async Task OnDisposingAsync()
     {
         Context = null;
+
         MenuSubscription?.Dispose();
-        await Script.Detach(MenuReference);
+        if (Script.Loaded)
+        {
+            await Script.Detach(ComponentReference);
+        }
     }
 }

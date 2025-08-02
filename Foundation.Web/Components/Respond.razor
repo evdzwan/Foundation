@@ -35,10 +35,15 @@
     {
         if (firstRender)
         {
-            await Script.Attach(RespondReference, ComponentReference, CancellationToken);
+            await Script.Attach(ComponentReference, RespondReference, CancellationToken);
         }
     }
 
     protected override async Task OnDisposingAsync()
-        => await Script.Detach(RespondReference);
+    {
+        if (Script.Loaded)
+        {
+            await Script.Detach(ComponentReference);
+        }
+    }
 }

@@ -1,32 +1,42 @@
-﻿export function attach(elem, invoker) {
-    if (elem !== null) {
-        elem.toggle = evt => toggle(invoker, evt);
-        elem.addEventListener("toggle", elem.toggle);
-        toggle(elem, invoker);
+﻿import { Foundation } from "../foundation.js"
+
+export function attach(component, element) {
+    const state = Foundation.setState(component._id, {
+        toggle: evt => toggle(component, evt),
+        element: element
+    });
+
+    if (element !== null) {
+        element.addEventListener("toggle", state.toggle);
     }
 }
 
-export function detach(elem) {
-    if (elem !== null) {
-        elem.removeEventListener("toggle", elem.toggle);
-        elem.toggle = undefined;
+export function detach(component) {
+    const state = Foundation.deleteState(component._id);
+    if (state !== undefined) {
+        const element = state.element;
+        if (element !== null) {
+            element.removeEventListener("toggle", state.toggle);
+        }
+
+        state.toggle = null;
     }
 }
 
-async function toggle(invoker, args) {
-    if (invoker !== null) {
-        await invoker.invokeMethodAsync("OnPopoverToggled", args.newState == "open");
+export function showMenu(element) {
+    if (element !== null) {
+        element.showPopover();
     }
 }
 
-export function showMenu(elem) {
-    if (elem !== null) {
-        elem.showPopover();
+export function hideMenu(element) {
+    if (element !== null) {
+        element.hidePopover();
     }
 }
 
-export function hideMenu(elem) {
-    if (elem !== null) {
-        elem.hidePopover();
+async function toggle(component, args) {
+    if (component !== null) {
+        await component.invokeMethodAsync("OnPopoverToggled", args.newState == "open");
     }
 }

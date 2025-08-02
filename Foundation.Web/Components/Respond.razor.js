@@ -1,18 +1,26 @@
-﻿export function attach(elem, invoker) {
-    if (elem !== null) {
-        elem.resize = () => resize(elem, invoker);
-        window.addEventListener("resize", elem.resize);
-        resize(elem, invoker);
+﻿import { Foundation } from "../foundation.js"
+
+export function attach(component, element) {
+    const state = Foundation.setState(component._id, {
+        resize: () => resize(component),
+        element: element
+    });
+
+    window.addEventListener("resize", state.resize);
+    resize(component);
+}
+
+export function detach(component) {
+    const state = Foundation.deleteState(component._id);
+    if (state !== undefined) {
+        window.removeEventListener("resize", state.resize);
+        state.resize = null;
     }
 }
 
-export function detach(elem) {
-    if (elem !== null) {
-        window.removeEventListener("resize", elem.resize);
-        elem.resize = undefined;
+async function resize(component) {
+    const state = Foundation.getState(component._id);
+    if (state !== undefined) {
+        await component.invokeMethodAsync("UpdateBounds", state.element.parentElement.clientWidth, state.element.parentElement.clientHeight);
     }
-}
-
-async function resize(elem, invoker) {
-    await invoker.invokeMethodAsync("UpdateBounds", elem.parentElement.clientWidth, elem.parentElement.clientHeight);
 }

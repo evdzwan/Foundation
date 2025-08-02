@@ -7,6 +7,6 @@ namespace Foundation.Scripts;
 [Script("./_content/Foundation.Web/Components/Canvas.razor.js")]
 sealed partial class CanvasScript
 {
-    public partial ValueTask Attach(ElementReference elem, IJSObjectReference? script, CancellationToken cancellationToken = default);
-    public partial ValueTask Detach(ElementReference elem, CancellationToken cancellationToken = default);
+    public partial ValueTask Attach<TValue>(DotNetObjectReference<TValue> component, ElementReference element, IJSObjectReference? script, CancellationToken cancellationToken = default) where TValue : class;
+    public partial ValueTask Detach<TValue>(DotNetObjectReference<TValue> component, CancellationToken cancellationToken = default) where TValue : class;
 }
