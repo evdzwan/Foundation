@@ -1,7 +1,10 @@
 ﻿.demo-list ::deep .canvas {
+    --ball-color: var(--fn-input-fg);
+    --ball-color-colliding: var(--fn-anchor-fg);
     aspect-ratio: 2;
     background-color: var(--fn-input-bg);
     border-radius: .25rem;
     color: var(--fn-input-fg);
+    transform: scaleY(-100%);
     width: 100%;
 }

@@ -151,6 +151,15 @@ namespace Foundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Script used to display canvas contents.
+        /// </summary>
+        internal static string Canvas_Script {
+            get {
+                return ResourceManager.GetString("Canvas.Script", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Items that make up the entities as an &lt;code&gt;IAsyncValue&amp;lt;&amp;gt;&lt;/code&gt;.
         /// </summary>
         internal static string Chart_Items {

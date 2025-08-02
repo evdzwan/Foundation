@@ -12,17 +12,8 @@
             <Canvas Script="Script" />
         </DemoSegment>
         <DemoSegment Resource="Canvas/Usage.razor" />
+        <DemoSegment Resource="Canvas/Script.js" />
     </Demo>
 
     <Members SubjectType="typeof(Canvas<>)" />
 </article>
-
-@code {
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await Script.Cleanup(new ElementReference());
-        }
-    }
-}

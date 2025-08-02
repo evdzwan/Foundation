@@ -405,4 +405,7 @@
   <data name="Chart.Type" xml:space="preserve">
     <value>The type of chart, defined by the &lt;code&gt;ChartType&lt;/code&gt; enum</value>
   </data>
+  <data name="Canvas.Script" xml:space="preserve">
+    <value>Script used to display canvas contents</value>
+  </data>
 </root>
