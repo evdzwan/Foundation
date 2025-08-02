@@ -1,0 +1,24 @@
+﻿@inject MyComponentScript Script
+@inherits Component
+
+<div @ref="Element" />
+
+@code {
+    ElementReference Element;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Script.Attach(ComponentReference, Element, CancellationToken);
+        }
+    }
+
+    protected override async Task OnDisposingAsync()
+    {
+        if (Script.Loaded) // omit detach call during pre-rendering and when script hasn't been loaded
+        {
+            await Script.Detach(ComponentReference);
+        }
+    }
+}
