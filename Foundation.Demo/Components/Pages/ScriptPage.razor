@@ -2,7 +2,7 @@
 
 <PageTitle>Script</PageTitle>
 <article class="demo-list">
-    <Demo Title="Script" New UnderConstruction>
+    <Demo Title="Script" New>
         <DemoSegment>
             Use <code>ScriptAttribute</code> to create analogues of JS files that will be loaded lazily.
             This will generate your class that extends <code>Script</code>.
@@ -13,10 +13,12 @@
         </DemoSegment>
         <DemoSegment Resource="Script/Registration.cs" />
         <DemoSegment>
-            Simply inject your script and use it like this. Note that rendering has to be complete,
-            so don't use your script before <code>OnAfterRender</code> is invoked.
+            Simply inject your script and use it like this. Note that rendering has to be complete, so don't use your script before <code>OnAfterRender</code> is invoked.
         </DemoSegment>
-        <DemoSegment Resource="Script/Usage.cs" />
+        <DemoSegment Resource="Script/Usage.razor" />
+        <DemoSegment>
+            Note that by inheriting from <a href="/components/component"><code>&lt;Component /&gt;</code></a>, you gain commonly used properties like <code>CancellationToken</code> and <code>ComponentReference</code>.
+        </DemoSegment>
     </Demo>
 
     <Members SubjectType="typeof(Script)" />
