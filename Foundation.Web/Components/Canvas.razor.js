@@ -4,12 +4,13 @@ export function attach(component, element, script) {
     const state = Foundation.setState(component._id, {
         resize: () => resize(component),
         element: element,
-        script: script
+        script: script,
+        scriptState: {}
     });
 
     window.addEventListener("resize", state.resize);
     if (script !== null && script.initialize !== undefined) {
-        script.initialize(component, element);
+        script.initialize(element, state.scriptState);
     }
 }
 
@@ -21,10 +22,11 @@ export function detach(component) {
 
         const script = state.script;
         if (script !== null && script.cleanup !== undefined) {
-            script.cleanup(component);
+            script.cleanup(state.scriptState);
         }
 
         state.script = null;
+        state.scriptState = null;
     }
 }
 
@@ -38,7 +40,7 @@ function resize(component) {
 
         const script = state.script;
         if (script !== null && script.resize !== undefined) {
-            script.resize(component, element);
+            script.resize(element, state.scriptState);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Diagnostics;
 
 namespace Foundation.Scripting;
 
@@ -58,9 +59,15 @@ public abstract class Script(string path, IJSRuntime jsRuntime) : IAsyncDisposab
         catch (JSDisconnectedException) { }
     }
 
-    async ValueTask IAsyncDisposable.DisposeAsync()
+    ValueTask IAsyncDisposable.DisposeAsync()
     {
         GC.SuppressFinalize(this);
+        return DisposeModule();
+    }
+
+    [DebuggerNonUserCode]
+    async ValueTask DisposeModule()
+    {
         if (Module is { } module)
         {
             try

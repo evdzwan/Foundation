@@ -1,23 +1,24 @@
 ﻿import { Foundation } from "./_content/Foundation.Web/foundation.js"
 
-export function initialize(component, canvas) {
+export function initialize(canvas, state) {
     if (canvas !== null) {
-        const state = Foundation.getState(component._id);
-        if (state !== undefined) {
-            const scene = state.scene = {
-                balls: [],
-                canvas: canvas,
-                context: canvas.getContext("2d"),
-                gravity: -9.81,
-                height: 50,
-                lastTime: 0,
-                width: 100
-            };
+        const scene = state.scene = {
+            balls: [],
+            canvas: canvas,
+            context: canvas.getContext("2d"),
+            gravity: -9.81,
+            height: 50,
+            lastTime: 0,
+            width: 100
+        };
 
-            setup(scene);
-            requestAnimationFrame(time => loop(component, time));
-        }
+        setup(scene);
+        requestAnimationFrame(time => loop(state, time));
     }
+}
+
+export function cleanup(state) {
+    state.scene = null;
 }
 
 function setup(scene) {
@@ -36,20 +37,17 @@ function setup(scene) {
     }
 }
 
-function loop(component, time) {
-    const state = Foundation.getState(component._id);
-    if (state === undefined) {
-        return;
-    }
-
+function loop(state, time) {
     const scene = state.scene;
-    const dt = (time - scene.lastTime) / 500;
-    scene.lastTime = time;
+    if (scene !== null) {
+        const dt = (time - scene.lastTime) / 500;
+        scene.lastTime = time;
 
-    update(scene, dt);
-    render(scene);
+        update(scene, dt);
+        render(scene);
 
-    requestAnimationFrame(time => loop(component, time));
+        requestAnimationFrame(time => loop(state, time));
+    }
 }
 
 function render(scene) {

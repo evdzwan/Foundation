@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 
 namespace Foundation.Scripting;
 
 public interface ICanvasScript
 {
-    ValueTask Cleanup<TValue>(DotNetObjectReference<TValue> component, CancellationToken cancellationToken = default) where TValue : class
+    ValueTask Cleanup(object state, CancellationToken cancellationToken = default)
         => ValueTask.CompletedTask;
 
-    ValueTask Initialize<TValue>(DotNetObjectReference<TValue> component, ElementReference canvas, CancellationToken cancellationToken = default) where TValue : class
+    ValueTask Initialize(ElementReference canvas, object state, CancellationToken cancellationToken = default)
         => ValueTask.CompletedTask;
 
-    ValueTask Resize<TValue>(DotNetObjectReference<TValue> component, ElementReference canvas, CancellationToken cancellationToken = default) where TValue : class
+    ValueTask Resize(ElementReference canvas, object state, CancellationToken cancellationToken = default)
         => ValueTask.CompletedTask;
 }
