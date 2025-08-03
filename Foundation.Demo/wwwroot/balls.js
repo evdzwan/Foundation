@@ -1,4 +1,4 @@
-﻿import { Foundation } from "./_content/Foundation.Web/foundation.js"
+﻿import { Foundation } from "./_content/EvdZwan.Foundation.Web/foundation.js"
 
 export function initialize(canvas, state) {
     if (canvas !== null) {
