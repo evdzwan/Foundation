@@ -5,6 +5,11 @@
     <RootNamespace>Foundation</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>Foundation</PackageId>
+    <Description>Core utilities and extensions for .NET</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>evdzwan</Authors>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
 </Project>
