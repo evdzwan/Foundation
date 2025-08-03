@@ -1,6 +1,11 @@
 <Solution>
 
   <Project Path="Foundation/Foundation.csproj" />
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
   <Project Path="Foundation.Analyzers/Foundation.Analyzers.csproj" />
   <Project Path="Foundation.Demo/Foundation.Demo.csproj" />
   <Project Path="Foundation.Web/Foundation.Web.csproj" />

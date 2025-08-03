@@ -2,16 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <RootNamespace>Foundation</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <PackageId>EvdZwan.Foundation</PackageId>
-    <Description>Core utilities and extensions for .NET</Description>
-    <RepositoryUrl>https://github.com/evdzwan/Foundation</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Authors>evdzwan</Authors>
-    <Version>1.0.1</Version>
+    <Description>Core utilities and extensions for .NET</Description>
+    <PackageId>EvdZwan.Foundation</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

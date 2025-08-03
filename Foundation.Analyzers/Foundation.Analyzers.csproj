@@ -2,17 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Foundation</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <LangVersion>latest</LangVersion>
-    <IsRoslynAnalyzer>true</IsRoslynAnalyzer>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <Description>Roslyn analyzers for enforcing code conventions</Description>
-    <RepositoryUrl>https://github.com/evdzwan/Foundation</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Authors>evdzwan</Authors>
-    <Version>1.0.1</Version>
+    <IsRoslynAnalyzer>true</IsRoslynAnalyzer>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,17 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <RootNamespace>Foundation</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <PackageId>EvdZwan.Foundation.Web</PackageId>
-    <Description>Web components and analyzers built on Foundation</Description>
-    <RepositoryUrl>https://github.com/evdzwan/Foundation</RepositoryUrl>
-    <IncludeReferencedProjects>true</IncludeReferencedProjects>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Authors>evdzwan</Authors>
-    <Version>1.0.1</Version>
+    <Description>Web components and analyzers built on Foundation</Description>
+    <IncludeReferencedProjects>true</IncludeReferencedProjects>
+    <PackageId>EvdZwan.Foundation.Web</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
