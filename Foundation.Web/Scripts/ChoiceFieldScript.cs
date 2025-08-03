@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 
 namespace Foundation.Scripts;
 
-[Script(@"./_content/Foundation.Web/Components/ChoiceField.razor.js")]
+[Script(@"./_content/EvdZwan.Foundation.Web/Components/ChoiceField.razor.js")]
 sealed partial class ChoiceFieldScript
 {
     public partial ValueTask Attach<TValue>(DotNetObjectReference<TValue> component, ElementReference element, CancellationToken cancellationToken = default) where TValue : class;
