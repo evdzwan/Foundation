@@ -19,7 +19,11 @@ dotnet add package Foundation
 
 # Install the Foundation Web package via NuGet (this includes the Foundation package itself)
 dotnet add package Foundation.Web
+```
 
+### Running the Demo
+
+```bash
 # Run the demo project
 dotnet run --project Foundation.Demo
 ```
