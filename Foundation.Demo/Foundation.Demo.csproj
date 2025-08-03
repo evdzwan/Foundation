@@ -10,7 +10,6 @@
     <RepositoryUrl>https://github.com/evdzwan/Foundation</RepositoryUrl>
     <IncludeReferencedProjects>true</IncludeReferencedProjects>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>evdzwan</Authors>
     <Version>1.0.0</Version>
   </PropertyGroup>
