@@ -1,0 +1,8 @@
+<Solution>
+
+  <Project Path="Foundation/Foundation.csproj" />
+  <Project Path="Foundation.Analyzers/Foundation.Analyzers.csproj" />
+  <Project Path="Foundation.Demo/Foundation.Demo.csproj" />
+  <Project Path="Foundation.Web/Foundation.Web.csproj" />
+
+</Solution>
