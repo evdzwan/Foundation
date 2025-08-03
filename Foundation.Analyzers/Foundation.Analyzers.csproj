@@ -9,6 +9,9 @@
     <IsRoslynAnalyzer>true</IsRoslynAnalyzer>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <Description>Roslyn analyzers for enforcing code conventions</Description>
+    <RepositoryUrl>https://github.com/evdzwan/Foundation</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>evdzwan</Authors>
     <Version>1.0.0</Version>
   </PropertyGroup>

@@ -7,8 +7,10 @@
     <Nullable>enable</Nullable>
     <PackageId>Foundation.Web</PackageId>
     <Description>Web components and analyzers built on Foundation</Description>
+    <RepositoryUrl>https://github.com/evdzwan/Foundation</RepositoryUrl>
     <IncludeReferencedProjects>true</IncludeReferencedProjects>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>evdzwan</Authors>
     <Version>1.0.0</Version>
   </PropertyGroup>
