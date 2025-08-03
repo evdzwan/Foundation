@@ -1,0 +1,25 @@
+# Foundation
+
+**Foundation** is a modular collection of reusable C# components and utilities designed to accelerate development in .NET applications. It includes analyzers, web helpers, and a Blazor demo to showcase usage.
+
+## 📦 Projects
+
+- `Foundation`: Core utilities and extensions for .NET.
+- `Foundation.Analyzers`: Roslyn analyzers to enforce code quality and conventions.
+- `Foundation.Web`: Web-specific components and helpers.
+- `Foundation.Demo`: Blazor demo showcasing usage of Foundation components.
+
+## 🚀 Getting Started
+
+### Installation via NuGet
+
+```bash
+# Install the Foundation package via NuGet
+dotnet add package Foundation
+
+# Install the Foundation Web package via NuGet (this includes the Foundation package itself)
+dotnet add package Foundation.Web
+
+# Run the demo project
+dotnet run --project Foundation.Demo
+```
