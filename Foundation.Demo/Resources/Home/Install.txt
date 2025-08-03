@@ -1,0 +1,5 @@
+﻿# Install the Foundation package via NuGet
+dotnet add package EvdZwan.Foundation
+
+# Install the Foundation Web package via NuGet (this includes the Foundation package itself)
+dotnet add package EvdZwan.Foundation.Web
