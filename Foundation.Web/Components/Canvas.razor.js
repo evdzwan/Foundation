@@ -8,10 +8,12 @@ export function attach(component, element, script) {
         scriptState: {}
     });
 
-    window.addEventListener("resize", state.resize);
     if (script !== null && script.initialize !== undefined) {
         script.initialize(element, state.scriptState);
     }
+
+    window.addEventListener("resize", state.resize);
+    resize(component);
 }
 
 export function detach(component) {
