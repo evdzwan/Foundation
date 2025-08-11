@@ -35,6 +35,7 @@
     --fn-scroll: #ccc;
     --fn-scroll-hover: #aaa;
     /*misc*/
+    --fn-backdrop: #0008;
     --fn-muted: #666;
     --fn-shadow: #333;
     --fn-skeleton: #ddd;
@@ -77,6 +78,7 @@
     --fn-scroll: #444;
     --fn-scroll-hover: #666;
     /*misc*/
+    --fn-backdrop: #0008;
     --fn-muted: #999;
     --fn-shadow: #000;
     --fn-skeleton: #333;
