@@ -1,0 +1,21 @@
+﻿::deep .dialog {
+    background-color: ...;
+    border: none;
+    border-radius: .25rem;
+    color: ...;
+    filter: drop-shadow(...);
+    overflow: auto;
+    padding: .5rem;
+    width: min(40rem, 80%);
+}
+
+    ::deep .dialog.persistent > div {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    ::deep .dialog::backdrop {
+        backdrop-filter: blur(.25rem);
+        background-color: ...;
+    }

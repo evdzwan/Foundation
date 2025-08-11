@@ -1,0 +1,72 @@
+﻿@inherits Component
+@inject DialogScript Script
+
+<dialog class="dialog @DialogClass" popover="@PopoverMode" @ref="DialogReference">
+    @ChildContent
+</dialog>
+
+@code {
+    ElementReference DialogReference;
+    bool DialogVisible;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public EventCallback<bool> Toggled { get; set; }
+    [Parameter] public bool Persistent { get; set; }
+
+    ClassList DialogClass => new ClassList().Add("persistent", Persistent);
+    string PopoverMode => Persistent ? "manual" : "auto";
+
+    public async Task<bool> Hide()
+    {
+        if (DialogVisible)
+        {
+            await Script.HideDialog(DialogReference, CancellationToken);
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task<bool> Show(ElementReference? source = null)
+    {
+        if (!DialogVisible)
+        {
+            await Script.ShowDialog(DialogReference, source, CancellationToken);
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task Toggle(ElementReference? source = null)
+    {
+        if (!await Show(source))
+        {
+            await Hide();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Script.Attach(ComponentReference, DialogReference, CancellationToken);
+        }
+    }
+
+    protected override async Task OnDisposingAsync()
+    {
+        if (Script.Loaded)
+        {
+            await Script.Detach(ComponentReference);
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnDialogToggled(bool visible)
+    {
+        DialogVisible = visible;
+        await Toggled.InvokeAsync(visible);
+        await InvokeAsync(StateHasChanged);
+    }
+}

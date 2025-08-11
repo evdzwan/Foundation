@@ -448,6 +448,60 @@ namespace Foundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Content to be rendered.
+        /// </summary>
+        internal static string Dialog_ChildContent {
+            get {
+                return ResourceManager.GetString("Dialog.ChildContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hides the dialog.
+        /// </summary>
+        internal static string Dialog_Hide__ {
+            get {
+                return ResourceManager.GetString("Dialog.Hide()", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When &lt;code&gt;true&lt;/code&gt; the dialog cannot be closed by clicking on the backdrop.
+        /// </summary>
+        internal static string Dialog_Persistent {
+            get {
+                return ResourceManager.GetString("Dialog.Persistent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows the dialog.
+        /// </summary>
+        internal static string Dialog_Show__ {
+            get {
+                return ResourceManager.GetString("Dialog.Show()", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows or hides the dialog, depending on wether it&apos;s currently visible.
+        /// </summary>
+        internal static string Dialog_Toggle__ {
+            get {
+                return ResourceManager.GetString("Dialog.Toggle()", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invoked when dialog is shown or hidden.
+        /// </summary>
+        internal static string Dialog_Toggled {
+            get {
+                return ResourceManager.GetString("Dialog.Toggled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Determines wether the field receives focus on page load.
         /// </summary>
         internal static string Field_AutoFocus {

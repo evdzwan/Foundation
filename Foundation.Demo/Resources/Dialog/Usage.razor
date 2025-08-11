@@ -1,0 +1,20 @@
+﻿<button @onclick="() => Dialog?.Toggle() ?? Task.CompletedTask">Toggle Dialog</button>
+<button @onclick="() => PersistentDialog?.Show() ?? Task.CompletedTask">Show persistent Dialog</button>
+
+<Dialog @ref="Dialog">
+    ...
+</Dialog>
+
+<Dialog @ref="PersistentDialog" Persistent>
+    <div>
+        <span>
+            ...
+        </span>
+        <button @onclick="() => PersistentDialog?.Hide() ?? Task.CompletedTask">Close</button>
+    </div>
+</Dialog>
+
+@code {
+    Dialog? Dialog;
+    Dialog? PersistentDialog;
+}

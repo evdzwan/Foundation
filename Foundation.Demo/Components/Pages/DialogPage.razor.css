@@ -1,0 +1,21 @@
+﻿.demo-list ::deep .dialog {
+    background-color: var(--fn-input-bg);
+    border: none;
+    border-radius: .25rem;
+    color: var(--fn-input-fg);
+    filter: drop-shadow(.1rem .1rem .25rem var(--fn-shadow));
+    overflow: auto;
+    padding: .5rem;
+    width: min(40rem, 80%);
+}
+
+    .demo-list ::deep .dialog.persistent > div {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .demo-list ::deep .dialog::backdrop {
+        backdrop-filter: blur(.25rem);
+        background-color: var(--fn-backdrop);
+    }

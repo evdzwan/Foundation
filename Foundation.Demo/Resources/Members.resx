@@ -426,4 +426,22 @@
   <data name="Component.ComponentReference" xml:space="preserve">
     <value>Reference to component, for JS interop purposes (protected)</value>
   </data>
+  <data name="Dialog.ChildContent" xml:space="preserve">
+    <value>Content to be rendered</value>
+  </data>
+  <data name="Dialog.Persistent" xml:space="preserve">
+    <value>When &lt;code&gt;true&lt;/code&gt; the dialog cannot be closed by clicking on the backdrop</value>
+  </data>
+  <data name="Dialog.Toggled" xml:space="preserve">
+    <value>Invoked when dialog is shown or hidden</value>
+  </data>
+  <data name="Dialog.Show()" xml:space="preserve">
+    <value>Shows the dialog</value>
+  </data>
+  <data name="Dialog.Hide()" xml:space="preserve">
+    <value>Hides the dialog</value>
+  </data>
+  <data name="Dialog.Toggle()" xml:space="preserve">
+    <value>Shows or hides the dialog, depending on wether it's currently visible</value>
+  </data>
 </root>
