@@ -94,7 +94,10 @@ main {
 }
 
 .notice {
+    display: flex;
+    flex-direction: column;
     font-size: 90%;
+    gap: .125rem;
 }
 
 .theme-toggle {
