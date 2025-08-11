@@ -40,7 +40,7 @@
                 <svg fill="currentColor" viewBox="0 0 24 24">
                     <path d="M19.999 4h-16c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm-13.5 3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm5.5 10h-7l4-5 1.5 2 3-4 5.5 7h-7z" />
                 </svg>
-                <span>Canvas <sup>new</sup></span>
+                <span>Canvas</span>
             </NavLink>
             <NavLink href="/components/chart">
                 <svg fill="currentColor" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@
                 <svg fill="currentColor" viewBox="0 0 24 24">
                     <path d="m3.553 18.895 4 2a1.001 1.001 0 0 0 .894 0L12 19.118l3.553 1.776a.99.99 0 0 0 .894.001l4-2c.339-.17.553-.516.553-.895v-5c0-.379-.214-.725-.553-.895L17 10.382V6c0-.379-.214-.725-.553-.895l-4-2a1 1 0 0 0-.895 0l-4 2C7.214 5.275 7 5.621 7 6v4.382l-3.447 1.724A.998.998 0 0 0 3 13v5c0 .379.214.725.553.895zM8 12.118l2.264 1.132-2.913 1.457-2.264-1.132L8 12.118zm4-2.5 3-1.5v2.264l-3 1.5V9.618zm6.264 3.632-2.882 1.441-2.264-1.132L16 12.118l2.264 1.132zM8 18.882l-.062-.031V16.65L11 15.118v2.264l-3 1.5zm8 0v-2.264l3-1.5v2.264l-3 1.5zM12 5.118l2.264 1.132-2.882 1.441-2.264-1.132L12 5.118z" />
                 </svg>
-                <span>Component <sup>new</sup></span>
+                <span>Component</span>
             </NavLink>
             <NavLink href="/components/defer">
                 <svg fill="currentColor" viewBox="0 0 24 24">
@@ -60,6 +60,12 @@
                     <path d="M20 2H10a2 2 0 0 0-2 2v2h8a2 2 0 0 1 2 2v8h2a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" />
                 </svg>
                 <span>Defer</span>
+            </NavLink>
+            <NavLink href="/components/dialog">
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 20h18a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1z" />
+                </svg>
+                <span>Dialog <sup>new</sup></span>
             </NavLink>
             <NavLink href="/components/foreach">
                 <svg fill="currentColor" viewBox="0 0 24 24">
@@ -145,7 +151,7 @@
                 <svg fill="currentColor" viewBox="0 0 24 24">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-2.745 14.186c0 1.345-.644 1.814-1.681 1.814-.245 0-.567-.042-.777-.112l.119-.861c.147.049.336.084.546.084.448 0 .729-.203.729-.938v-2.97h1.064v2.983zm2.043 1.807c-.539 0-1.071-.141-1.337-.287l.217-.883c.287.147.729.294 1.184.294.491 0 .749-.203.749-.511 0-.295-.224-.463-.791-.666-.784-.272-1.295-.707-1.295-1.394 0-.806.672-1.422 1.786-1.422.533 0 .925.112 1.205.238l-.238.861c-.189-.091-.525-.224-.987-.224s-.687.21-.687.455c0 .301.267.435.875.665.834.309 1.226.742 1.226 1.408-.002.793-.61 1.466-1.907 1.466zM14 9h-1V4l5 5h-4z" />
                 </svg>
-                <span>Script <sup>new</sup></span>
+                <span>Script</span>
             </NavLink>
             <NavLink href="/misc/selection">
                 <svg fill="currentColor" viewBox="0 0 24 24">
@@ -162,7 +168,8 @@
         </div>
 
         <div class="notice">
-            Erik van der Zwan &copy; 2025
+            <span>Version @Version</span>
+            <span>Erik van der Zwan &copy; 2025</span>
         </div>
     </nav>
 
@@ -176,3 +183,11 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+    readonly string Version = typeof(MainLayout).Assembly.GetName().Version switch
+    {
+        { } version => version.ToString(fieldCount: 3),
+        _ => "1.0.0"
+    };
+}
