@@ -1,4 +1,4 @@
-﻿.field-value > [popover] {
+﻿.field-value > ::deep .dialog {
     --offset: 0;
     inset: unset;
     left: calc(anchor(start));

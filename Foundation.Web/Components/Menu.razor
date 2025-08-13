@@ -1,24 +1,23 @@
 ﻿@inject MenuController Controller
-@inject MenuScript Script
 @inherits Component
 
-<div popover class="menu" style="@MenuStyle" @oncontextmenu:preventDefault @ref="MenuReference">
+<Dialog class="menu" style="@MenuStyle" Toggled="OnDialogToggled" @oncontextmenu:preventDefault @ref="DialogReference">
     <h4>@Title</h4>
     <div class="menu-items">
-        @if (MenuOpened)
+        @if (MenuRequested)
         {
             <CascadingValue Value="Parent ?? this">
                 @ChildContent?.Invoke(Context)
             </CascadingValue>
         }
     </div>
-</div>
+</Dialog>
 
 @code {
-    ElementReference MenuReference;
+    Dialog? DialogReference;
     IDisposable? MenuSubscription;
-    bool MenuOpened;
-    bool MenuOpen;
+    bool MenuRequested;
+    bool DialogVisible;
 
     object? Context;
     (double Left, double Top)? Offset;
@@ -29,37 +28,30 @@
     [Parameter] public EventCallback<MenuItem> OnItemPressed { get; set; }
     [Parameter] public string? Title { get; set; }
 
-    StyleList MenuStyle => new StyleList().Add("--left", $"{Offset?.Left}px", Offset is not null)
-                                          .Add("--top", $"{Offset?.Top}px", Offset is not null);
+    StyleList MenuStyle => new StyleList().Add("inset", "unset")
+                                          .Add("left", $"{Offset?.Left}px", Offset is not null)
+                                          .Add("margin", "0")
+                                          .Add("position", "fixed")
+                                          .Add("top", $"{Offset?.Top}px", Offset is not null);
 
-    public async Task Hide()
-    {
-        if (MenuOpen)
-        {
-            await Script.HideMenu(MenuReference, CancellationToken);
-        }
-    }
+    public Task Hide()
+        => DialogVisible && DialogReference is { } dialog ? dialog.Hide() : Task.CompletedTask;
 
     public Task Show(MouseEventArgs e) => Show(context: null, e);
     public async Task Show(object? context, MouseEventArgs e)
     {
-        if (!MenuOpen)
+        if (!DialogVisible)
         {
             Context = context;
             Offset = (e.ClientX, e.ClientY);
-            MenuOpened = true;
+            MenuRequested = true;
             StateHasChanged();
 
             await Task.Yield();
-            await Script.ShowMenu(MenuReference, CancellationToken);
-        }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await Script.Attach(ComponentReference, MenuReference, CancellationToken);
+            if (DialogReference is { } dialog)
+            {
+                await dialog.Show();
+            }
         }
     }
 
@@ -71,21 +63,12 @@
         }
     }
 
-    [JSInvokable]
-    public Task OnPopoverToggled(bool open)
-    {
-        MenuOpen = open;
-        return InvokeAsync(StateHasChanged);
-    }
+    void OnDialogToggled(bool visible)
+        => DialogVisible = visible;
 
-    protected override async Task OnDisposingAsync()
+    protected override void OnDisposing()
     {
         Context = null;
-
         MenuSubscription?.Dispose();
-        if (Script.Loaded)
-        {
-            await Script.Detach(ComponentReference);
-        }
     }
 }

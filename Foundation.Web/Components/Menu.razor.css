@@ -1,14 +1,4 @@
-﻿.menu {
-    --left: 0;
-    --top: 0;
-    inset: unset;
-    left: var(--left);
-    margin: 0;
-    position: fixed;
-    top: var(--top);
-}
-
-.menu-items {
+﻿.menu-items {
     display: flex;
     flex-direction: column;
 }

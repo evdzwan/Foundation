@@ -1,6 +1,4 @@
-﻿@using System.Collections.Specialized
-@attribute [CascadingTypeParameter(nameof(TModel))]
-@inject ChoiceFieldScript Script
+﻿@attribute [CascadingTypeParameter(nameof(TModel))]
 @inherits Field<TModel>
 @typeparam TModel
 @typeparam TItem
@@ -24,8 +22,9 @@
                     <path d="M16.939 7.939 12 12.879l-4.939-4.94-2.122 2.122L12 17.121l7.061-7.06z" />
                 </svg>
             </button>
-            <div popover @ref="PopoverReference">
-                @if (PopoverLoaded)
+
+            <Dialog Toggled="OnDialogToggled" @ref="DialogReference">
+                @if (ChoiceRequested)
                 {
                     <Browse PageSize="12">
                         <Select Selection="TableSelection">
@@ -33,7 +32,7 @@
                         </Select>
                     </Browse>
                 }
-            </div>
+            </Dialog>
         </div>
 
         @if (ValueExpression is { } valueExpression)
@@ -47,9 +46,9 @@
     ISelection<TItem>? TableSelection;
     IDisposable? TableSelectionChangedSubscription;
     ElementReference EditorReference;
-    ElementReference PopoverReference;
-    bool PopoverLoaded;
-    bool PopoverOpen;
+    Dialog? DialogReference;
+    bool ChoiceRequested;
+    bool DialogVisible;
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public RenderFragment? Columns { get; set; }
@@ -61,13 +60,9 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && AutoFocus)
         {
-            await Script.Attach(ComponentReference, PopoverReference, CancellationToken);
-            if (AutoFocus)
-            {
-                await EditorReference.FocusAsync();
-            }
+            await EditorReference.FocusAsync();
         }
     }
 
@@ -84,12 +79,8 @@
         }
     }
 
-    [JSInvokable]
-    public Task OnPopoverToggled(bool open)
-    {
-        PopoverOpen = open;
-        return InvokeAsync(StateHasChanged);
-    }
+    void OnDialogToggled(bool visible)
+        => DialogVisible = visible;
 
     async void OnTableSelectionChanged(ISelection<TItem> selection)
     {
@@ -108,29 +99,21 @@
 
     async Task ShowPopover()
     {
-        if (!PopoverOpen)
+        if (!DialogVisible)
         {
-            PopoverLoaded = true;
-            await Script.ShowPopover(PopoverReference, EditorReference, CancellationToken);
+            ChoiceRequested = true;
+            if (DialogReference is { } dialog)
+            {
+                await dialog.Show(EditorReference);
+            }
         }
     }
 
-    async Task HidePopover()
-    {
-        if (PopoverOpen)
-        {
-            await Script.HidePopover(PopoverReference, CancellationToken);
-        }
-    }
+    Task HidePopover()
+        => DialogVisible && DialogReference is { } dialog ? dialog.Hide() : Task.CompletedTask;
 
-    protected override async Task OnDisposingAsync()
-    {
-        TableSelectionChangedSubscription?.Dispose();
-        if (Script.Loaded)
-        {
-            await Script.Detach(ComponentReference);
-        }
-    }
+    protected override void OnDisposing()
+        => TableSelectionChangedSubscription?.Dispose();
 
     static Func<TItem, string?> CreateDefaultDisplayItem()
     {
