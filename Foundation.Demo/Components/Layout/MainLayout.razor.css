@@ -105,29 +105,6 @@ main {
                 text-align: end;
             }
 
-/*.brand > svg {
-    width: 100px;
-    height: 100px;
-}
-
-    .brand > ::deep a {
-        color: inherit;
-        font-size: 250%;
-        font-weight: 600;
-        letter-spacing: .1em;
-        outline: none;
-        text-decoration: none;
-    }
-
-    .brand > small {
-        color: var(--fn-muted);
-        font-size: 90%;
-        font-variant: small-caps;
-        font-weight: 500;
-        letter-spacing: .1em;
-        margin: -.25em .5em 0 0;
-        text-align: end;
-    }*/
 .commands {
     display: flex;
     gap: .25rem;
