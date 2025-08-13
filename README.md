@@ -6,8 +6,8 @@
 
 - `Foundation`: Core utilities and extensions for .NET.
 - `Foundation.Analyzers`: Roslyn analyzers to enforce code quality and conventions.
-- `Foundation.Web`: Web-specific components and helpers.
 - `Foundation.Demo`: Blazor demo showcasing usage of Foundation components.
+- `Foundation.Web`: Web-specific components and helpers.
 
 ## 🚀 Getting Started
 
