@@ -1,7 +1,7 @@
 ﻿@inherits Component
 @inject DialogScript Script
 
-<dialog class="dialog @DialogClass" popover="@PopoverMode" @ref="DialogReference">
+<dialog @attributes="Attributes" class="dialog @DialogClass" popover="@PopoverMode" @ref="DialogReference">
     @ChildContent
 </dialog>
 
@@ -9,12 +9,14 @@
     ElementReference DialogReference;
     bool DialogVisible;
 
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object?>? Attributes { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public EventCallback<bool> Toggled { get; set; }
     [Parameter] public bool Persistent { get; set; }
 
-    ClassList DialogClass => new ClassList().Add("persistent", Persistent);
     string PopoverMode => Persistent ? "manual" : "auto";
+    ClassList DialogClass => new ClassList().Add("persistent", Persistent)
+                                            .AddUnmatched(Attributes);
 
     public async Task<bool> Hide()
     {
