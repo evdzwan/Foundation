@@ -64,8 +64,51 @@ main {
         }
 
 .brand {
-    display: flex;
-    flex-direction: column;
+    padding: .5rem .5rem 0 .5rem;
+}
+
+    .brand > ::deep a {
+        align-items: center;
+        color: inherit;
+        display: flex;
+        gap: 1.5rem;
+        letter-spacing: .1em;
+        outline: none;
+        text-decoration: none;
+    }
+
+        .brand > ::deep a > svg {
+            height: 5rem;
+            width: 5rem;
+        }
+
+        .brand > ::deep a > div {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .brand > ::deep a > div > h1 {
+                font-size: 250%;
+                font-weight: 600;
+                grid-column: 2 / span 1;
+                grid-row: 1 / span 1;
+                margin: 0;
+            }
+
+            .brand > ::deep a > div > small {
+                color: var(--fn-muted);
+                font-size: 90%;
+                font-weight: 500;
+                grid-column: 2 / span 1;
+                grid-row: 2 / span 1;
+                letter-spacing: .1em;
+                margin: -.25em .5em 0 0;
+                text-align: end;
+            }
+
+/*.brand > svg {
+    width: 100px;
+    height: 100px;
 }
 
     .brand > ::deep a {
@@ -85,8 +128,7 @@ main {
         letter-spacing: .1em;
         margin: -.25em .5em 0 0;
         text-align: end;
-    }
-
+    }*/
 .commands {
     display: flex;
     gap: .25rem;

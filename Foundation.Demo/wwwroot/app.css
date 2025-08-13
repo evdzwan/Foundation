@@ -45,25 +45,25 @@
 [data-theme="dark"] {
     color-scheme: dark;
     /*anchor*/
-    --fn-anchor-fg: #c60;
+    --fn-anchor-fg: #e60;
     /*body*/
     --fn-body-bg: #222;
     --fn-body-fg: #ddd;
     /*button*/
     --fn-button-bg: #444;
-    --fn-button-bg-active: #c60;
+    --fn-button-bg-active: #e60;
     --fn-button-bg-rgb: 68,68,68;
     --fn-button-fg: #eee;
     --fn-button-fg-active: #eee;
     --fn-button-link-bg: transparent;
     --fn-button-link-bg-active: transparent;
     --fn-button-link-fg: #eee;
-    --fn-button-link-fg-active: #c60;
+    --fn-button-link-fg-active: #e60;
     --fn-button-link-fg-rgb: 238,238,238;
-    --fn-button-outline: #c60;
+    --fn-button-outline: #e60;
     /*input*/
     --fn-input-bg: #333;
-    --fn-input-bg-focus: #c60;
+    --fn-input-bg-focus: #e60;
     --fn-input-bg-rgb: 51,51,51;
     --fn-input-fg: #eee;
     --fn-input-fg-focus: #eee;
@@ -71,7 +71,7 @@
     --fn-input-outline-hover: #ccc;
     /*table*/
     --fn-table-row-bg-hover: #444;
-    --fn-table-row-bg-selected: #c60;
+    --fn-table-row-bg-selected: #e60;
     --fn-table-row-fg-hover: #eee;
     --fn-table-row-fg-selected: #eee;
     /*scroll*/
