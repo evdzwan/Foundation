@@ -69,7 +69,6 @@ main {
 
     .brand > ::deep a {
         align-items: center;
-        color: inherit;
         display: flex;
         gap: 1.5rem;
         letter-spacing: .1em;
@@ -96,7 +95,7 @@ main {
             }
 
             .brand > ::deep a > div > small {
-                color: var(--fn-muted);
+                color: var(--fn-body-fg);
                 font-size: 90%;
                 font-weight: 500;
                 grid-column: 2 / span 1;
