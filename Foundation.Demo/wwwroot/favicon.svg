@@ -1,4 +1,5 @@
-  <svg viewBox="0 0 24 24">
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <g transform="rotate(-45 12 12)">
           <rect x="4.3" y="4.3" width="15.4" height="7.2" rx=".5" ry=".5" fill="#06c" />
           <rect x="4.3" y="12.3" width="7.2" height="7.2" rx=".5" ry=".5" fill="#e60" />
